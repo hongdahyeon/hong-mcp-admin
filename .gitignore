@@ -1,6 +1,7 @@
-HELP.md
+backend/HELP.md
 .gradle
 build/
+bin/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -35,3 +36,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# IDE (IntelliJ, Eclipse, VS Code)
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
