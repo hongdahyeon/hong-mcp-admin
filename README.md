@@ -28,6 +28,9 @@ Java 25의 최신 기능과 Spring Boot 4.0, React를 활용한 차세대 어드
 2. `.\gradlew.bat bootRun` (Windows PowerShell) 또는 IntelliJ Gradle 탭에서 `bootRun` 실행
 - **Access URL:** http://localhost:8080
 - **Check:** 터미널에 `Tomcat started on port(s): 8080` 메시지 확인
+- 만약 backend 패키지를 인식하지 못하면, 아래와 같이 진행
+(1) backend 하위에 build.gradle 파일 찾고 우클릭
+(2) Link Gradle Project 혹은 Import Gradle Project 클릭
 
 ### **[Terminal 2] Frontend (React)**
 1. `cd frontend`
