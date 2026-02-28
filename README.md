@@ -48,7 +48,17 @@ hong-mcp-admin/
 │   ├── src/            # Java 25 소스 및 리소스 (io.hong.admin)
 │   └── build.gradle    # 백엔드 의존성 및 Java 25 설정
 ├── frontend/           # React 클라이언트 (Vite)
-│   ├── src/            # React/TypeScript 컴포넌트 (.tsx)
-│   └── package.json    # 프론트엔드 라이브러리 관리
+│   ├── src/            # 애플리케이션 소스 코드
+│   │   ├── api/        # API 호출 및 공통 Axios 설정
+│   │   ├── components/ # 공통 및 레이아웃 컴포넌트
+│   │   ├── hooks/      # 커스텀 React Hooks
+│   │   ├── pages/      # 라우팅 페이지 컴포넌트
+│   │   ├── store/      # 전역 상태 관리 (Zustand 등)
+│   │   ├── types/      # TypeScript 타입 및 인터페이스
+│   │   └── utils/      # 공통 유틸리티 및 상수
+│   ├── docs/           # 프로젝트 문서 (rules, todo, plan 등)
+│   ├── App.tsx         # 메인 앱 컴포넌트
+│   ├── main.tsx        # 진입점 파일
+│   └── package.json    # 프론트엔드 의존성 관리
 ├── .gitignore          # .idea, node_modules, build 등 제외 설정
 └── README.md           # 통합 가이드 문서 (v1)
