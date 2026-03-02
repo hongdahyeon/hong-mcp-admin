@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { User, ChevronDown } from 'lucide-react';
+import { User, ChevronDown, LogOut, Settings, UserCircle, LogIn, UserPlus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+    // ✅ 로그인 상태 및 사용자 정보 확인
+    const isLoggedIn = !!localStorage.getItem('accessToken');
+    const username = localStorage.getItem('username') || '사용자';
+
     const menus = [
-        { title: '대시보드', subMenus: ['통합 대시보드', '실시간 지표', '운영 리포트'] },
-        { title: '사용자 관리', subMenus: ['유저 리스트', '권한 설정', '그룹 관리', '로그인 기록'] },
-        { title: '시스템 설정', subMenus: ['일반 설정', '보안 관리', '백업/복구', 'API 로그'] },
-        { title: '고객 지원', subMenus: ['FAQ', '공지사항', '1:1 문의'] },
+        { title: '공방 탐색', subMenus: ['카테고리별 클래스', '실시간 핫플레이스', '신규 공방'] },
+        { title: '예약/결제', subMenus: ['예약 내역', '결제 관리', '쿠폰/포인트'] },
+        { title: '커뮤니티', subMenus: ['찐후기 자랑', '공방 소식', '작가님 인터뷰'] },
+        { title: '제휴 문의', subMenus: ['공방 입점 안내', '작가 신청', '광고/제휴'] },
     ];
 
     return (
@@ -18,15 +23,15 @@ const Header: React.FC = () => {
             onMouseLeave={() => setActiveMenu(null)}
         >
             <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                {/* Logo */}
-                <div className="flex items-center gap-2 cursor-pointer group">
-                    <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center text-white font-bold group-hover:bg-violet-700 transition-colors">
-                        H
+                {/* Logo: CraftDay */}
+                <Link to="/" className="flex items-center gap-2 cursor-pointer group">
+                    <div className="w-9 h-9 bg-violet-600 rounded-xl flex items-center justify-center text-white font-black group-hover:rotate-6 transition-transform shadow-lg shadow-violet-200">
+                        C
                     </div>
-                    <span className="text-xl font-bold tracking-tight text-slate-900">
-                        HONG <span className="text-violet-600">MCP</span>
+                    <span className="text-xl font-black tracking-tighter text-slate-900">
+                        Craft<span className="text-violet-600 italic">Day</span>
                     </span>
-                </div>
+                </Link>
 
                 {/* Navigation */}
                 <nav className="hidden lg:flex items-stretch h-full">
@@ -38,7 +43,7 @@ const Header: React.FC = () => {
                             onMouseEnter={() => setActiveMenu(menu.title)}
                         >
                             {menu.title}
-                            <ChevronDown size={16} className={`ml-1 transition-transform ${activeMenu === menu.title ? 'rotate-180 text-violet-600' : ''}`} />
+                            <ChevronDown size={14} className={`ml-1 transition-transform ${activeMenu === menu.title ? 'rotate-180 text-violet-600' : ''}`} />
                             <div className={`absolute bottom-0 left-4 right-4 h-0.5 bg-violet-600 transition-transform origin-left ${activeMenu === menu.title ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
                         </div>
                     ))}
@@ -49,16 +54,61 @@ const Header: React.FC = () => {
                     <div className="relative">
                         <button
                             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                            className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-violet-50 hover:text-violet-600 transition-all border border-transparent hover:border-violet-200"
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 hover:border-violet-300 transition-all group"
                         >
-                            <User size={20} />
+                            <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center text-violet-600 group-hover:scale-110 transition-transform">
+                                <User size={18} />
+                            </div>
+                            {isLoggedIn && (
+                                <span className="hidden sm:block text-sm font-bold text-slate-800">{username}님</span>
+                            )}
+                            <ChevronDown size={14} className={`text-slate-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         {isUserMenuOpen && (
-                            <div className="absolute right-0 mt-3 w-48 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50 animate-in fade-in zoom-in duration-200">
-                                <button className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-violet-50 hover:text-violet-600 font-medium">
-                                    로그인
-                                </button>
+                            <div className="absolute right-0 mt-3 w-52 bg-white border border-slate-200 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
+                                {isLoggedIn ? (
+                                    <>
+                                        <div className="px-4 py-2 border-b border-slate-50 mb-1">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">My Account</p>
+                                            <p className="text-sm font-black text-slate-900 line-clamp-1">{username}님 반갑습니다!</p>
+                                        </div>
+                                        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-violet-50 hover:text-violet-600 font-bold transition-all">
+                                            <UserCircle size={18} /> 내 정보 관리
+                                        </button>
+                                        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-violet-50 hover:text-violet-600 font-bold transition-all">
+                                            <Settings size={18} /> 예약 내역 확인
+                                        </button>
+                                        <Link
+                                            to="/logout"
+                                            onClick={() => setIsUserMenuOpen(false)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 font-black transition-all border-t border-slate-50 mt-1"
+                                        >
+                                            <LogOut size={18} /> 로그아웃
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="px-4 py-2 border-b border-slate-50 mb-1">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Guest</p>
+                                            <p className="text-sm font-black text-slate-900">로그인이 필요합니다</p>
+                                        </div>
+                                        <Link
+                                            to="/login"
+                                            onClick={() => setIsUserMenuOpen(false)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-violet-600 hover:bg-violet-50 font-black transition-all"
+                                        >
+                                            <LogIn size={18} /> 로그인하기
+                                        </Link>
+                                        <Link
+                                            to="/signup"
+                                            onClick={() => setIsUserMenuOpen(false)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 font-bold transition-all"
+                                        >
+                                            <UserPlus size={18} /> 회원가입
+                                        </Link>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>
@@ -71,16 +121,16 @@ const Header: React.FC = () => {
                     }`}
             >
                 <div className="max-w-7xl mx-auto px-6 py-8">
-                    <div className="grid grid-cols-4 gap-8">
+                    <div className="grid grid-cols-4 gap-8 text-center sm:text-left">
                         {menus.map((menu) => (
                             <div key={menu.title} className="transition-opacity duration-300">
-                                <h4 className={`text-xs font-bold uppercase tracking-widest mb-4 ${activeMenu === menu.title ? 'text-violet-600' : 'text-slate-400'
+                                <h4 className={`text-[10px] font-black uppercase tracking-widest mb-4 ${activeMenu === menu.title ? 'text-violet-600' : 'text-slate-300'
                                     }`}>
                                     {menu.title}
                                 </h4>
                                 <ul className="space-y-2">
                                     {menu.subMenus.map((sub) => (
-                                        <li key={sub} className="text-sm font-medium text-slate-600 hover:text-violet-600 cursor-pointer transition-colors">
+                                        <li key={sub} className="text-sm font-bold text-slate-500 hover:text-violet-600 cursor-pointer transition-colors">
                                             {sub}
                                         </li>
                                     ))}
