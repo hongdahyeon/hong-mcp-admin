@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:~/hong-workshop;AUTO_SERVER=TRUE;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: hong
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
+        web-allow-others: false
+  jpa:
+    hibernate:
+      # (로컬) 테이블 구조가 자주 변경될 수 있으니 update 권장
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        # SQL 주석도 함께 출력 여부
+        use_sql_comments: true
+        # JAVA 25 & Hibernate 최신 버전에서의 dialect 자동 설정 활용
+        dialect: org.hibernate.dialect.H2Dialect
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    # 쿼리 파라미터 값 확인용
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+jwt:
+  # HS256 알고리즘을 위해 최소 32자 이상의 Base64 인코딩된 문자열이 필요합니다.
+  secret: dGhpcy1pcy1ob25nLXdvcmtzaG9wLXByb2plY3Qtc2VjcmV0LWtleS1mb3Itand0LXRlc3Rpbmc=
+  access-token-validity: 3600000 # 1시간 (60 * 60 * 1000)
+  refresh-token-validity: 604800000 # 7일 (7 * 24 * 60 * 60 * 1000)
+
+hong:
+  front-url: http://localhost:5173
+
