@@ -2,11 +2,13 @@ package io.hong.admin.golbal.auth.service;
 
 import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.repository.HUserRepository;
+import io.hong.admin.domain.useraccesslog.service.HUserAccessLogService;
 import io.hong.admin.domain.usertoken.service.HUserTokenService;
 import io.hong.admin.golbal.auth.dto.request.LoginRequest;
 import io.hong.admin.golbal.auth.dto.response.TokenResponse;
 import io.hong.admin.golbal.exception.HongException;
 import io.hong.admin.golbal.jwt.JwtProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-04        home       접속 정보 저장
  */
 
 @Service
@@ -32,11 +35,13 @@ public class AuthService {
 
     private final HUserRepository userRepository;
     private final HUserTokenService tokenService;
+    private final HUserAccessLogService accessLogService;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
     @Transactional(readOnly = true)
-    public TokenResponse login(LoginRequest request) throws HongException {
+    public TokenResponse login(LoginRequest request, HttpServletRequest req ) throws HongException {
 
         // 1. 유저 조회
         HUser hUser = userRepository.findByEmail(request.email())
@@ -57,6 +62,9 @@ public class AuthService {
         // 5. 바로 여기서 saveOrUpdate 호출
         // => 로그인할 때마다 DB의 Refresh Token을 최신화
         tokenService.saveOrUpdate(hUser.getId(), refreshToken);
+
+        // 6. 접속 정보 저장
+        accessLogService.saveUserAccessLog(hUser.getId(), req);
 
         return new TokenResponse(accessToken, refreshToken, hUser.getUsername());
     }
