@@ -1,6 +1,7 @@
 package io.hong.admin.domain.user.entity;
 
 import io.hong.admin.domain.user.enumcd.UserRole;
+import io.hong.admin.golbal.audit.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,13 +20,14 @@ import java.time.LocalDateTime;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-04        home       BaseEntity 추가
  */
 
 @Entity
 @Table(name = "h_user")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HUser {
+public class HUser extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
