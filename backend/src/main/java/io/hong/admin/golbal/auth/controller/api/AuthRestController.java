@@ -4,6 +4,7 @@ import io.hong.admin.golbal.auth.dto.request.LoginRequest;
 import io.hong.admin.golbal.auth.dto.response.TokenResponse;
 import io.hong.admin.golbal.auth.service.AuthService;
 import io.hong.admin.golbal.exception.HongException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,11 +37,14 @@ public class AuthRestController {
      * FE의 login: async (email, password) 호출을 받는 지점
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) throws HongException {
+    public ResponseEntity<TokenResponse> login(
+            @RequestBody LoginRequest loginRequest,
+            HttpServletRequest req
+    ) throws HongException {
         log.info("로그인 시도: {}", loginRequest.email());
 
         // 1. AuthService를 통해 로그인 로직 수행 (비밀번호 체크 및 토큰 생성 포함)
-        TokenResponse tokenResponse = authService.login(loginRequest);
+        TokenResponse tokenResponse = authService.login(loginRequest, req);
 
         // 2. 성공 시 200 OK와 함께 AccessToken, RefreshToken, Username 반환
         return ResponseEntity.ok(tokenResponse);
