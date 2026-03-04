@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 /**
  * packageName    : io.hong.admin.domain.user.entity
  * fileName       : HUser
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : HUser Entity
  * ===========================================================

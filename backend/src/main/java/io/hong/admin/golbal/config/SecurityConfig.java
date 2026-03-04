@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * packageName    : io.hong.admin.golbal.config
  * fileName       : SecurityConfig
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : SecurityConfig Class
  * ===========================================================

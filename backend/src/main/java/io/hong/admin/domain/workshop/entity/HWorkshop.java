@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 /**
  * packageName    : io.hong.admin.domain.workshop.entity
  * fileName       : HWorkshop
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : HWorkshop Entity
  * ===========================================================

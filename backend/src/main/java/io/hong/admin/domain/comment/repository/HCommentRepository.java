@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * packageName    : io.hong.admin.domain.comment.repository
  * fileName       : HCommentRepository
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : HCommentRepository Interface
  * ===========================================================

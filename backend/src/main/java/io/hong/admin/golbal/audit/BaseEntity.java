@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 /**
  * packageName    : io.hong.admin.golbal.audit
  * fileName       : BaseEntity
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : BaseEntity Class
  * ===========================================================

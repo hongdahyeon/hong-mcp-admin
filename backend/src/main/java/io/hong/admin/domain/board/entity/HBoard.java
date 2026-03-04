@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * packageName    : io.hong.admin.domain.board.entity
  * fileName       : HBoard
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : HBoard Entity
  * ===========================================================

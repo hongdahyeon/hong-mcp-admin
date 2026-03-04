@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 /**
  * packageName    : io.hong.admin.golbal.exception
  * fileName       : HongException
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : HongException Class - 공통 예외 처리
  * ===========================================================

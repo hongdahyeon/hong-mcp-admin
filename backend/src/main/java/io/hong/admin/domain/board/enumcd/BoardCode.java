@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * packageName    : io.hong.admin.domain.board.enumcd
  * fileName       : BoardCode
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : BoardCode Enum
  * ===========================================================

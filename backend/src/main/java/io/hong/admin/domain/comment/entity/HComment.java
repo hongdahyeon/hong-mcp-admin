@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * packageName    : io.hong.admin.domain.comment.entity
  * fileName       : HComment
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : HComment Entity
  * ===========================================================

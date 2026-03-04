@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * packageName    : io.hong.admin.golbal.global
  * fileName       : GlobalRestException
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : GlobalRestException Class
  * ===========================================================

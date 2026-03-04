@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * packageName    : io.hong.admin.golbal.auth.service
  * fileName       : AuthService
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : AuthService Class
  *                  => {BCrypt}로 비밀번호를 검사하고,
