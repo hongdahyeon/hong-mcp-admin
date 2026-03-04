@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * packageName    : io.hong.admin.golbal.config
  * fileName       : AuthConfig
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : AuthConfig Class
  * ===========================================================

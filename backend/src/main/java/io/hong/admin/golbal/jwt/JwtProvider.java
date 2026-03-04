@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * packageName    : io.hong.admin.golbal.jwt
  * fileName       : JwtProvider
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : JwtProvider Class
  *                  - 토큰의 생성, 파싱, 검증 담당

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * packageName    : io.hong.admin.domain.usertoken.entity
  * fileName       : HUserToken
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : HUserToken Entity
  * ===========================================================

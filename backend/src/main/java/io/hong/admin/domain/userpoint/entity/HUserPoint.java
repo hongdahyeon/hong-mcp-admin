@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * packageName    : io.hong.admin.domain.userpoint.entity
  * fileName       : HUserPoint
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : HUserPoint Entity
  *                  - HUser 1:1 관계

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 /**
  * packageName    : io.hong.admin.domain.userpointhist.entity
  * fileName       : HUserPointHist
- * author         : note
+ * author         : home
  * date           : 2026-03-04
  * description    : HUserPointHist Entity
  *                  - HUser의 Point 사용 이력

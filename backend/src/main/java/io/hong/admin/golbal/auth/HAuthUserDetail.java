@@ -12,7 +12,7 @@ import java.util.Collections;
 /**
  * packageName    : io.hong.admin.domain.user.dto.response
  * fileName       : HAuthUserDetail
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : HAuthUser Class
  * ===========================================================

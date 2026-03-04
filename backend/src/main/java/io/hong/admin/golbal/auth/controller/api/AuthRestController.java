@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * packageName    : io.hong.admin.golbal.auth.controller.api
  * fileName       : AuthRestController
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    :
  * ===========================================================
