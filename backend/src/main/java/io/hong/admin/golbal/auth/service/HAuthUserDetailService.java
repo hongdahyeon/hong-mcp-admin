@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * packageName    : io.hong.admin.golbal.auth.service
  * fileName       : HAuthUserDetailService
- * author         : note
+ * author         : home
  * date           : 2026-03-03
  * description    : Spring Security UserDetailsService 구현체
  * ===========================================================
