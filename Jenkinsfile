@@ -48,24 +48,24 @@ pipeline {
                     echo ">>> Current Branch: ${currentBranch}"
                     echo ">>> Extracted Commit Message: ${commitMessage}"
 
-                    // 시나리오 판별
-                    if (commitMessage.contains('from hongdahyeon/work') || commitMessage.contains('Merge branch \'work\'')) {
-                        // 시나리오 2: work -> Feature (Sync)
-                        echo ">>> Scenario 2: Sync from 'work' to '${currentBranch}' detected."
-                        env.CASE_TYPE = "SYNC_FROM_WORK"
-                        env.ACTUAL_SOURCE = "work"
+                    // Determine scenarios
+                    if (commitMessage.contains('from hongdahyeon/main') || commitMessage.contains('Merge branch \'main\'')) {
+                        // Scenario 2: main -> Feature (Sync)
+                        echo ">>> Scenario 2: Sync from 'main' to '${currentBranch}' detected."
+                        env.CASE_TYPE = "SYNC_FROM_MAIN"
+                        env.ACTUAL_SOURCE = "main"
                         env.ACTUAL_TARGET = currentBranch
                         env.SKIP_PUSH = "true"
-                    } else if (currentBranch == "work") {
-                        echo ">>> Direct push to 'work' detected. Skipping automated merge."
-                        env.CASE_TYPE = "DIRECT_WORK_PUSH"
+                    } else if (currentBranch == "main") {
+                        echo ">>> Direct push to 'main' detected. Skipping automated merge."
+                        env.CASE_TYPE = "DIRECT_MAIN_PUSH"
                         env.SKIP_PUSH = "true"
                     } else {
-                        // 시나리오 1: Feature -> work (Automated Merge)
-                        echo ">>> Scenario 1: Automated Merge from '${currentBranch}' to 'work' detected."
-                        env.CASE_TYPE = "MERGE_TO_WORK"
+                        // Scenario 1: Feature -> main (Automated Merge)
+                        echo ">>> Scenario 1: Automated Merge from '${currentBranch}' to 'main' detected."
+                        env.CASE_TYPE = "MERGE_TO_MAIN"
                         def cleanSource = currentBranch
-                        def cleanTarget = "work"
+                        def cleanTarget = "main"
                         
                         env.ACTUAL_SOURCE = cleanSource
                         env.ACTUAL_TARGET = cleanTarget
@@ -101,9 +101,9 @@ pipeline {
         success {
             script {
                 def now = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
-                if (env.CASE_TYPE == "SYNC_FROM_WORK") {
-                    sendTelegramNotification("[${now}] [v] CI/CD Success: Sync from work completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
-                } else if (env.CASE_TYPE == "MERGE_TO_WORK") {
+                if (env.CASE_TYPE == "SYNC_FROM_MAIN") {
+                    sendTelegramNotification("[${now}] [v] CI/CD Success: Sync from main completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+                } else if (env.CASE_TYPE == "MERGE_TO_MAIN") {
                     sendTelegramNotification("[${now}] [v] CI/CD Success: Build and Automated Merge completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
                 } else {
                     sendTelegramNotification("[${now}] [v] CI/CD Success: Build completed (${env.GIT_BRANCH ?: 'unknown'})")
@@ -126,6 +126,6 @@ def sendTelegramNotification(String message) {
             bat "curl -s -X POST https://api.telegram.org/bot${TOKEN}/sendMessage -d chat_id=${CHAT_ID} -d text=\"${message}\""
         }
     } catch (Exception e) {
-        echo "Telegram 알림 전송 실패: ${e.getMessage()}"
+        echo "Telegram notification failed: ${e.getMessage()}"
     }
 }
