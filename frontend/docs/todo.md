@@ -47,6 +47,12 @@
 - [x] 비즈니스 로직 에러 코드별 사용자 피드백 테스트
 - [x] 페이지별 중복 alert 제거 및 `[object Object]` 출력 방지 로직 적용
 
+## 9. CI/CD 파이프라인 구축 (Jenkinsfile)
+- [x] Java 25 / React 빌드 대응 Jenkinsfile 작성
+- [x] Gatekeeper 전략 (자동 머지 및 동기화 감지) 구현
+- [x] 텔레그램 알림 시스템 연동
+
+
 
 
 
