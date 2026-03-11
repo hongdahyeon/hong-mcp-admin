@@ -38,8 +38,9 @@ pipeline {
         stage('Automated Merge (Gatekeeper)') {
             steps {
                 script {
-                    def fullLog = bat(script: 'git log -1 --pretty=%%B', returnStdout: true).trim()
-                    def messageLines = fullLog.split('\r?\n').findAll { !it.contains('git log -1') && !it.startsWith('C:\\') }
+                    // Set code page to UTF-8 for git log to handle Korean/special characters
+                    def fullLog = bat(script: '@echo off && chcp 65001 > nul && git log -1 --pretty=%%B', returnStdout: true).trim()
+                    def messageLines = fullLog.split('\r?\n').findAll { !it.contains('git log -1') && !it.startsWith('C:\\') && !it.contains('Active code page: 65001') }
                     def commitMessage = messageLines.join('\n').trim()
                     
                     def rawBranch = env.GIT_BRANCH ?: "home"
@@ -102,18 +103,18 @@ pipeline {
             script {
                 def now = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
                 if (env.CASE_TYPE == "SYNC_FROM_MAIN") {
-                    sendTelegramNotification("[${now}] [v] CI/CD Success: Sync from main completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+                    sendTelegramNotification("[${now}] CI/CD Success: Sync from main completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
                 } else if (env.CASE_TYPE == "MERGE_TO_MAIN") {
-                    sendTelegramNotification("[${now}] [v] CI/CD Success: Build and Automated Merge completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+                    sendTelegramNotification("[${now}] CI/CD Success: Build and Automated Merge completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
                 } else {
-                    sendTelegramNotification("[${now}] [v] CI/CD Success: Build completed (${env.GIT_BRANCH ?: 'unknown'})")
+                    sendTelegramNotification("[${now}] CI/CD Success: Build completed (${env.GIT_BRANCH ?: 'unknown'})")
                 }
             }
         }
         failure {
             script {
                 def now = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
-                sendTelegramNotification("[${now}] [x] CI/CD Failed: Error during pipeline execution. Check Jenkins logs.")
+                sendTelegramNotification("[${now}] CI/CD Failed: Error during pipeline execution. Check Jenkins logs.")
             }
         }
     }
@@ -123,7 +124,14 @@ def sendTelegramNotification(String message) {
     try {
         withCredentials([string(credentialsId: 'telegram-token-craft', variable: 'TOKEN'),
                          string(credentialsId: 'telegram-chat-id-craft', variable: 'CHAT_ID')]) {
-            bat "curl -s -X POST https://api.telegram.org/bot${TOKEN}/sendMessage -d chat_id=${CHAT_ID} -d text=\"${message}\""
+            // Using --data-urlencode for message to handle special characters safely
+            // Using double quotes for chat_id in case it contains negative sign or other characters
+            bat """
+            @echo off
+            curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" ^
+            -d "chat_id=${CHAT_ID}" ^
+            --data-urlencode "text=${message}"
+            """
         }
     } catch (Exception e) {
         echo "Telegram notification failed: ${e.getMessage()}"
