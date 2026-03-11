@@ -5,6 +5,7 @@ import io.hong.admin.domain.user.enumcd.UserRole;
 import io.hong.admin.domain.user.repository.HUserRepository;
 import io.hong.admin.domain.user.dto.request.UserSaveRequest;
 import io.hong.admin.golbal.exception.HongException;
+import io.hong.admin.golbal.exception.error.HongErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,8 +46,8 @@ public class HUserService {
     public Long saveUser(UserSaveRequest dto) {
         try {
             // 중복 검증 한 번 더 수행
-            if (checkEmailDuplicate(dto.email())) throw new HongException("이미 존재하는 이메일입니다.");
-            if (checkUsernameDuplicate(dto.username())) throw new HongException("이미 존재하는 이름입니다.");
+            if (checkEmailDuplicate(dto.email())) throw new HongException(HongErrorCode.USER_ID_DUPLICATE);
+            if (checkUsernameDuplicate(dto.username())) throw new HongException(HongErrorCode.USER_NAME_DUPLICATE);
 
             HUser user = HUser.builder()
                     .email(dto.email())
