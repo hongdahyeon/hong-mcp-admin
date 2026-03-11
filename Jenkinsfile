@@ -103,18 +103,18 @@ pipeline {
             script {
                 def now = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
                 if (env.CASE_TYPE == "SYNC_FROM_MAIN") {
-                    sendTelegramNotification("[${now}] CI/CD Success: Sync from main completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+                    sendTelegramNotification("[${now}][V] CI/CD Success: Sync from main completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
                 } else if (env.CASE_TYPE == "MERGE_TO_MAIN") {
-                    sendTelegramNotification("[${now}] CI/CD Success: Build and Automated Merge completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+                    sendTelegramNotification("[${now}][V] CI/CD Success: Build and Automated Merge completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
                 } else {
-                    sendTelegramNotification("[${now}] CI/CD Success: Build completed (${env.GIT_BRANCH ?: 'unknown'})")
+                    sendTelegramNotification("[${now}][V] CI/CD Success: Build completed (${env.GIT_BRANCH ?: 'unknown'})")
                 }
             }
         }
         failure {
             script {
                 def now = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
-                sendTelegramNotification("[${now}] CI/CD Failed: Error during pipeline execution. Check Jenkins logs.")
+                sendTelegramNotification("[${now}][X] CI/CD Failed: Error during pipeline execution. Check Jenkins logs.")
             }
         }
     }
