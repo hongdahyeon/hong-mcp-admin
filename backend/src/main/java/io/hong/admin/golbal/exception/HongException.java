@@ -1,7 +1,7 @@
 package io.hong.admin.golbal.exception;
 
+import io.hong.admin.golbal.exception.error.HongErrorCode;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 /**
  * packageName    : io.hong.admin.golbal.exception
@@ -13,23 +13,21 @@ import org.springframework.http.HttpStatus;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-11        home       HongErrorCode 이용으로 변경
  */
 
 @Getter
 public class HongException extends Exception {
 
-    private final HttpStatus httpStatus;
+    private final HongErrorCode hongErrorCode;
 
-    public HongException() {
-        this(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류입니다.");
+    public HongException(HongErrorCode hongErrorCode) {
+        super(hongErrorCode.getMessage());
+        this.hongErrorCode = hongErrorCode;
     }
 
-    public HongException(String message) {
-        this(HttpStatus.INTERNAL_SERVER_ERROR, message);
-    }
-
-    public HongException(HttpStatus httpStatus, String message) {
+    public HongException(HongErrorCode hongErrorCode, String message) {
         super(message);
-        this.httpStatus = httpStatus;
+        this.hongErrorCode = hongErrorCode;
     }
 }

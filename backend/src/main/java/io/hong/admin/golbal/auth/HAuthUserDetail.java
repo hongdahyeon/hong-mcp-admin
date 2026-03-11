@@ -19,6 +19,7 @@ import java.util.Collections;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-11        home       JWT 필터용 생성자 추가 > 기본 값들만 세팅
  */
 public record HAuthUserDetail(
         Long userId,
@@ -32,7 +33,7 @@ public record HAuthUserDetail(
         Collection<? extends GrantedAuthority> authorities
 ) implements UserDetails {
 
-    // 정적 팩토리 메서드: 엔티티를 레코드로 변환
+    // 1. [로그인/DB조회용] 모든 정보를 다 채울 때
     public static HAuthUserDetail from(HUser user) {
         return new HAuthUserDetail(
                 user.getId(),
@@ -43,9 +44,22 @@ public record HAuthUserDetail(
                 user.isDeleted(),
                 user.isEnabled(),
                 user.getLastPasswordChangedDate(),
-                Collections.singleton(
-                        new SimpleGrantedAuthority(user.getRole().getAuthority())
-                )
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getAuthority()))
+        );
+    }
+
+    // 2. [JWT 필터용] DB 조회 없이 토큰 정보만으로 가볍게 만들 때
+    public static HAuthUserDetail of(Long userId, String email, String role) {
+        return new HAuthUserDetail(
+                userId,
+                email,
+                null,           // username은 토큰에 없으므로 null
+                true,                   // 인증 단계는 통과시키기 위해 true 세팅
+                false,                  // isLocked (false가 잠기지 않음)
+                false,                  // isDeleted
+                true,                   // isEnabled
+                LocalDateTime.now(),    // 만료 체크 통과를 위해 현재 시간
+                Collections.singleton(new SimpleGrantedAuthority(role))
         );
     }
 

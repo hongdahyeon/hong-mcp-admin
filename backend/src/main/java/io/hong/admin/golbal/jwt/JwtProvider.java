@@ -1,8 +1,9 @@
 package io.hong.admin.golbal.jwt;
 
 import io.hong.admin.domain.user.entity.HUser;
-import io.hong.admin.golbal.auth.service.HAuthUserDetailService;
+import io.hong.admin.golbal.auth.HAuthUserDetail;
 import io.hong.admin.golbal.exception.HongException;
+import io.hong.admin.golbal.exception.error.HongErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -38,13 +39,11 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    private final HAuthUserDetailService hAuthUserDetailService;
     private final SecretKey key;
     private final long accessTokenValidity;
     private final long refreshTokenValidity;
 
     public JwtProvider(
-            HAuthUserDetailService hAuthUserDetailService,
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.access-token-validity}") long accessTokenValidity,
             @Value("${jwt.refresh-token-validity}") long refreshTokenValidity) {
@@ -54,7 +53,6 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         this.accessTokenValidity = accessTokenValidity;
         this.refreshTokenValidity = refreshTokenValidity;
-        this.hAuthUserDetailService = hAuthUserDetailService;
     }
 
     // 1. Access Token 생성
@@ -71,6 +69,7 @@ public class JwtProvider {
         Claims claims = Jwts.claims()
                 .subject(user.getEmail())
                 .add("role", user.getRole().getAuthority())
+                .add("userId", user.getId())
                 .build();
 
         Date now = new Date();
@@ -113,16 +112,11 @@ public class JwtProvider {
         try {
             Claims claims = getClaims(token);
             String email = claims.getSubject();
-
-            // 1. 토큰에 저장된 권한 정보 추출
-            Object roleClaim = claims.get("role");
-            if (roleClaim == null) {
-                throw new HongException(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다.");
-            }
+            String roleClaim = claims.get("role", String.class);
+            Long userIdClaim = claims.get("userId", Long.class);
 
             // 매 요청마다 DB 조회를 통해 최신 상태의 UserDetails(HAuthUserDetail)를 가져옴
-            UserDetails userDetails = hAuthUserDetailService.loadUserByUsername(email);
-
+            UserDetails userDetails = HAuthUserDetail.of(userIdClaim, email, roleClaim);
             return new UsernamePasswordAuthenticationToken(
                     userDetails,
                     token,
@@ -130,17 +124,16 @@ public class JwtProvider {
             );
 
         } catch (JwtException e) {
-            log.error("토큰 복싱 중 오류 발생: {}", e.getMessage());
-            throw new HongException(HttpStatus.UNAUTHORIZED, "변조되거나 손상된 토큰입니다.");
+            log.error("토큰 파싱 중 오류 발생: {}", e.getMessage());
+            throw new HongException(HongErrorCode.INVALID_TOKEN);
 
         } catch (UsernameNotFoundException e) {
             log.error("토큰의 이메일에 해당하는 유저를 찾을 수 없음: {}", e.getMessage());
-            throw new HongException(HttpStatus.UNAUTHORIZED, "존재하지 않는 사용자 계정입니다.");
+            throw new HongException(HongErrorCode.USER_NOT_FOUND_BY_TOKEN);
 
         } catch (Exception e) {
             log.error("예상치 못한 인증 오류: {}", e.getMessage());
-            throw new HongException(HttpStatus.INTERNAL_SERVER_ERROR, "인증 처리 중 오류가 발생했습니다.");
-
+            throw new HongException(HongErrorCode.AUTHENTICATION_FAILED);
         }
     }
 }

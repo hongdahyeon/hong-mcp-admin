@@ -7,12 +7,15 @@ import io.hong.admin.domain.usertoken.service.HUserTokenService;
 import io.hong.admin.golbal.auth.dto.request.LoginRequest;
 import io.hong.admin.golbal.auth.dto.response.TokenResponse;
 import io.hong.admin.golbal.exception.HongException;
+import io.hong.admin.golbal.exception.error.HongErrorCode;
 import io.hong.admin.golbal.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 /**
  * packageName    : io.hong.admin.golbal.auth.service
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
  * 2026-03-04        home       접속 정보 저장
+ * 2026-03-11        home       HongException > HongErrorCode로 통일
  */
 
 @Service
@@ -45,15 +49,15 @@ public class AuthService {
 
         // 1. 유저 조회
         HUser hUser = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new HongException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new HongException(HongErrorCode.USER_NOT_FOUND));
 
         // 2. 비밀번호 검증
         if (!passwordEncoder.matches(request.password(), hUser.getPassword())) {
-            throw new HongException("비밀번호가 일치하지 않습니다.");
+            throw new HongException(HongErrorCode.PASSWORD_NOT_MATCH);
         }
 
-        // 3. 계정 상태 체크 (시큐리티가 해주기도 하지만 여기서 미리 확인 가능)
-        if (hUser.isDeleted()) throw new HongException("탈퇴한 계정입니다.");
+        // 3. 계정 상세 상태 체크 (필터 대신 로그인 시점에 수행)
+        validateUserStatus(hUser);
 
         // 4. 토큰 발행 (HUser 정보를 Claims에 가득 담아 보냄)
         String accessToken = jwtProvider.createAccessToken(hUser);
@@ -67,6 +71,33 @@ public class AuthService {
         accessLogService.saveUserAccessLog(hUser.getId(), req);
 
         return new TokenResponse(accessToken, refreshToken, hUser.getUsername());
+    }
+
+    /**
+     * 유저 계정 상태 검증 로직 분리
+     */
+    private void validateUserStatus(HUser hUser) throws HongException {
+        // (1) 탈퇴 여부
+        if (hUser.isDeleted()) {
+            throw new HongException(HongErrorCode.USER_DELETED);
+        }
+        // (2) 잠금 여부
+        if (hUser.isLocked()) {
+            throw new HongException(HongErrorCode.USER_LOCKED);
+        }
+        // (3) 승인 여부
+        if (!hUser.isApproved()) {
+            throw new HongException(HongErrorCode.USER_NOT_APPROVED);
+        }
+        // (4) 활성화 여부
+        if (!hUser.isEnabled()) {
+            throw new HongException(HongErrorCode.USER_FORBIDDEN);
+        }
+        // (5) 비밀번호 만료 체크 (90일)
+        if (hUser.getLastPasswordChangedDate() != null &&
+                hUser.getLastPasswordChangedDate().isBefore(LocalDateTime.now().minusDays(90))) {
+            throw new HongException(HongErrorCode.PASSWORD_EXPIRED);
+        }
     }
 
 }
