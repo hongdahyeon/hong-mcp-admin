@@ -35,3 +35,27 @@
 - [x] `AppRouter` 및 Header/Login 페이지 내 회원가입 경로 연동
 - [x] 최종 테스트 및 예외 처리 (API 에러 핸들링 등)
 - [x] 이메일 기반 ID 로그인 체계 UI 반영 및 용어 정리 (username -> 이름/닉네임)
+
+## 7. 폰트 및 테마 최적화 (Tailwind CSS v4)
+- [x] Tailwind CSS v4 `@theme` 블록을 사용한 폰트 설정 (index.css)
+- [x] Pretendard Variable 폰트 우선 순위 적용 및 최적화
+- [ ] 디자인 시스템 변수 점검 및 브라우저 렌더링 확인
+
+## 8. 전역 예외 처리 최적화 (ErrorResponse / HongErrorCode 연동)
+- [x] `api/index.ts` 내 `ErrorResponse` (code, message) 처리 인터셉터 고도화
+- [x] 401 (Unauthorized) 에러 세분화 (비밀번호 불일치 vs 세션 만료)
+- [x] 비즈니스 로직 에러 코드별 사용자 피드백 테스트
+- [x] 페이지별 중복 alert 제거 및 `[object Object]` 출력 방지 로직 적용
+
+## 9. CI/CD 파이프라인 구축 (Jenkinsfile)
+- [x] Java 25 / React 빌드 대응 Jenkinsfile 작성
+- [x] Gatekeeper 전략 (자동 머지 및 동기화 감지) 구현
+- [x] 텔레그램 알림 시스템 연동
+
+
+
+
+
+
+
+

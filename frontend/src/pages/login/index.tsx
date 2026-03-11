@@ -17,7 +17,7 @@ const Login: React.FC = () => {
             await authService.login(userId, password);
             navigate('/');
         } catch (err: any) {
-            alert(err.response?.data || '로그인 실패. 아이디와 비밀번호를 확인해주세요.');
+            console.error('Login error:', err);
         } finally {
             setIsLoading(false);
         }
