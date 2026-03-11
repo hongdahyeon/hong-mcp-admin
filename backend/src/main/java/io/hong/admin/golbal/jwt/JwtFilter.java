@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (HongException e) {
             // 필터 단에서 에러 응답 직접 구성
-            response.setStatus(e.getHttpStatus().value());
+            response.setStatus(e.getHongErrorCode().getHttpStatus().value());
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(e.getMessage());
         }
