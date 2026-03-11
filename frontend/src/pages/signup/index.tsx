@@ -103,7 +103,7 @@ const Signup: React.FC = () => {
             alert('회원가입이 완료되었습니다! 로그인해 주세요.');
             navigate('/login');
         } catch (err: any) {
-            alert(err.response?.data || '회원가입 실패. 입력 정보를 다시 확인해주세요.');
+            console.error('Signup error:', err);
         } finally {
             setIsLoading(false);
         }
