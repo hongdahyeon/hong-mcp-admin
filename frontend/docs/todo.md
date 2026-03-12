@@ -52,10 +52,8 @@
 - [x] Gatekeeper 전략 (자동 머지 및 동기화 감지) 구현
 - [x] 텔레그램 알림 시스템 연동
 
-
-
-
-
-
-
-
+## 10. 레이아웃 고도화 및 테마 시스템 구축
+- [x] 전역 테마 시스템 [ThemeProvider], [ThemeContext] 구축 및 다크 모드(Dark/Light) 지원
+- [x] Tailwind CSS v4 기반 다크 모드 스타일링 적용 (Home, Header, Footer, Login, Signup)
+- [x] 메인 레이아웃 너비 제약 (`max-w-[1440px]`) 및 반응형 최적화
+- [x] 로그인 페이지 '아이디 기억하기' (`localStorage`: `HONG_CRAFT_DAY`) 기능 구현

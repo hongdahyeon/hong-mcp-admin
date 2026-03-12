@@ -112,8 +112,8 @@ const Signup: React.FC = () => {
     const isPasswordMatch = formData.password && formData.confirmPassword && formData.password === formData.confirmPassword;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 font-sans p-4 py-12">
-            <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 font-sans p-4 py-12 transition-colors duration-300">
+            <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700 border border-transparent dark:border-slate-800">
                 {/* Header Section */}
                 <div className="bg-violet-600 p-10 text-center text-white relative overflow-hidden">
                     <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
@@ -133,12 +133,12 @@ const Signup: React.FC = () => {
                     <div className="space-y-6">
                         {/* Email Field */}
                         <div>
-                            <label className="block text-slate-700 text-sm font-bold mb-2 ml-1" htmlFor="email">
+                            <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="email">
                                 이메일 주소
                             </label>
                             <div className="flex gap-2">
                                 <div className="relative flex-1">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
                                         <Mail size={18} />
                                     </div>
                                     <input
@@ -146,7 +146,7 @@ const Signup: React.FC = () => {
                                         type="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 placeholder:text-slate-400 font-medium"
+                                        className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium"
                                         placeholder="example@craftday.com"
                                         required
                                     />
@@ -154,7 +154,7 @@ const Signup: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleCheckEmail}
-                                    className="px-4 py-3.5 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm whitespace-nowrap"
+                                    className="px-4 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-sm whitespace-nowrap"
                                 >
                                     중복 확인
                                 </button>
@@ -169,12 +169,12 @@ const Signup: React.FC = () => {
 
                         {/* Username (Name) Field */}
                         <div>
-                            <label className="block text-slate-700 text-sm font-bold mb-2 ml-1" htmlFor="username">
+                            <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="username">
                                 사용자 이름
                             </label>
                             <div className="flex gap-2">
                                 <div className="relative flex-1">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
                                         <User size={18} />
                                     </div>
                                     <input
@@ -182,7 +182,7 @@ const Signup: React.FC = () => {
                                         type="text"
                                         value={formData.username}
                                         onChange={handleChange}
-                                        className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 placeholder:text-slate-400 font-medium"
+                                        className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium"
                                         placeholder="이름 또는 닉네임을 입력하세요"
                                         required
                                     />
@@ -190,7 +190,7 @@ const Signup: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleCheckUsername}
-                                    className="px-4 py-3.5 bg-slate-100 text-slate-700 font-bold rounded-2xl hover:bg-slate-200 transition-all text-sm whitespace-nowrap"
+                                    className="px-4 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-sm whitespace-nowrap"
                                 >
                                     중복 확인
                                 </button>
@@ -206,11 +206,11 @@ const Signup: React.FC = () => {
                         {/* Password Field */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-slate-700 text-sm font-bold mb-2 ml-1" htmlFor="password">
+                                <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="password">
                                     비밀번호
                                 </label>
                                 <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
                                         <Lock size={18} />
                                     </div>
                                     <input
@@ -218,18 +218,18 @@ const Signup: React.FC = () => {
                                         type="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        className="w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 placeholder:text-slate-400 font-medium"
+                                        className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium"
                                         placeholder="비밀번호 설정"
                                         required
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-slate-700 text-sm font-bold mb-2 ml-1" htmlFor="confirmPassword">
+                                <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="confirmPassword">
                                     비밀번호 확인
                                 </label>
                                 <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
                                         <Lock size={18} />
                                     </div>
                                     <input
@@ -237,7 +237,7 @@ const Signup: React.FC = () => {
                                         type="password"
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
-                                        className={`w-full pl-10 pr-4 py-3.5 bg-slate-50 border rounded-2xl focus:ring-2 focus:ring-violet-500/20 transition-all outline-none text-slate-900 placeholder:text-slate-400 font-medium ${formData.confirmPassword ? (isPasswordMatch ? 'border-emerald-500 focus:border-emerald-500' : 'border-rose-500 focus:border-rose-500') : 'border-slate-200 focus:border-violet-500'
+                                        className={`w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border rounded-2xl focus:ring-2 focus:ring-violet-500/20 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${formData.confirmPassword ? (isPasswordMatch ? 'border-emerald-500 focus:border-emerald-500' : 'border-rose-500 focus:border-rose-500') : 'border-slate-200 dark:border-slate-700 focus:border-violet-500'
                                             }`}
                                         placeholder="비밀번호 재입력"
                                         required
@@ -253,17 +253,17 @@ const Signup: React.FC = () => {
 
                         {/* Role Selection */}
                         <div>
-                            <label className="block text-slate-700 text-sm font-bold mb-2 ml-1" htmlFor="role">
+                            <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="role">
                                 회원 유형
                             </label>
                             <select
                                 id="role"
                                 value={formData.role}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 font-bold appearance-none cursor-pointer"
+                                className="w-full px-4 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 font-bold appearance-none cursor-pointer"
                             >
                                 {roles.map(role => (
-                                    <option key={role} value={role}>{role}</option>
+                                    <option key={role} value={role} className="dark:bg-slate-900">{role}</option>
                                 ))}
                             </select>
                         </div>
@@ -272,7 +272,7 @@ const Signup: React.FC = () => {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full bg-violet-600 text-white font-black py-4.5 rounded-2xl shadow-xl shadow-violet-200 hover:bg-violet-700 transition-all active:scale-95 flex items-center justify-center gap-3 group mt-10 mb-6"
+                        className="w-full bg-violet-600 text-white font-black py-4.5 rounded-2xl shadow-xl shadow-violet-200 dark:shadow-violet-900/20 hover:bg-violet-700 transition-all active:scale-95 flex items-center justify-center gap-3 group mt-10 mb-6"
                     >
                         {isLoading ? (
                             <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
@@ -284,9 +284,9 @@ const Signup: React.FC = () => {
                     </button>
 
                     <div className="text-center">
-                        <p className="text-slate-400 text-sm font-bold">
+                        <p className="text-slate-400 dark:text-slate-500 text-sm font-bold">
                             이미 계정이 있으신가요?{' '}
-                            <Link to="/login" className="text-violet-600 hover:underline underline-offset-4 decoration-2">
+                            <Link to="/login" className="text-violet-600 dark:text-violet-400 hover:underline underline-offset-4 decoration-2">
                                 로그인하기
                             </Link>
                         </p>

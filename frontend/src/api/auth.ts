@@ -30,7 +30,8 @@ export const authService = {
      * 로그아웃 처리
      */
     logout: (): void => {
-        localStorage.clear();
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('username');
         window.location.href = '/login';
     },
 
