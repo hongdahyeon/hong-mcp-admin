@@ -1,7 +1,5 @@
 package io.hong.admin.golbal.exception.error;
 
-import lombok.Getter;
-
 /**
  * packageName    : io.hong.admin.golbal.exception.error
  * fileName       : ErrorResponse
