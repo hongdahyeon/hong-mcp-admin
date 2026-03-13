@@ -52,10 +52,21 @@
 - [x] Gatekeeper 전략 (자동 머지 및 동기화 감지) 구현
 - [x] 텔레그램 알림 시스템 연동
 
+## 10. 레이아웃 고도화 및 테마 시스템 구축
+- [x] 전역 테마 시스템 [ThemeProvider], [ThemeContext] 구축 및 다크 모드(Dark/Light) 지원
+- [x] Tailwind CSS v4 기반 다크 모드 스타일링 적용 (Home, Header, Footer, Login, Signup)
+- [x] 메인 레이아웃 너비 제약 (`max-w-[1440px]`) 및 반응형 최적화
+- [x] 로그인 페이지 '아이디 기억하기' (`localStorage`: `HONG_CRAFT_DAY`) 기능 구현
 
-
-
-
+## 11. 인증 정보 관리 최적화 및 UI 개선
+- [x] 인증 응답(`TokenResponse`) 구조 개선 (role, refreshToken 포함)
+- [x] `authService` 내 `localStorage` 저장 방식 단일 객체(`AUTH_DATA`)로 통합 리팩토링
+- [x] `Footer` 컴포넌트 내 '공방 등록하기' 링크 추가 및 인증 상태별 라우팅 구현
+- [x] `Header` 컴포넌트 내 네비게이션 및 메가 메뉴 폰트 크기 확대 (가독성 개선)
+- [x] 어드민(`ROLE_ADMIN`) 전용 '시스템 관리' 메뉴 구성 및 조건부 렌더링 구현
+- [x] 어드민 관리 페이지 프로토타입 4종(사용자, 공방, 접속 이력, 결제 정보) 구현 및 라우팅 연결
+- [x] `AdminTable` 공통 컴포넌트 데이터 페이징(Page Size Selector 포함: 5, 10, 50, 100) 및 UI 구현
+- [x] UI 가이드라인[ui_look.md] 최신화
 
 
 
