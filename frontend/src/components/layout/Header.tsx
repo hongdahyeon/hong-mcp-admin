@@ -9,8 +9,10 @@ const Header: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
 
     // ✅ 로그인 상태 및 사용자 정보 확인
-    const isLoggedIn = !!localStorage.getItem('accessToken');
-    const username = localStorage.getItem('username') || '사용자';
+    const authDataString = localStorage.getItem('AUTH_DATA');
+    const authData = authDataString ? JSON.parse(authDataString) : null;
+    const isLoggedIn = !!authData?.accessToken;
+    const username = authData?.username || '사용자';
 
     const menus = [
         { title: '공방 탐색', subMenus: ['카테고리별 클래스', '실시간 핫플레이스', '신규 공방'] },
@@ -40,8 +42,8 @@ const Header: React.FC = () => {
                     {menus.map((menu) => (
                         <div
                             key={menu.title}
-                            className={`relative flex items-center px-4 cursor-pointer transition-all group ${activeMenu === menu.title ? 'text-violet-600 font-bold' : 'text-slate-600 dark:text-slate-300 font-medium hover:text-violet-600'
-                                }`}
+                            className={`relative flex items-center px-4 cursor-pointer transition-all group ${activeMenu === menu.title ? 'text-violet-600 font-bold' : 'text-slate-600 dark:text-slate-300 font-semibold hover:text-violet-600'
+                                } text-lg`}
                             onMouseEnter={() => setActiveMenu(menu.title)}
                         >
                             {menu.title}
@@ -135,13 +137,13 @@ const Header: React.FC = () => {
                     <div className="grid grid-cols-4 gap-8 text-center sm:text-left">
                         {menus.map((menu) => (
                             <div key={menu.title} className="transition-opacity duration-300">
-                                <h4 className={`text-[10px] font-black uppercase tracking-widest mb-4 ${activeMenu === menu.title ? 'text-violet-600' : 'text-slate-300 dark:text-slate-600'
+                                <h4 className={`text-xs font-black uppercase tracking-widest mb-4 ${activeMenu === menu.title ? 'text-violet-600' : 'text-slate-300 dark:text-slate-600'
                                     }`}>
                                     {menu.title}
                                 </h4>
                                 <ul className="space-y-2">
                                     {menu.subMenus.map((sub) => (
-                                        <li key={sub} className="text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors">
+                                        <li key={sub} className="text-base font-bold text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors">
                                             {sub}
                                         </li>
                                     ))}
