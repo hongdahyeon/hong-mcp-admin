@@ -14,10 +14,14 @@ export const authService = {
         try {
             const response = await api.post<TokenResponse>('/api/auth/login', { email, password });
 
-            // ✅ 백엔드 TokenResponse 구조에 맞게 저장
-            const { accessToken, username } = response.data;
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('username', username);
+            // ✅ 백엔드 TokenResponse 구조에 맞게 하나의 객체로 저장
+            const authData = {
+                accessToken: response.data.accessToken,
+                refreshToken: response.data.refreshToken,
+                username: response.data.username,
+                role: response.data.role
+            };
+            localStorage.setItem('AUTH_DATA', JSON.stringify(authData));
 
             return response.data;
         } catch (error) {
@@ -30,8 +34,7 @@ export const authService = {
      * 로그아웃 처리
      */
     logout: (): void => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('username');
+        localStorage.removeItem('AUTH_DATA');
         window.location.href = '/login';
     },
 
