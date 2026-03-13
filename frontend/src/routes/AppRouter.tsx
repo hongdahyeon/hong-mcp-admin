@@ -5,6 +5,10 @@ import Home from '@/pages/home';
 import Login from '@/pages/login';
 import Logout from '@/pages/logout';
 import Signup from '@/pages/signup';
+import UserManagement from '@/pages/admin/user';
+import WorkplaceManagement from '@/pages/admin/workplace';
+import AccessLog from '@/pages/admin/access';
+import PaymentManagement from '@/pages/admin/payment';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -19,7 +23,12 @@ const AppRouter: React.FC = () => {
                 {/* 메인 레이아웃 적용 경로 (대시보드 등) */}
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Home />} />
-                    {/* 향후 다른 페이지들을 여기에 추가 */}
+
+                    {/* 관리자(Admin) 전용 메뉴 */}
+                    <Route path="/admin/user" element={<UserManagement />} />
+                    <Route path="/admin/workplace" element={<WorkplaceManagement />} />
+                    <Route path="/admin/access" element={<AccessLog />} />
+                    <Route path="/admin/payment" element={<PaymentManagement />} />
                 </Route>
 
                 {/* 404 페이지 - 최상단 수준에서 렌더링 */}

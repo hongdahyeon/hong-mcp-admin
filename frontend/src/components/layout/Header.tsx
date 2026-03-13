@@ -15,11 +15,52 @@ const Header: React.FC = () => {
     const username = authData?.username || '사용자';
 
     const menus = [
-        { title: '공방 탐색', subMenus: ['카테고리별 클래스', '실시간 핫플레이스', '신규 공방'] },
-        { title: '예약/결제', subMenus: ['예약 내역', '결제 관리', '쿠폰/포인트'] },
-        { title: '커뮤니티', subMenus: ['찐후기 자랑', '공방 소식', '작가님 인터뷰'] },
-        { title: '제휴 문의', subMenus: ['공방 입점 안내', '작가 신청', '광고/제휴'] },
+        {
+            title: '공방 탐색',
+            subMenus: [
+                { name: '카테고리별 클래스', path: '#' },
+                { name: '실시간 핫플레이스', path: '#' },
+                { name: '신규 공방', path: '#' }
+            ]
+        },
+        {
+            title: '예약/결제',
+            subMenus: [
+                { name: '예약 내역', path: '#' },
+                { name: '결제 관리', path: '#' },
+                { name: '쿠폰/포인트', path: '#' }
+            ]
+        },
+        {
+            title: '커뮤니티',
+            subMenus: [
+                { name: '찐후기 자랑', path: '#' },
+                { name: '공방 소식', path: '#' },
+                { name: '작가님 인터뷰', path: '#' }
+            ]
+        },
+        {
+            title: '제휴 문의',
+            subMenus: [
+                { name: '공방 입점 안내', path: '#' },
+                { name: '작가 신청', path: '#' },
+                { name: '광고/제휴', path: '#' }
+            ]
+        },
     ];
+
+    // ✅ 관리자(ROLE_ADMIN)일 경우 시스템 관리 메뉴 추가
+    if (authData?.role === 'ROLE_ADMIN') {
+        menus.push({
+            title: '시스템 관리',
+            subMenus: [
+                { name: '사용자 관리', path: '/admin/user' },
+                { name: '공방 관리', path: '/admin/workplace' },
+                { name: '접속 이력 관리', path: '/admin/access' },
+                { name: '결제 정보 관리', path: '/admin/payment' }
+            ]
+        });
+    }
 
     return (
         <header
@@ -128,13 +169,15 @@ const Header: React.FC = () => {
                 </div>
             </div>
 
-            {/* Mega Menu Dropdown */}
             <div
                 className={`absolute top-16 left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-xl transition-all duration-300 ease-in-out overflow-hidden ${activeMenu ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
                     }`}
             >
                 <div className="max-w-[1440px] mx-auto px-6 py-8">
-                    <div className="grid grid-cols-4 gap-8 text-center sm:text-left">
+                    <div
+                        className="grid gap-8 text-center sm:text-left"
+                        style={{ gridTemplateColumns: `repeat(${menus.length}, minmax(0, 1fr))` }}
+                    >
                         {menus.map((menu) => (
                             <div key={menu.title} className="transition-opacity duration-300">
                                 <h4 className={`text-xs font-black uppercase tracking-widest mb-4 ${activeMenu === menu.title ? 'text-violet-600' : 'text-slate-300 dark:text-slate-600'
@@ -143,8 +186,14 @@ const Header: React.FC = () => {
                                 </h4>
                                 <ul className="space-y-2">
                                     {menu.subMenus.map((sub) => (
-                                        <li key={sub} className="text-base font-bold text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors">
-                                            {sub}
+                                        <li key={sub.name}>
+                                            <Link
+                                                to={sub.path}
+                                                onClick={() => setActiveMenu(null)}
+                                                className="text-base font-bold text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors"
+                                            >
+                                                {sub.name}
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
