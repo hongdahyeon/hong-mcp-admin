@@ -1,9 +1,15 @@
 package io.hong.admin.domain.useraccesslog.service;
 
+import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLog;
+import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogList;
 import io.hong.admin.domain.useraccesslog.entity.HUserAccessLog;
 import io.hong.admin.domain.useraccesslog.repository.HUserAccessLogRepository;
+import io.hong.admin.golbal.common.page.PageResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-04        home       최초 생성
+ * 2026-03-14        home       유저 접근 이력 페이징 조회 추가
  */
 
 @Service
@@ -38,5 +45,11 @@ public class HUserAccessLogService {
                 .build();
 
         repository.save(log);
+    }
+
+    public PageResponseDto<UserAccessLogList> findUserAccessLogPage(SearchUserAccessLog search) {
+        Pageable pageable = search.toPageable(Sort.by("id").descending());
+        Page<UserAccessLogList> userPage = repository.findAllWithUserInfo(pageable);
+        return new PageResponseDto<>(userPage);
     }
 }

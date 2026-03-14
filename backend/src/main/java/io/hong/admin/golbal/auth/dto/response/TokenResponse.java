@@ -10,6 +10,7 @@ package io.hong.admin.golbal.auth.dto.response;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-14        home       TokenResponse > role 정보 추가
  */
-public record TokenResponse(String accessToken, String refreshToken, String username) {
+public record TokenResponse(String accessToken, String refreshToken, String username, String role) {
 }
