@@ -1,56 +1,103 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminTable from '@/components/common/AdminTable';
+import api from '@/api';
+import { PageResponseDto, PageRequestDto } from '@/types/common';
+
+interface UserAccessLogList {
+    id: number;
+    userId: number;
+    userName: string;
+    userEmail: string;
+    ipAddress: string;
+    userAgent: string;
+    loginAt: string;
+}
 
 const AccessLog: React.FC = () => {
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const [pageSize, setPageSize] = React.useState(10);
-    const totalPages = 10;
+    const [logs, setLogs] = useState<UserAccessLogList[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
+    const [search, setSearch] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const sampleLogs = [
-        { id: 1, user: 'admin@craftday.com', action: 'LOGIN', ip: '192.168.0.1', device: 'Windows / Chrome', time: '2024-03-13 18:30:45' },
-        { id: 2, user: 'user1@gmail.com', action: 'RESOURCE_ACCESS', detail: '/api/v1/workshops', ip: '1.2.3.4', device: 'iPhone / Safari', time: '2024-03-13 18:25:21' },
-        { id: 3, user: 'host1@naver.com', action: 'WORKSHOP_UPDATE', detail: 'ID: 104', ip: '210.10.20.30', device: 'MacBook / Edge', time: '2024-03-13 18:15:10' },
-        { id: 4, user: 'admin@craftday.com', action: 'USER_BLOCK', detail: 'ID: 882', ip: '192.168.0.1', device: 'Windows / Chrome', time: '2024-03-13 17:50:00' },
-    ];
+    const fetchLogs = async () => {
+        try {
+            setLoading(true);
+            const params: PageRequestDto = {
+                page: currentPage,
+                size: pageSize,
+                search: search || undefined
+            };
+            const response = await api.get<PageResponseDto<UserAccessLogList>>('/api/admin/user-access/page', { params });
+            const data = response.data;
+            setLogs(data.content);
+            setTotalPages(data.totalPages);
+            setCurrentPage(data.pageNumber);
+        } catch (error) {
+            console.error('Failed to fetch access logs', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchLogs();
+    }, [currentPage, pageSize, search]);
 
     const columns = [
-        { header: '시간', key: 'time', render: (log: any) => <span className="text-xs font-medium text-slate-400 whitespace-nowrap">{log.time}</span> },
-        { header: '사용자', key: 'user', render: (log: any) => <span className="text-sm font-black text-slate-900 dark:text-white">{log.user}</span> },
+        { header: '시간', key: 'loginAt', render: (log: UserAccessLogList) => <span className="text-xs font-medium text-slate-400 whitespace-nowrap">{new Date(log.loginAt).toLocaleString()}</span> },
         {
-            header: '활동',
-            key: 'action',
-            render: (log: any) => (
-                <span className={`px-2 py-1 rounded-md text-[10px] font-black tracking-tight ${log.action === 'LOGIN' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                    log.action === 'USER_BLOCK' ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400' :
-                        'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
-                    }`}>
-                    {log.action}
-                </span>
+            header: '사용자 정보',
+            key: 'userName',
+            render: (log: UserAccessLogList) => (
+                <div className="flex flex-col">
+                    <span className="text-sm font-black text-slate-900 dark:text-white">{log.userName || `ID: ${log.userId}`}</span>
+                    <span className="text-xs text-slate-500">{log.userEmail || '-'}</span>
+                </div>
             )
         },
-        { header: '상세 내용', key: 'detail', render: (log: any) => <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{log.detail || '-'}</span> },
-        { header: 'IP 주소', key: 'ip', render: (log: any) => <span className="text-sm font-medium text-slate-500">{log.ip}</span> },
-        { header: '접속 환경', key: 'device', render: (log: any) => <span className="text-sm font-medium text-slate-400">{log.device}</span> },
+        { header: 'IP 주소', key: 'ipAddress', render: (log: UserAccessLogList) => <span className="text-sm font-medium text-slate-500">{log.ipAddress}</span> },
+        { header: '접속 환경', key: 'userAgent', render: (log: UserAccessLogList) => <span className="text-sm font-medium text-slate-400 max-w-xs truncate block" title={log.userAgent}>{log.userAgent}</span> },
     ];
 
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-black text-slate-900 dark:text-white">접속 이력 관리</h1>
-                <button className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                    로그 내보내기 (CSV)
-                </button>
+                <div className="flex gap-2 items-center">
+                    <input
+                        type="text"
+                        placeholder="검색어 입력..."
+                        value={search}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1); // Reset page on search
+                        }}
+                        className="px-4 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg text-sm outline-none focus:border-violet-500 text-slate-900 dark:text-white"
+                    />
+                    <button className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors whitespace-nowrap">
+                        로그 내보내기 (CSV)
+                    </button>
+                </div>
             </div>
 
-            <AdminTable
-                columns={columns}
-                data={sampleLogs}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-                pageSize={pageSize}
-                onPageSizeChange={setPageSize}
-            />
+            {loading ? (
+                <div className="text-center py-12 text-slate-400 font-medium">로딩 중...</div>
+            ) : (
+                <AdminTable
+                    columns={columns}
+                    data={logs}
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    pageSize={pageSize}
+                    onPageSizeChange={(size) => {
+                        setPageSize(size);
+                        setCurrentPage(1); // Reset page on size change
+                    }}
+                />
+            )}
         </div>
     );
 };
