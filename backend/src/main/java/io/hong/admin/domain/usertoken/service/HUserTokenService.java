@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * packageName    : io.hong.admin.domain.usertoken.service
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-15        home       findByUserId, findByRefreshToken 추가
  */
 
 @Service
@@ -47,5 +49,13 @@ public class HUserTokenService {
 
         // 3. 메소드 종료(@Transactional 종료) :: Tx 커밋 발생
         // 4. JPA가 스냅샷과 비교 후, '수정됏음'을 감지하고 UPDATE 쿼리 자동 전송 (Dirty Checking)
+    }
+
+    public Optional<HUserToken> findByUserId(Long userId) {
+        return tokenRepository.findById(userId);
+    }
+
+    public Optional<HUserToken> findByRefreshToken(String refreshToken) {
+        return tokenRepository.findByRefreshToken(refreshToken);
     }
 }

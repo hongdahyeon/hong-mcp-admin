@@ -1,6 +1,7 @@
 package io.hong.admin.golbal.auth.controller.api;
 
 import io.hong.admin.golbal.auth.dto.request.LoginRequest;
+import io.hong.admin.golbal.auth.dto.request.ReissueRequest;
 import io.hong.admin.golbal.auth.dto.response.TokenResponse;
 import io.hong.admin.golbal.auth.service.AuthService;
 import io.hong.admin.golbal.exception.HongException;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-15        home       토큰 재발급 시도 프로세스 추가
  */
 
 @Slf4j
@@ -42,11 +44,17 @@ public class AuthRestController {
             HttpServletRequest req
     ) throws HongException {
         log.info("로그인 시도: {}", loginRequest.email());
-
-        // 1. AuthService를 통해 로그인 로직 수행 (비밀번호 체크 및 토큰 생성 포함)
         TokenResponse tokenResponse = authService.login(loginRequest, req);
+        return ResponseEntity.ok(tokenResponse);
+    }
 
-        // 2. 성공 시 200 OK와 함께 AccessToken, RefreshToken, Username 반환
+    @PostMapping("/reissue")
+    public ResponseEntity<TokenResponse> reissue(
+            @RequestBody ReissueRequest reissueRequest,
+            HttpServletRequest req
+    ) throws HongException {
+        log.info("토큰 재발급 시도");
+        TokenResponse tokenResponse = authService.reissue(reissueRequest, req);
         return ResponseEntity.ok(tokenResponse);
     }
 }

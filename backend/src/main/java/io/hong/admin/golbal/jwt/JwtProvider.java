@@ -5,6 +5,7 @@ import io.hong.admin.golbal.auth.HAuthUserDetail;
 import io.hong.admin.golbal.exception.HongException;
 import io.hong.admin.golbal.exception.error.HongErrorCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -32,6 +33,7 @@ import java.util.Date;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-15        home       validateToken catch 문 세분화
  */
 
 
@@ -89,13 +91,17 @@ public class JwtProvider {
     }
 
     // 4. 토큰 유효성 검증
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws HongException {
         try {
             getClaims(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            log.error("만료된 JWT 토큰입니다.");
+            // 여기서 바로 예외를 던져 Filter의 catch 블록으로 보냅니다.
+            throw new HongException(HongErrorCode.EXPIRED_TOKEN);
         } catch (JwtException | IllegalArgumentException e) {
             log.error("잘못된 JWT 토큰입니다: {}", e.getMessage());
-            return false;
+            throw new HongException(HongErrorCode.INVALID_TOKEN);
         }
     }
 

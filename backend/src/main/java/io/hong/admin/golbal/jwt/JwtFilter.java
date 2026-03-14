@@ -1,6 +1,7 @@
 package io.hong.admin.golbal.jwt;
 
 import io.hong.admin.golbal.exception.HongException;
+import io.hong.admin.golbal.exception.error.HongErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import java.io.IOException;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-03-15        home       setErrorResponse 추가
  */
 
 @RequiredArgsConstructor
@@ -39,19 +41,16 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
 
         try {
-            // 2. 토큰 유효성 검사 및 SecurityContext 저장
-            // => Java 25의 가상 스레드 환경에서는 ContextHolder 관리가 더 효율적입니다.
-            if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
-                Authentication authentication = jwtProvider.getAuthentication(jwt);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (StringUtils.hasText(jwt)) {
+                // validateToken 내부에서 만료 시 HongException(EXPIRED_TOKEN)을 던짐
+                if (jwtProvider.validateToken(jwt)) {
+                    Authentication authentication = jwtProvider.getAuthentication(jwt);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
-
             filterChain.doFilter(request, response);
         } catch (HongException e) {
-            // 필터 단에서 에러 응답 직접 구성
-            response.setStatus(e.getHongErrorCode().getHttpStatus().value());
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(e.getMessage());
+            setErrorResponse(response, e.getHongErrorCode());
         }
     }
 
@@ -61,5 +60,19 @@ public class JwtFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    // 에러 응답을 직접 만드는 헬퍼 메서드
+    private void setErrorResponse(HttpServletResponse response, HongErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getHttpStatus().value());
+        response.setContentType("application/json;charset=UTF-8");
+        // ErrorResponse 객체를 JSON 문자열로 변환
+        String json = String.format(
+                "{\"code\": \"%s\", \"message\": \"%s\", \"status\": %d}",
+                errorCode.getCode(),
+                errorCode.getMessage(),
+                errorCode.getHttpStatus().value()
+        );
+        response.getWriter().write(json);
     }
 }
