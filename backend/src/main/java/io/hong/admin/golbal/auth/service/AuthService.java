@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
  * 2026-03-03        home       최초 생성
  * 2026-03-04        home       접속 정보 저장
  * 2026-03-11        home       HongException > HongErrorCode로 통일
+ * 2026-03-14        home       TokenResponse > role 정보 추가
  */
 
 @Service
@@ -70,7 +71,7 @@ public class AuthService {
         // 6. 접속 정보 저장
         accessLogService.saveUserAccessLog(hUser.getId(), req);
 
-        return new TokenResponse(accessToken, refreshToken, hUser.getUsername());
+        return new TokenResponse(accessToken, refreshToken, hUser.getUsername(), hUser.getRole().getAuthority());
     }
 
     /**
