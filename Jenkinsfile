@@ -97,17 +97,17 @@ pipeline {
                             git config user.email "hyeon8287@gmail.com"
                             git config user.name "hong Home"
                             
-                            echo >>> Fetching latest changes from remote...
+                            echo ">>> Fetching latest changes from remote..."
                             git fetch origin
                             
-                            echo >>> Checking out target branch: ${cleanTarget}
+                            echo ">>> Checking out target branch: ${cleanTarget}"
                             git checkout ${cleanTarget}
                             git pull origin ${cleanTarget}
                             
-                            echo >>> Merging ${cleanSource} into ${cleanTarget}...
+                            echo ">>> Merging ${cleanSource} into ${cleanTarget}..."
                             git merge origin/${cleanSource} --no-edit
                             
-                            echo >>> Pushing merged results to GitHub...
+                            echo ">>> Pushing merged results to GitHub..."
                             git push https://%GIT_USER%:%GIT_PASS%@${env.REPO_URL.replace('https://', '')} ${cleanTarget}
                             """
                         }
