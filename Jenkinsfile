@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // 사용할 도구 정의 (Jenkins Global Tool Configuration에 등록된 이름)
+        // Define tool names (as registered in Jenkins Global Tool Configuration)
         nodejs 'node'
         jdk 'jdk-25'
     }
@@ -19,7 +19,7 @@ pipeline {
 
     stages {
 
-        // 1단계: 백엔드 빌드 및 테스트 (Java/Gradle)
+        // Stage 1: Backend Build & Test (Java/Gradle)
         stage('Backend Build & Test') {
             steps {
                 dir('backend') {
@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        // 2단계: 프론트엔드 빌드 (Node.js/npm)
+        // Stage 2: Frontend Build (Node.js/npm)
         stage('Frontend Build') {
             steps {
                 dir('frontend') {
@@ -38,40 +38,39 @@ pipeline {
             }
         }
 
-        // 3단계: 자동 병합 (Gatekeeper) (코드 품질 검증 통과 후 실행)
+        // Stage 3: Automated Merge (Gatekeeper) (Runs after build and test success)
         stage('Automated Merge (Gatekeeper)') {
             steps {
                 script {
-                    // [핵심] Windows Jenkins에서 한글 커밋 메시지가 깨지지 않도록 UTF-8(65001)로 설정 후 로그 추출
+                    // Set to UTF-8 (65001) for Windows Jenkins to extract commit logs without encoding issues
                     def fullLog = bat(script: '@echo off && chcp 65001 > nul && git log -1 --pretty=%%B', returnStdout: true).trim()
                     
-                    // 불필요한 시스템 출력(Active code page... 등)을 필터링하여 순수 커밋 메시지만 획득
+                    // Filter unnecessary system output (Active code page...) to get target commit message
                     def messageLines = fullLog.split('\r?\n').findAll {
-                        !it.contains('git log -1') && !it.startsWith('C:\\') && !it.contains('Active code page: 65001') 
+                        !it.contains('git log -1') && !it.startsWith('C:\\') && !it.contains('Active code page: 65001')
                     }
                     def commitMessage = messageLines.join('\n').trim()
                     
-                    // 현재 빌드가 발생한 브랜치명 확인 (origin/ 제거)
+                    // Identify branch name (removing origin/ prefix)
                     def rawBranch = env.GIT_BRANCH ?: "home"
                     def currentBranch = rawBranch.replace('origin/', '').trim()
                     
                     echo ">>> Current Branch: ${currentBranch}"
                     echo ">>> Extracted Commit Message: ${commitMessage}"
 
-                    // --- 머지 시나리오 판별 --- //
+                    // --- Determine Merge Scenario --- //
 
-                    // [시나리오 2] 상위 브랜치(main)의 내용을 현재 브랜치로 가져온 경우 (Sync)
-                    // 커밋 메시지에 'from hongdahyeon/main' 등이 포함되어 있다면 역머지로 판단
+                    // [Scenario 2] Sync: When changes from target branch (main) are pulled to feature branch
                     if (commitMessage.contains('from hongdahyeon/main') || commitMessage.contains('Merge branch \'main\'')) {
                         
                         echo ">>> [Scenario 2] Sync from 'main' to '${currentBranch}' detected. Skipping Auto-Merge to prevent infinite loop."
                         env.CASE_TYPE = "SYNC_FROM_MAIN"
                         env.ACTUAL_SOURCE = "main"
                         env.ACTUAL_TARGET = currentBranch
-                        env.SKIP_PUSH = "true" // 다시 main으로 push하지 않음
+                        env.SKIP_PUSH = "true"
 
                     }
-                    // [예외] main 브랜치에 직접 코드를 푸시한 경우
+                    // [Exception] Direct Push: When code is pushed directly to main branch
                     else if (currentBranch == "main") {
                         
                         echo ">>> Direct push to 'main' detected. Skipping automated merge process."
@@ -79,7 +78,7 @@ pipeline {
                         env.SKIP_PUSH = "true"
 
                     }
-                    // [시나리오 1] 일반 브랜치(home2 등)에서 작업 후 품질 검증 성공 -> main으로 자동 머지
+                    // [Scenario 1] Automated Merge: When feature branch build/test succeeds -> merge to main
                     else {
                         
                         echo ">>> [Scenario 1] Starting Automated Merge from '${currentBranch}' to 'main'."
@@ -89,9 +88,9 @@ pipeline {
                         
                         env.ACTUAL_SOURCE = cleanSource
                         env.ACTUAL_TARGET = cleanTarget
-                        env.SKIP_PUSH = "false" // main으로 최종 push 진행
+                        env.SKIP_PUSH = "false"
 
-                        // GitHub 자격 증명을 사용하여 머지 및 푸시 실행
+                        // Merge and Push using GitHub Credentials
                         withCredentials([usernamePassword(credentialsId: 'github-login', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                             bat """
                             @echo off
@@ -150,8 +149,6 @@ def sendTelegramNotification(String message) {
     try {
         withCredentials([string(credentialsId: 'telegram-token-craft', variable: 'TOKEN'),
                          string(credentialsId: 'telegram-chat-id-craft', variable: 'CHAT_ID')]) {
-            // Using --data-urlencode for message to handle special characters safely
-            // Using double quotes for chat_id in case it contains negative sign or other characters
             bat """
             @echo off
             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" ^
