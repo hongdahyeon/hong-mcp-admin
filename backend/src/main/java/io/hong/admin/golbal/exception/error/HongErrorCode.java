@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-11        home       최초 생성
+ * 2026-03-15        home       기존 A003 삭제 및 [만료된 토큰] 에러 코드 추가
  */
 @Getter
 public enum HongErrorCode {
@@ -23,9 +24,9 @@ public enum HongErrorCode {
     // 인증/인가
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A001", "인증되지 않은 사용자입니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A002", "유효하지 않은 토큰입니다."),
-    FORBIDDEN(HttpStatus.FORBIDDEN, "A003", "권한이 없습니다."),
-    USER_NOT_FOUND_BY_TOKEN(HttpStatus.UNAUTHORIZED, "A004", "존재하지 않는 사용자 계정입니다."),
-    AUTHENTICATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "A005", "인증 처리 중 오류가 발생했습니다."),
+    USER_NOT_FOUND_BY_TOKEN(HttpStatus.UNAUTHORIZED, "A003", "존재하지 않는 사용자 계정입니다."),
+    AUTHENTICATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "A004", "인증 처리 중 오류가 발생했습니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A005", "만료된 토큰입니다."),
 
     // 유저 상태 관련 (상세화)
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
