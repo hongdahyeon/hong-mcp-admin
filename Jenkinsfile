@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     tools {
+        // Define tool names (as registered in Jenkins Global Tool Configuration)
         nodejs 'node'
         jdk 'jdk-25'
     }
@@ -18,6 +19,7 @@ pipeline {
 
     stages {
 
+        // Stage 1: Backend Build & Test (Java/Gradle)
         stage('Backend Build & Test') {
             steps {
                 dir('backend') {
@@ -26,6 +28,7 @@ pipeline {
             }
         }
 
+        // Stage 2: Frontend Build (Node.js/npm)
         stage('Frontend Build') {
             steps {
                 dir('frontend') {
@@ -35,35 +38,50 @@ pipeline {
             }
         }
 
+        // Stage 3: Automated Merge (Gatekeeper) (Runs after build and test success)
         stage('Automated Merge (Gatekeeper)') {
             steps {
                 script {
-                    // Set code page to UTF-8 for git log to handle Korean/special characters
+                    // Set to UTF-8 (65001) for Windows Jenkins to extract commit logs without encoding issues
                     def fullLog = bat(script: '@echo off && chcp 65001 > nul && git log -1 --pretty=%%B', returnStdout: true).trim()
-                    def messageLines = fullLog.split('\r?\n').findAll { !it.contains('git log -1') && !it.startsWith('C:\\') && !it.contains('Active code page: 65001') }
+                    
+                    // Filter unnecessary system output (Active code page...) to get target commit message
+                    def messageLines = fullLog.split('\r?\n').findAll {
+                        !it.contains('git log -1') && !it.startsWith('C:\\') && !it.contains('Active code page: 65001')
+                    }
                     def commitMessage = messageLines.join('\n').trim()
                     
+                    // Identify branch name (removing origin/ prefix)
                     def rawBranch = env.GIT_BRANCH ?: "home"
                     def currentBranch = rawBranch.replace('origin/', '').trim()
                     
                     echo ">>> Current Branch: ${currentBranch}"
                     echo ">>> Extracted Commit Message: ${commitMessage}"
 
-                    // Determine scenarios
+                    // --- Determine Merge Scenario --- //
+
+                    // [Scenario 2] Sync: When changes from target branch (main) are pulled to feature branch
                     if (commitMessage.contains('from hongdahyeon/main') || commitMessage.contains('Merge branch \'main\'')) {
-                        // Scenario 2: main -> Feature (Sync)
-                        echo ">>> Scenario 2: Sync from 'main' to '${currentBranch}' detected."
+                        
+                        echo ">>> [Scenario 2] Sync from 'main' to '${currentBranch}' detected. Skipping Auto-Merge to prevent infinite loop."
                         env.CASE_TYPE = "SYNC_FROM_MAIN"
                         env.ACTUAL_SOURCE = "main"
                         env.ACTUAL_TARGET = currentBranch
                         env.SKIP_PUSH = "true"
-                    } else if (currentBranch == "main") {
-                        echo ">>> Direct push to 'main' detected. Skipping automated merge."
+
+                    }
+                    // [Exception] Direct Push: When code is pushed directly to main branch
+                    else if (currentBranch == "main") {
+                        
+                        echo ">>> Direct push to 'main' detected. Skipping automated merge process."
                         env.CASE_TYPE = "DIRECT_MAIN_PUSH"
                         env.SKIP_PUSH = "true"
-                    } else {
-                        // Scenario 1: Feature -> main (Automated Merge)
-                        echo ">>> Scenario 1: Automated Merge from '${currentBranch}' to 'main' detected."
+
+                    }
+                    // [Scenario 1] Automated Merge: When feature branch build/test succeeds -> merge to main
+                    else {
+                        
+                        echo ">>> [Scenario 1] Starting Automated Merge from '${currentBranch}' to 'main'."
                         env.CASE_TYPE = "MERGE_TO_MAIN"
                         def cleanSource = currentBranch
                         def cleanTarget = "main"
@@ -72,23 +90,24 @@ pipeline {
                         env.ACTUAL_TARGET = cleanTarget
                         env.SKIP_PUSH = "false"
 
+                        // Merge and Push using GitHub Credentials
                         withCredentials([usernamePassword(credentialsId: 'github-login', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                             bat """
                             @echo off
                             git config user.email "hyeon8287@gmail.com"
                             git config user.name "hong Home"
                             
-                            echo Fetching latest changes...
+                            echo ">>> Fetching latest changes from remote..."
                             git fetch origin
                             
-                            echo Checking out target branch: ${cleanTarget}
+                            echo ">>> Checking out target branch: ${cleanTarget}"
                             git checkout ${cleanTarget}
                             git pull origin ${cleanTarget}
                             
-                            echo Merging ${cleanSource} into ${cleanTarget}...
+                            echo ">>> Merging ${cleanSource} into ${cleanTarget}..."
                             git merge origin/${cleanSource} --no-edit
                             
-                            echo Pushing changes to remote...
+                            echo ">>> Pushing merged results to GitHub..."
                             git push https://%GIT_USER%:%GIT_PASS%@${env.REPO_URL.replace('https://', '')} ${cleanTarget}
                             """
                         }
@@ -103,11 +122,17 @@ pipeline {
             script {
                 def now = new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone('Asia/Seoul'))
                 if (env.CASE_TYPE == "SYNC_FROM_MAIN") {
+                    
                     sendTelegramNotification("[${now}][V] CI/CD Success: Sync from main completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+
                 } else if (env.CASE_TYPE == "MERGE_TO_MAIN") {
+
                     sendTelegramNotification("[${now}][V] CI/CD Success: Build and Automated Merge completed (${env.ACTUAL_SOURCE} -> ${env.ACTUAL_TARGET})")
+
                 } else {
+                    
                     sendTelegramNotification("[${now}][V] CI/CD Success: Build completed (${env.GIT_BRANCH ?: 'unknown'})")
+                
                 }
             }
         }
@@ -124,8 +149,6 @@ def sendTelegramNotification(String message) {
     try {
         withCredentials([string(credentialsId: 'telegram-token-craft', variable: 'TOKEN'),
                          string(credentialsId: 'telegram-chat-id-craft', variable: 'CHAT_ID')]) {
-            // Using --data-urlencode for message to handle special characters safely
-            // Using double quotes for chat_id in case it contains negative sign or other characters
             bat """
             @echo off
             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" ^

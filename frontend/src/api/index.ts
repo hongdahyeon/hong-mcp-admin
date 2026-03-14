@@ -15,9 +15,17 @@ const api = axios.create({
 // [Request Interceptor] 모든 요청 전에 토큰 삽입
 api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('accessToken');
-        if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
+        const authDataStr = localStorage.getItem('AUTH_DATA');
+        if (authDataStr) {
+            try {
+                const authData = JSON.parse(authDataStr);
+                const token = authData.accessToken;
+                if (token && config.headers) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+            } catch (e) {
+                console.error('Failed to parse AUTH_DATA from localStorage', e);
+            }
         }
         return config;
     },

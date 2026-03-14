@@ -85,4 +85,42 @@ When creating new admin prototypes:
 
 ---
 
-*Last Updated: 2026-03-13 by Antigravity AI*
+## 🔗 데이터 페이징 연동 (API 호출 패턴)
+
+목록성 데이터를 서버에서 가져올 때는 항상 공통 타입을 사용하고 아래 패턴을 따릅니다.
+
+### 1. 공통 타입 사용
+```tsx
+import { PageRequestDto, PageResponseDto } from '@/types/common';
+```
+
+### 2. 표준 데이터 패칭 패턴
+```tsx
+const [data, setData] = useState<ItemType[]>([]);
+const [currentPage, setCurrentPage] = useState(1);
+const [pageSize, setPageSize] = useState(10);
+const [totalPages, setTotalPages] = useState(1);
+
+const fetchData = async () => {
+    const params: PageRequestDto = {
+        page: currentPage,
+        size: pageSize,
+        search: searchStr // 선택 사항
+    };
+    
+    const response = await api.get<PageResponseDto<ItemType>>('/your-api-path', { params });
+    const { content, totalPages, pageNumber } = response.data;
+    
+    setData(content);
+    setTotalPages(totalPages);
+    setCurrentPage(pageNumber); // 서버에서 보정된 현재 페이지 반영
+};
+
+useEffect(() => {
+    fetchData();
+}, [currentPage, pageSize]);
+```
+
+---
+
+*Last Updated: 2026-03-14 by Antigravity AI*
