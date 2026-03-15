@@ -120,7 +120,3 @@ useEffect(() => {
     fetchData();
 }, [currentPage, pageSize]);
 ```
-
----
-
-*Last Updated: 2026-03-14 by Antigravity AI*

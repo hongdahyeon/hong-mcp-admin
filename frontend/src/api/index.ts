@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { authService } from './auth';
 
 /**
  * 🚀 Axios 공통 인스턴스 설정
@@ -34,41 +35,80 @@ api.interceptors.request.use(
     }
 );
 
+// 토큰 재발급 중복 방지를 위한 플래그
+let isRefreshing = false;
+
 // [Response Interceptor] 401(만료/인증실패) 및 공통 예외(ErrorResponse) 처리
 api.interceptors.response.use(
     (response: AxiosResponse) => {
         return response;
     },
-    (error: AxiosError) => {
-        const status = error.response?.status;
-        const data = error.response?.data as any; // ErrorResponse { code, message, status }
-
-        // 백엔드 HongException (ErrorResponse) 구조 대응
+    async (error: AxiosError) => {
+        const originalRequest = error.config as any;
+        const data = error.response?.data as any;
         const errorCode = data?.code;
-        let errorMessage = data?.message || error.message || '알 수 없는 오류가 발생했습니다.';
+        const errorMessage = data?.message || '오류가 발생했습니다.';
 
-        // 만약 errorMessage가 객체라면 (예외 상황) 문자열로 변환
-        if (typeof errorMessage === 'object') {
-            errorMessage = JSON.stringify(errorMessage);
+        console.log("--- Axios Error Detected ---");
+
+        // [A005] Access Token 만료 시 처리
+        if (errorCode === 'A005') {
+            console.log("Detected A005 - Attempting Reissue");
+
+            // 이미 한 번 시도한 요청이라면 즉시 종료 (무한 루프 방지)
+            if (originalRequest._retry) {
+                localStorage.removeItem('AUTH_DATA');
+                alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                window.location.href = '/login';
+                return Promise.reject(error);
+            }
+
+            // 중복 재발급 요청 방지
+            if (isRefreshing) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return api(originalRequest);
+            }
+
+            const authDataStr = localStorage.getItem('AUTH_DATA');
+            if (authDataStr) {
+                originalRequest._retry = true;
+                isRefreshing = true;
+                try {
+                    const authData = JSON.parse(authDataStr);
+                    const refreshToken = authData.refreshToken;
+
+                    // 토큰 재발급 호출
+                    const newTokenData = await authService.reissue(refreshToken);
+
+                    // 새 토큰으로 재시도
+                    originalRequest.headers.Authorization = `Bearer ${newTokenData.accessToken}`;
+                    return api(originalRequest);
+                } catch (reissueError: any) {
+                    console.error('Silent refresh failed:', reissueError);
+                } finally {
+                    isRefreshing = false;
+                }
+            }
+
+            // 재발급이 불가능하거나 실패하면 세션 종료
+            localStorage.removeItem('AUTH_DATA');
+            alert('세션 정보가 만료되었습니다. 다시 로그인해주세요.');
+            window.location.href = '/login';
+            return Promise.reject(error);
         }
 
-        // 401 에러 중 실제 세션 만료인 경우만 체크 (A001: Unauthorized, A002: Invalid Token)
-        // U002(비밀번호 불일치) 등은 401이지만 세션 만료로 처리하지 않음
-        const isSessionError = errorCode === 'A001' || errorCode === 'A002';
+        // 그 외의 인증 에러 (미인증 등)
+        if (errorCode === 'A001' || errorCode === 'A002') {
+            localStorage.removeItem('AUTH_DATA');
+            location.href = '/login';
+            return Promise.reject(error);
+        }
 
-        if (status === 401 && isSessionError) {
-            // ✅ 세션 만료 처리: 사용자 경험을 고려하여 알림 후 리다이렉트
-            alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-            localStorage.clear();
-
-            // 현재 페이지가 로그인 페이지가 아닐 때만 리다이렉트 (무한 루프 방지)
-            if (!window.location.pathname.includes('/login')) {
-                window.location.href = '/login';
-            }
-        } else if (status) {
-            // ✅ 401 중 비즈니스 예외 또는 기타 에러 발생 시 ErrorResponse의 메시지 노출
+        // 일반 비즈니스 예외 및 기타 서버 에러
+        if (errorCode) {
             alert(errorMessage);
-            console.error(`[API Error] ${errorCode || 'Unknown'}:`, errorMessage);
+        } else if (error.response?.status) {
+            alert(`서버 응답 오류: ${error.response.status}`);
         }
 
         return Promise.reject(error);
