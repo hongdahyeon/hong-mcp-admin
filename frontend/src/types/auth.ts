@@ -22,3 +22,7 @@ export interface TokenResponse {
     username: string;
     role: string;
 }
+
+export interface ReissueRequest {
+    refreshToken: string;
+}

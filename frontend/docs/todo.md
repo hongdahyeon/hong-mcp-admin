@@ -2,11 +2,11 @@
 
 ## 1. 프론트엔드 기본 구조 설계 및 적용 
 - [x] 프론트엔드 기본 구조 설계 및 적용
-    - [x] `docs/todo.md` 및 `docs/implementation_plan.md` 작성
-    - [x] TypeScript 관련 설정 점검 및 보완 (tsconfig.json 등)
-    - [x] 폴더 구조 설계 및 `implementation_plan.md` 업데이트
-    - [x] 사용자 승인 및 일괄 반영
-    - [x] `docs/about_frontend.md` 작성 및 설명 추가
+- [x] `docs/todo.md` 및 `docs/implementation_plan.md` 작성
+- [x] TypeScript 관련 설정 점검 및 보완 (tsconfig.json 등)
+- [x] 폴더 구조 설계 및 `implementation_plan.md` 업데이트
+- [x] 사용자 승인 및 일괄 반영
+- [x] `docs/about_frontend.md` 작성 및 설명 추가
 
 ## 2. Tailwind CSS 및 의존성 설치
 - [x] `tailwindcss`, `postcss`, `autoprefixer` 설치 및 설정
@@ -66,7 +66,7 @@
 - [x] 어드민(`ROLE_ADMIN`) 전용 '시스템 관리' 메뉴 구성 및 조건부 렌더링 구현
 - [x] 어드민 관리 페이지 프로토타입 4종(사용자, 공방, 접속 이력, 결제 정보) 구현 및 라우팅 연결
 - [x] `AdminTable` 공통 컴포넌트 데이터 페이징(Page Size Selector 포함: 5, 10, 50, 100) 및 UI 구현
-- [x] UI 가이드라인(`ui_look.md`) 최신화
+- [x] UI 가이드라인 (`ui_look.md`) 최신화
 
 ## 12. 데이터 연동 고도화 (페이징 및 공통 타입)
 - [x] `PageRequestDto`, `PageResponseDto` 공통 타입 정의 (`types/common.ts`)
@@ -75,3 +75,10 @@
 - [x] 모든 목록성 API 요청 시 공통 페이징 파라미터(`PageRequestDto`) 사용하도록 구조 개선
 - [x] UI 가이드라인(`ui_look.md`) 내 페이징 연동 패턴 문서화
 
+## 13. 토큰 재발급 (Token Reissue) 플로우 구현
+- [x] `authService.reissue` API 호출 메서드 추가
+- [x] 401 에러 및 `A006`(토큰 만료) 발생 시 자동 재발급 로직 (Silent Refresh) 구현
+- [x] 대기 중인 요청 재시도 처리
+
+---
+*Last Updated: 2026-03-14*
