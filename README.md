@@ -28,6 +28,9 @@ Java 25의 최신 기능과 Spring Boot 4.0, React를 활용한 차세대 어드
 2. `.\gradlew.bat bootRun` (Windows PowerShell) 또는 IntelliJ Gradle 탭에서 `bootRun` 실행
 - **Access URL:** http://localhost:8080
 - **Check:** 터미널에 `Tomcat started on port(s): 8080` 메시지 확인
+- 만약 backend 패키지를 인식하지 못하면, 아래와 같이 진행
+(1) backend 하위에 build.gradle 파일 찾고 우클릭
+(2) Link Gradle Project 혹은 Import Gradle Project 클릭
 
 ### **[Terminal 2] Frontend (React)**
 1. `cd frontend`
@@ -45,7 +48,17 @@ hong-mcp-admin/
 │   ├── src/            # Java 25 소스 및 리소스 (io.hong.admin)
 │   └── build.gradle    # 백엔드 의존성 및 Java 25 설정
 ├── frontend/           # React 클라이언트 (Vite)
-│   ├── src/            # React/TypeScript 컴포넌트 (.tsx)
-│   └── package.json    # 프론트엔드 라이브러리 관리
+│   ├── src/            # 애플리케이션 소스 코드
+│   │   ├── api/        # API 호출 및 공통 Axios 설정
+│   │   ├── components/ # 공통 및 레이아웃 컴포넌트
+│   │   ├── hooks/      # 커스텀 React Hooks
+│   │   ├── pages/      # 라우팅 페이지 컴포넌트
+│   │   ├── store/      # 전역 상태 관리 (Zustand 등)
+│   │   ├── types/      # TypeScript 타입 및 인터페이스
+│   │   └── utils/      # 공통 유틸리티 및 상수
+│   ├── docs/           # 프로젝트 문서 (rules, todo, plan 등)
+│   ├── App.tsx         # 메인 앱 컴포넌트
+│   ├── main.tsx        # 진입점 파일
+│   └── package.json    # 프론트엔드 의존성 관리
 ├── .gitignore          # .idea, node_modules, build 등 제외 설정
 └── README.md           # 통합 가이드 문서 (v1)
