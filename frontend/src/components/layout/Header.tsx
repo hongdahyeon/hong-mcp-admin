@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { User, ChevronDown, LogOut, Settings, UserCircle, LogIn, UserPlus, Sun, Moon } from 'lucide-react';
+import { User, ChevronDown, LogOut, Settings, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/hooks/ThemeContext';
-import { Link } from 'react-router-dom';
+import { useCart } from '@/hooks/CartContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
+    const { cartItems, favoriteItems, removeFromCart, toggleFavorite } = useCart();
+    const navigate = useNavigate();
 
     // ✅ 로그인 상태 및 사용자 정보 확인
     const authDataString = localStorage.getItem('AUTH_DATA');
@@ -105,9 +110,157 @@ const Header: React.FC = () => {
                         {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
                     </button>
 
+                    {/* Favorites Toggle */}
                     <div className="relative">
                         <button
-                            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                            onClick={() => {
+                                setIsFavoritesOpen(!isFavoritesOpen);
+                                setIsCartOpen(false);
+                                setIsUserMenuOpen(false);
+                            }}
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-rose-300 transition-all relative group"
+                            aria-label="Favorites"
+                        >
+                            <Heart size={20} className={favoriteItems.length > 0 ? 'text-rose-500 fill-rose-500' : ''} />
+                            {favoriteItems.length > 0 && (
+                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900 animate-in zoom-in duration-300">
+                                    {favoriteItems.length}
+                                </span>
+                            )}
+                        </button>
+
+                        {isFavoritesOpen && (
+                            <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in duration-200">
+                                <div className="px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-2 flex justify-between items-center">
+                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">관심 목록</p>
+                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{favoriteItems.length}개</span>
+                                </div>
+                                <div className="max-h-64 overflow-y-auto px-2 space-y-1">
+                                    {favoriteItems.length === 0 ? (
+                                        <div className="py-8 text-center">
+                                            <p className="text-sm text-slate-400 font-medium">관심있는 공방이 없어요</p>
+                                        </div>
+                                    ) : (
+                                        favoriteItems.slice(0, 5).map(item => (
+                                            <div key={item.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group/item">
+                                                <img src={item.imageUrl} alt={item.title} className="w-12 h-12 rounded-lg object-cover" />
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{item.title}</p>
+                                                    <p className="text-[10px] text-slate-400 font-medium">{item.category} · {item.region}</p>
+                                                </div>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleFavorite(item);
+                                                    }}
+                                                    className="p-1.5 text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover/item:opacity-100"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                                {favoriteItems.length > 5 && (
+                                    <button
+                                        onClick={() => {
+                                            setIsFavoritesOpen(false);
+                                            navigate('/favorites');
+                                        }}
+                                        className="w-full mt-2 flex items-center justify-center gap-2 py-2 px-4 text-xs font-black text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all border-t border-slate-50 dark:border-slate-800"
+                                    >
+                                        관심 목록 더보기 <ArrowRight size={12} />
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Cart Toggle */}
+                    <div className="relative">
+                        <button
+                            onClick={() => {
+                                setIsCartOpen(!isCartOpen);
+                                setIsFavoritesOpen(false);
+                                setIsUserMenuOpen(false);
+                            }}
+                            className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all relative group"
+                            aria-label="Shopping Cart"
+                        >
+                            <ShoppingCart size={20} className={cartItems.length > 0 ? 'text-violet-600' : ''} />
+                            {cartItems.length > 0 && (
+                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-violet-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900 animate-in zoom-in duration-300">
+                                    {cartItems.length}
+                                </span>
+                            )}
+                        </button>
+
+                        {isCartOpen && (
+                            <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in duration-200">
+                                <div className="px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-2 flex justify-between items-center">
+                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">주문 대기함</p>
+                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{cartItems.length}개</span>
+                                </div>
+                                <div className="max-h-64 overflow-y-auto px-2 space-y-1">
+                                    {cartItems.length === 0 ? (
+                                        <div className="py-8 text-center">
+                                            <p className="text-sm text-slate-400 font-medium">장바구니가 비어있어요</p>
+                                        </div>
+                                    ) : (
+                                        cartItems.slice(0, 5).map(item => (
+                                            <div key={item.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group/item">
+                                                <img src={item.imageUrl} alt={item.title} className="w-12 h-12 rounded-lg object-cover" />
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{item.title}</p>
+                                                    <p className="text-[10px] text-slate-400 font-medium">₩{item.price}</p>
+                                                </div>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        removeFromCart(item.id);
+                                                    }}
+                                                    className="p-1.5 text-slate-300 hover:text-rose-500 transition-colors opacity-0 group-hover/item:opacity-100"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                                {cartItems.length > 5 ? (
+                                    <button
+                                        onClick={() => {
+                                            setIsCartOpen(false);
+                                            navigate('/cart');
+                                        }}
+                                        className="w-full mt-2 flex items-center justify-center gap-2 py-2 px-4 text-xs font-black text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all border-t border-slate-50 dark:border-slate-800"
+                                    >
+                                        장바구니 전체 보기 <ArrowRight size={12} />
+                                    </button>
+                                ) : cartItems.length > 0 && (
+                                    <div className="px-2 mt-2">
+                                        <button
+                                            onClick={() => {
+                                                setIsCartOpen(false);
+                                                navigate('/cart');
+                                            }}
+                                            className="w-full py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black rounded-xl transition-all shadow-lg shadow-violet-200 dark:shadow-none"
+                                        >
+                                            주문하러 가기
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="relative">
+                        <button
+                            onClick={() => {
+                                setIsUserMenuOpen(!isUserMenuOpen);
+                                setIsCartOpen(false);
+                                setIsFavoritesOpen(false);
+                            }}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all group"
                         >
                             <div className="w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">

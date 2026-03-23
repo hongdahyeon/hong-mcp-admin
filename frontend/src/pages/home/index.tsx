@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Star, ShoppingCart, RefreshCw, Zap, ArrowRight, Heart } from 'lucide-react';
-
-interface Workshop {
-    id: string;
-    title: string;
-    region: string;
-    category: string;
-    price: string;
-    rating: number;
-    reviews: number;
-    imageUrl: string;
-    instructor: string;
-}
+import { Workshop } from '@/types/workshop';
+import { useCart } from '@/hooks/CartContext';
 
 const REGIONS = ['서울', '경기/인천', '부산/경상', '제주/강원'];
 
@@ -27,6 +17,7 @@ const MOCK_WORKSHOPS: Workshop[] = [
 const Home: React.FC = () => {
     const [workshops, setWorkshops] = useState<Workshop[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { addToCart, toggleFavorite, isFavorite } = useCart();
 
     useEffect(() => {
         handleLoadWorkshops();
@@ -106,8 +97,17 @@ const Home: React.FC = () => {
                                                         {workshop.category}
                                                     </span>
                                                 </div>
-                                                <button className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-white/90 backdrop-blur-md rounded-full text-white hover:text-rose-500 transition-all shadow-sm">
-                                                    <Heart size={16} fill="currentColor" className="opacity-70 group-hover:opacity-100" />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleFavorite(workshop);
+                                                    }}
+                                                    className={`absolute top-3 right-3 p-2 backdrop-blur-md rounded-full transition-all shadow-sm ${isFavorite(workshop.id)
+                                                        ? 'bg-rose-500 text-white'
+                                                        : 'bg-white/20 text-white hover:bg-white/90 hover:text-rose-500'
+                                                        }`}
+                                                >
+                                                    <Heart size={16} fill={isFavorite(workshop.id) ? 'currentColor' : 'none'} className={isFavorite(workshop.id) ? '' : 'opacity-70 group-hover:opacity-100'} />
                                                 </button>
                                             </div>
                                             <div className="p-5">
@@ -125,7 +125,13 @@ const Home: React.FC = () => {
                                                         <span className="text-xs font-medium text-slate-500 dark:text-slate-400 mr-1">₩</span>
                                                         {workshop.price}
                                                     </div>
-                                                    <button className="p-2 bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-lg hover:bg-violet-600 dark:hover:bg-violet-500 hover:text-white dark:hover:text-white transition-all">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            addToCart(workshop);
+                                                        }}
+                                                        className="p-2 bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-lg hover:bg-violet-600 dark:hover:bg-violet-500 hover:text-white dark:hover:text-white transition-all"
+                                                    >
                                                         <ShoppingCart size={18} />
                                                     </button>
                                                 </div>
