@@ -9,6 +9,8 @@ import UserManagement from '@/pages/admin/user';
 import WorkplaceManagement from '@/pages/admin/workplace';
 import AccessLog from '@/pages/admin/access';
 import PaymentManagement from '@/pages/admin/payment';
+import Cart from '@/pages/cart';
+import Favorites from '@/pages/favorites';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -23,6 +25,10 @@ const AppRouter: React.FC = () => {
                 {/* 메인 레이아웃 적용 경로 (대시보드 등) */}
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Home />} />
+
+                    {/* 사용자 메뉴 */}
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/favorites" element={<Favorites />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />
