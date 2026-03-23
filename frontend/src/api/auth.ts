@@ -1,4 +1,5 @@
 import client from './client';
+import api from './index';
 import { UserSaveRequest, TokenResponse } from '@/types/auth';
 
 /**
@@ -12,7 +13,7 @@ export const authService = {
      */
     login: async (email: string, password: string): Promise<TokenResponse> => {
         try {
-            const response = await client.post<TokenResponse>('/api/auth/login', { email, password });
+            const response = await api.post<TokenResponse>('/api/auth/login', { email, password });
 
             // ✅ 백엔드 TokenResponse 구조에 맞게 하나의 객체로 저장
             const authData = {
@@ -42,7 +43,7 @@ export const authService = {
      * 이메일 중복 체크
      */
     checkEmailDuplicate: async (email: string): Promise<boolean> => {
-        const response = await client.get<boolean>('/api/auth-user/check-email', { params: { email } });
+        const response = await api.get<boolean>('/api/auth-user/check-email', { params: { email } });
         return response.data;
     },
 
@@ -50,7 +51,7 @@ export const authService = {
      * 사용자 아이디 중복 체크
      */
     checkUsernameDuplicate: async (username: string): Promise<boolean> => {
-        const response = await client.get<boolean>('/api/auth-user/check-username', { params: { username } });
+        const response = await api.get<boolean>('/api/auth-user/check-username', { params: { username } });
         return response.data;
     },
 
@@ -58,7 +59,7 @@ export const authService = {
      * 사용자 역할 목록 조회
      */
     findUserRoles: async (): Promise<string[]> => {
-        const response = await client.get<string[]>('/api/auth-user/roles');
+        const response = await api.get<string[]>('/api/auth-user/roles');
         return response.data;
     },
 
@@ -66,7 +67,7 @@ export const authService = {
      * 회원가입 요청
      */
     signup: async (userData: UserSaveRequest): Promise<number> => {
-        const response = await client.post<number>('/api/auth-user/signup', userData);
+        const response = await api.post<number>('/api/auth-user/signup', userData);
         return response.data; // userId
     },
 

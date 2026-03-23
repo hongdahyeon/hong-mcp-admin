@@ -32,7 +32,7 @@ pipeline {
         stage('Frontend Build') {
             steps {
                 dir('frontend') {
-                    bat "npm install"
+                    bat "npm ci"
                     bat "npm run build"
                 }
             }
@@ -100,8 +100,9 @@ pipeline {
                             echo ">>> Fetching latest changes from remote..."
                             git fetch origin
                             
-                            echo ">>> Checking out target branch: ${cleanTarget}"
-                            git checkout ${cleanTarget}
+                            echo ">>> Resetting and checking out target branch: ${cleanTarget}"
+                            git reset --hard
+                            git checkout -f ${cleanTarget}
                             git pull origin ${cleanTarget}
                             
                             echo ">>> Merging ${cleanSource} into ${cleanTarget}..."
