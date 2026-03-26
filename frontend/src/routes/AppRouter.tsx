@@ -11,6 +11,7 @@ import AccessLog from '@/pages/admin/access';
 import PaymentManagement from '@/pages/admin/payment';
 import Cart from '@/pages/cart';
 import Favorites from '@/pages/favorites';
+import Workshops from '@/pages/workshops';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -29,6 +30,7 @@ const AppRouter: React.FC = () => {
                     {/* 사용자 메뉴 */}
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/favorites" element={<Favorites />} />
+                    <Route path="/workshops" element={<Workshops />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />
