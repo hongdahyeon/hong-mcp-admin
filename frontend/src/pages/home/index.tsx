@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { MapPin, Star, ShoppingCart, RefreshCw, Zap, ArrowRight, Heart } from 'lucide-react';
 import { Workshop } from '@/types/workshop';
 import { useCart } from '@/hooks/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MOCK_WORKSHOPS, REGIONS } from '@/constants/workshop';
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
     const [workshops, setWorkshops] = useState<Workshop[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { addToCart, toggleFavorite, isFavorite } = useCart();
@@ -82,7 +83,11 @@ const Home: React.FC = () => {
                                 workshops
                                     .filter(w => w.region === region)
                                     .map(workshop => (
-                                        <div key={workshop.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-violet-300 dark:hover:border-violet-500 transition-all hover:shadow-lg dark:hover:shadow-violet-900/20 group cursor-pointer">
+                                        <div 
+                                            key={workshop.id} 
+                                            onClick={() => navigate(`/workshops/${workshop.id}`)}
+                                            className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-violet-300 dark:hover:border-violet-500 transition-all hover:shadow-lg dark:hover:shadow-violet-900/20 group cursor-pointer"
+                                        >
                                             <div className="relative h-40 overflow-hidden">
                                                 <img
                                                     src={workshop.imageUrl}

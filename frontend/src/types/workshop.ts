@@ -8,4 +8,7 @@ export interface Workshop {
     reviews: number;
     imageUrl: string;
     instructor: string;
+    description: string;
+    curriculum: string[];
+    instructorBio: string;
 }
