@@ -1,9 +1,10 @@
 import React from 'react';
 import { useCart } from '@/hooks/CartContext';
 import { Heart, Home, Star, ShoppingCart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FavoritesPage: React.FC = () => {
+    const navigate = useNavigate();
     const { favoriteItems, toggleFavorite, addToCart } = useCart();
 
     return (
@@ -37,7 +38,11 @@ const FavoritesPage: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {favoriteItems.map((workshop) => (
-                        <div key={workshop.id} className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-rose-300 dark:hover:border-rose-500 transition-all hover:shadow-2xl hover:shadow-rose-500/10 group cursor-pointer">
+                        <div 
+                            key={workshop.id} 
+                            onClick={() => navigate(`/workshops/${workshop.id}`)}
+                            className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-rose-300 dark:hover:border-rose-500 transition-all hover:shadow-2xl hover:shadow-rose-500/10 group cursor-pointer"
+                        >
                             <div className="relative h-48 overflow-hidden">
                                 <img
                                     src={workshop.imageUrl}

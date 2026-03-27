@@ -12,6 +12,7 @@ import PaymentManagement from '@/pages/admin/payment';
 import Cart from '@/pages/cart';
 import Favorites from '@/pages/favorites';
 import Workshops from '@/pages/workshops';
+import WorkshopDetail from '@/pages/workshops/Detail';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -31,6 +32,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="/workshops" element={<Workshops />} />
+                    <Route path="/workshops/:id" element={<WorkshopDetail />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />

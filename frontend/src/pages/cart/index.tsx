@@ -1,9 +1,10 @@
 import React from 'react';
 import { useCart } from '@/hooks/CartContext';
 import { ShoppingCart, Trash2, ArrowRight, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const CartPage: React.FC = () => {
+    const navigate = useNavigate();
     const { cartItems, removeFromCart } = useCart();
 
     const totalPrice = cartItems.reduce((acc, item) => {
@@ -38,10 +39,14 @@ const CartPage: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-4">
                         {cartItems.map((item) => (
-                            <div key={item.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex gap-4 hover:border-violet-300 dark:hover:border-violet-500 transition-all shadow-sm group">
-                                <Link to="/" className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                            <div 
+                                key={item.id} 
+                                onClick={() => navigate(`/workshops/${item.id}`)}
+                                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex gap-4 hover:border-violet-300 dark:hover:border-violet-500 transition-all shadow-sm group cursor-pointer"
+                            >
+                                <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
                                     <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                </Link>
+                                </div>
                                 <div className="flex-1 min-w-0 py-1">
                                     <div className="flex justify-between items-start mb-1">
                                         <span className="text-[10px] font-black text-violet-600 dark:text-violet-400 uppercase tracking-widest">{item.category}</span>
