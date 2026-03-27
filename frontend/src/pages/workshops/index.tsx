@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import { Search, MapPin, Tag, Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, X, RefreshCw } from 'lucide-react';
 import { useCart } from '@/hooks/CartContext';
 import { REGIONS, CATEGORIES, MOCK_WORKSHOPS } from '@/constants/workshop';
+import { useNavigate } from 'react-router-dom';
 
 const Workshops: React.FC = () => {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { addToCart, toggleFavorite, isFavorite } = useCart();
     
@@ -202,7 +204,11 @@ const Workshops: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {filteredWorkshops.map(workshop => (
-                        <div key={workshop.id} className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-violet-300 dark:hover:border-violet-500 transition-all hover:shadow-2xl hover:shadow-violet-500/10 group cursor-pointer">
+                        <div 
+                            key={workshop.id} 
+                            onClick={() => navigate(`/workshops/${workshop.id}`)}
+                            className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-violet-300 dark:hover:border-violet-500 transition-all hover:shadow-2xl hover:shadow-violet-500/10 group cursor-pointer"
+                        >
                             <div className="relative h-48 overflow-hidden">
                                 <img
                                     src={workshop.imageUrl}
