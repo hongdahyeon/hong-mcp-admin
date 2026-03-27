@@ -13,6 +13,8 @@ import Cart from '@/pages/cart';
 import Favorites from '@/pages/favorites';
 import Workshops from '@/pages/workshops';
 import WorkshopDetail from '@/pages/workshops/Detail';
+import WorkshopManage from '@/pages/workshops/Manage';
+import WorkshopNew from '@/pages/workshops/New';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -33,6 +35,8 @@ const AppRouter: React.FC = () => {
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="/workshops" element={<Workshops />} />
                     <Route path="/workshops/:id" element={<WorkshopDetail />} />
+                    <Route path="/workshops/manage" element={<WorkshopManage />} />
+                    <Route path="/workshops/manage/new" element={<WorkshopNew />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />
