@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, ChevronDown, LogOut, Settings, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
+import { User, ChevronDown, LogOut, Settings, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight, LayoutDashboard } from 'lucide-react';
 import { useTheme } from '@/hooks/ThemeContext';
 import { useCart } from '@/hooks/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -286,6 +286,13 @@ const Header: React.FC = () => {
                                         <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all">
                                             <Settings size={18} /> 예약 내역 확인
                                         </button>
+                                        <Link 
+                                            to="/workshops/manage"
+                                            onClick={() => setIsUserMenuOpen(false)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
+                                        >
+                                            <LayoutDashboard size={18} /> 내 공방 관리
+                                        </Link>
                                         <Link
                                             to="/logout"
                                             onClick={() => setIsUserMenuOpen(false)}
