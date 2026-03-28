@@ -7,12 +7,14 @@ import {
 } from 'lucide-react';
 import { useCart } from '@/hooks/CartContext';
 import { MOCK_WORKSHOPS } from '@/constants/workshop';
+import ReservationModal from './components/ReservationModal';
 
 const WorkshopDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { addToCart, toggleFavorite, isFavorite } = useCart();
     const [activeTab, setActiveTab] = useState<'about' | 'curriculum' | 'instructor' | 'reviews'>('about');
+    const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
 
     const workshop = MOCK_WORKSHOPS.find(w => w.id === id);
 
@@ -258,14 +260,25 @@ const WorkshopDetail: React.FC = () => {
                             <Heart size={24} fill={isFavorite(workshop.id) ? 'currentColor' : 'none'} />
                         </button>
                         <button 
-                            onClick={() => addToCart(workshop)}
-                            className="px-8 py-4 bg-violet-600 text-white rounded-2xl font-black text-lg hover:bg-violet-700 transition-all flex items-center gap-3 shadow-lg shadow-violet-500/30"
+                            onClick={() => setIsReservationModalOpen(true)}
+                            className="px-10 py-4 bg-violet-600 text-white rounded-2xl font-black text-lg hover:bg-violet-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 shadow-lg shadow-violet-500/30"
                         >
-                            <ShoppingCart size={22} /> 장바구니 담기
+                            <ShoppingCart size={22} /> 예약하기
                         </button>
                     </div>
                 </div>
             </div>
+
+            <ReservationModal 
+                isOpen={isReservationModalOpen}
+                onClose={() => setIsReservationModalOpen(false)}
+                workshopTitle={workshop.title}
+                price={workshop.price}
+                onConfirm={(data) => {
+                    console.log('Confirmed Booking:', data);
+                    // navigate to payment or booking status page later
+                }}
+            />
         </div>
     );
 };
