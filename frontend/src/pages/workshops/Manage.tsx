@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
     LayoutDashboard, Plus, Settings, Trash2, 
-    Eye, Edit3, AlertCircle, ShoppingBag 
+    Eye, Edit3, AlertCircle, ShoppingBag, Users
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Workshop } from '@/types/workshop';
@@ -77,6 +77,13 @@ const WorkshopManage: React.FC = () => {
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white truncate">{workshop.title}</h3>
                                     </div>
                                     <div className="flex gap-2">
+                                        <button 
+                                            onClick={() => navigate(`/workshops/manage/${workshop.id}/reservations`)}
+                                            className="p-2 text-slate-400 hover:text-blue-500 transition-colors"
+                                            title="예약 관리"
+                                        >
+                                            <Users size={20} />
+                                        </button>
                                         <button 
                                             onClick={() => navigate(`/workshops/${workshop.id}`)}
                                             className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
