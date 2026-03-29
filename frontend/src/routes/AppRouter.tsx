@@ -15,6 +15,7 @@ import Workshops from '@/pages/workshops';
 import WorkshopDetail from '@/pages/workshops/Detail';
 import WorkshopManage from '@/pages/workshops/Manage';
 import WorkshopNew from '@/pages/workshops/New';
+import WorkshopReservations from '@/pages/workshops/Reservations';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -37,6 +38,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/workshops/:id" element={<WorkshopDetail />} />
                     <Route path="/workshops/manage" element={<WorkshopManage />} />
                     <Route path="/workshops/manage/new" element={<WorkshopNew />} />
+                    <Route path="/workshops/manage/:id/reservations" element={<WorkshopReservations />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />
