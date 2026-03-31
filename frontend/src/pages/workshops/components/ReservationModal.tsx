@@ -4,17 +4,19 @@ import {
     ChevronLeft, ChevronRight, CheckCircle2, 
     CreditCard, ArrowRight, AlertCircle 
 } from 'lucide-react';
+import { reservationService } from '@/api/reservationService';
 
 interface ReservationModalProps {
     isOpen: boolean;
     onClose: () => void;
+    workshopId: string;
     workshopTitle: string;
     price: string;
     onConfirm: (data: any) => void;
 }
 
 const ReservationModal: React.FC<ReservationModalProps> = ({ 
-    isOpen, onClose, workshopTitle, price, onConfirm 
+    isOpen, onClose, workshopId, workshopTitle, price, onConfirm 
 }) => {
     const [step, setStep] = useState(1);
     const [selectedDate, setSelectedDate] = useState<number | null>(null);
@@ -73,6 +75,20 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
         
         const bookingDate = `${currentYear}.${String(currentMonth + 1).padStart(2, '0')}.${String(selectedDate).padStart(2, '0')}`;
         
+        // Get user info from localStorage if available
+        const authDataString = localStorage.getItem('AUTH_DATA');
+        const authData = authDataString ? JSON.parse(authDataString) : {};
+
+        reservationService.addReservation({
+            workshopId: workshopId,
+            userName: authData.username || '익명 사용자',
+            userEmail: authData.email || 'guest@example.com',
+            date: bookingDate,
+            time: selectedTime || '',
+            guests: guests,
+            totalPrice: priceNumber * guests
+        });
+
         onConfirm({
             date: bookingDate,
             time: selectedTime,
