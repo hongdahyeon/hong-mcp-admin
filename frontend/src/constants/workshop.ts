@@ -73,19 +73,5 @@ export const MOCK_WORKSHOPS: Workshop[] = [
         description: '해운대의 푸른 바다를 작은 프레임 안에 가두어보세요. 투명한 레진과 파도 표현 기법을 통해 바다 감성 소품을 제작합니다.',
         curriculum: ['레진 아트 기초 및 주의사항', '조색제 활용법', '파도 무늬 표현(Cell) 기법', '코팅 및 완성'],
         instructorBio: '바다의 아름다움을 예술로 승화시키는 부산 로컬 공방입니다.'
-    },
-    { 
-        id: '6', 
-        title: '애월 바다 담은 감성 캔들 만들기', 
-        region: '제주/강원', 
-        category: '향수/캔들', 
-        price: '35,000', 
-        rating: 5.0, 
-        reviews: 32, 
-        instructor: '제주 향기', 
-        imageUrl: 'https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?q=80&w=400&h=300&auto=format&fit=crop',
-        description: '제주의 짙은 향기를 담은 감성 캔들을 제작합니다. 천연 왁스와 제주 야생화 드라이플라워를 활용한 캔들 메이킹 클래스입니다.',
-        curriculum: ['왁스의 종류와 향료 선택', '심지 고정 및 왁스 녹이기', '드라이플라워 데코레이션', '포장 및 관리법'],
-        instructorBio: '제주의 자연에서 영감을 받아 향기를 빚는 향기 디자이너입니다.'
-    },
+    }
 ];
