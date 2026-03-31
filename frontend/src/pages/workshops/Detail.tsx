@@ -272,6 +272,7 @@ const WorkshopDetail: React.FC = () => {
             <ReservationModal 
                 isOpen={isReservationModalOpen}
                 onClose={() => setIsReservationModalOpen(false)}
+                workshopId={workshop.id}
                 workshopTitle={workshop.title}
                 price={workshop.price}
                 onConfirm={(data) => {

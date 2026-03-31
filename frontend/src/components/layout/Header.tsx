@@ -31,7 +31,7 @@ const Header: React.FC = () => {
         {
             title: '예약/결제',
             subMenus: [
-                { name: '예약 내역', path: '#' },
+                { name: '예약 내역', path: '/my/reservations' },
                 { name: '결제 관리', path: '#' },
                 { name: '쿠폰/포인트', path: '#' }
             ]
@@ -283,9 +283,13 @@ const Header: React.FC = () => {
                                         <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all">
                                             <UserCircle size={18} /> 내 정보 관리
                                         </button>
-                                        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all">
+                                        <Link 
+                                            to="/my/reservations"
+                                            onClick={() => setIsUserMenuOpen(false)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
+                                        >
                                             <Settings size={18} /> 예약 내역 확인
-                                        </button>
+                                        </Link>
                                         <Link 
                                             to="/workshops/manage"
                                             onClick={() => setIsUserMenuOpen(false)}
