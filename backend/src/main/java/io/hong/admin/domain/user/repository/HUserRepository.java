@@ -3,6 +3,7 @@ package io.hong.admin.domain.user.repository;
 import io.hong.admin.domain.user.entity.HUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,4 +22,6 @@ public interface HUserRepository extends JpaRepository<HUser, Long> {
     Optional<HUser> findByUsername(String username);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+
+    HUser getHUserById(Long id);
 }
