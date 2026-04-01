@@ -1,9 +1,11 @@
 package io.hong.admin.domain.user.controller.api;
 
+import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.enumcd.UserRole;
 import io.hong.admin.domain.user.service.HUserService;
 import io.hong.admin.domain.user.dto.request.UserSaveRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.List;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-04-02        home       signup -> CREATED, return Entity
  */
 
 @RestController
@@ -47,8 +50,10 @@ public class HUserRestController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Long> signup(@RequestBody UserSaveRequest dto) {
-        Long userId = hUserService.saveUser(dto);
-        return ResponseEntity.ok(userId);
+    public ResponseEntity<HUser> signup(@RequestBody UserSaveRequest dto) {
+        HUser hUser = hUserService.saveUser(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(hUser);
     }
 }
