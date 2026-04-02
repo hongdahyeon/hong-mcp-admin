@@ -43,7 +43,7 @@ public class HUserService {
 
     // 3. 유저 저장
     @Transactional
-    public Long saveUser(UserSaveRequest dto) {
+    public HUser saveUser(UserSaveRequest dto) {
         try {
             // 중복 검증 한 번 더 수행
             if (checkEmailDuplicate(dto.email())) throw new HongException(HongErrorCode.USER_ID_DUPLICATE);
@@ -58,7 +58,9 @@ public class HUserService {
                     .isEnabled(true)
                     .build();
 
-            return userRepository.save(user).getId();
+            Long userId = userRepository.save(user).getId();
+
+            return userRepository.getHUserById(userId);
 
         } catch (HongException e) {
             return null;
