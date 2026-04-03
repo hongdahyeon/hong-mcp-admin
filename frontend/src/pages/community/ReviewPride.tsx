@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
     Heart, MessageCircle, Star, 
     TrendingUp, Search, 
@@ -8,6 +9,7 @@ import {
 import { MOCK_REVIEWS, ReviewPrideItem } from '@/constants/reviews';
 
 const ReviewPride: React.FC = () => {
+    const navigate = useNavigate();
     const [selectedCategory, setSelectedCategory] = useState('전체');
     const [selectedReview, setSelectedReview] = useState<ReviewPrideItem | null>(null);
 
@@ -34,7 +36,7 @@ const ReviewPride: React.FC = () => {
                     </p>
                 </div>
                 <button 
-                    onClick={() => {}}
+                    onClick={() => navigate('/community/reviews/write')}
                     className="flex items-center gap-2 px-8 py-4 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-[1.5rem] font-black hover:scale-105 transition-all shadow-xl shadow-slate-200 dark:shadow-none shrink-0"
                 >
                     <Plus size={20} /> 후기 작성하기
