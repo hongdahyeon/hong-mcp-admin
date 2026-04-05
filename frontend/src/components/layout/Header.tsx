@@ -40,7 +40,7 @@ const Header: React.FC = () => {
             title: '커뮤니티',
             subMenus: [
                 { name: '찐 후기 자랑', path: '/community/reviews' },
-                { name: '공방 소식', path: '#' },
+                { name: '공방 소식', path: '/community/news' },
                 { name: '작가님 인터뷰', path: '#' }
             ]
         },
