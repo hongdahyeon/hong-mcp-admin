@@ -19,6 +19,7 @@ import WorkshopReservations from '@/pages/workshops/Reservations';
 import MyReservations from '@/pages/my/Reservations';
 import ReviewPride from '@/pages/community/ReviewPride';
 import WriteReview from '@/pages/community/WriteReview';
+import WorkshopNews from '@/pages/community/WorkshopNews';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -45,6 +46,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/my/reservations" element={<MyReservations />} />
                     <Route path="/community/reviews" element={<ReviewPride />} />
                     <Route path="/community/reviews/write" element={<WriteReview />} />
+                    <Route path="/community/news" element={<WorkshopNews />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />
