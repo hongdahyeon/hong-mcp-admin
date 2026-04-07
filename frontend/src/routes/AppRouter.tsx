@@ -17,6 +17,7 @@ import WorkshopManage from '@/pages/workshops/Manage';
 import WorkshopNew from '@/pages/workshops/New';
 import WorkshopReservations from '@/pages/workshops/Reservations';
 import MyReservations from '@/pages/my/Reservations';
+import Coupons from '@/pages/my/Coupons';
 import ReviewPride from '@/pages/community/ReviewPride';
 import WriteReview from '@/pages/community/WriteReview';
 import WorkshopNews from '@/pages/community/WorkshopNews';
@@ -45,6 +46,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/workshops/manage/new" element={<WorkshopNew />} />
                     <Route path="/workshops/manage/:id/reservations" element={<WorkshopReservations />} />
                     <Route path="/my/reservations" element={<MyReservations />} />
+                    <Route path="/my/coupons" element={<Coupons />} />
                     <Route path="/community/reviews" element={<ReviewPride />} />
                     <Route path="/community/reviews/write" element={<WriteReview />} />
                     <Route path="/community/news" element={<WorkshopNews />} />
