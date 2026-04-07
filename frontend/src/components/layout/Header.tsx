@@ -33,7 +33,7 @@ const Header: React.FC = () => {
             subMenus: [
                 { name: '예약 내역', path: '/my/reservations' },
                 { name: '결제 관리', path: '#' },
-                { name: '쿠폰/포인트', path: '#' }
+                { name: '쿠폰/포인트', path: '/my/coupons' }
             ]
         },
         {
