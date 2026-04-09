@@ -4,6 +4,7 @@ import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.enumcd.UserRole;
 import io.hong.admin.domain.user.service.HUserService;
 import io.hong.admin.domain.user.dto.request.UserSaveRequest;
+import io.hong.admin.golbal.common.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +45,10 @@ public class HUserRestController {
     }
 
     @GetMapping("/roles")
-    public ResponseEntity<List<UserRole>> findUserRoles() {
+    public ResponseEntity<BaseResponse<UserRole[]>> findUserRoles() {
         UserRole[] values = UserRole.values();
-        return ResponseEntity.ok(List.of(values));
+        BaseResponse<UserRole[]> response = BaseResponse.ok(values);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signup")
