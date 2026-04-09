@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, ChevronDown, LogOut, Settings, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight, LayoutDashboard } from 'lucide-react';
+import { User, ChevronDown, LogOut, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight, LayoutDashboard, CalendarCheck, CreditCard, Ticket } from 'lucide-react';
 import { useTheme } from '@/hooks/ThemeContext';
 import { useCart } from '@/hooks/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ const Header: React.FC = () => {
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+    const [isResMenuOpen, setIsResMenuOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
     const { cartItems, favoriteItems, removeFromCart, toggleFavorite } = useCart();
     const navigate = useNavigate();
@@ -28,14 +29,7 @@ const Header: React.FC = () => {
                 { name: '신규 공방', path: '#' }
             ]
         },
-        {
-            title: '예약/결제',
-            subMenus: [
-                { name: '예약 내역', path: '/my/reservations' },
-                { name: '결제 관리', path: '#' },
-                { name: '쿠폰/포인트', path: '/my/coupons' }
-            ]
-        },
+
         {
             title: '커뮤니티',
             subMenus: [
@@ -101,6 +95,53 @@ const Header: React.FC = () => {
 
                 {/* User Actions */}
                 <div className="flex items-center gap-2 md:gap-4">
+                    {/* Reservation/Payment Dropdown Menu */}
+                    {isLoggedIn && (
+                        <div className="relative">
+                            <button
+                                onClick={() => {
+                                    setIsResMenuOpen(!isResMenuOpen);
+                                    setIsFavoritesOpen(false);
+                                    setIsCartOpen(false);
+                                    setIsUserMenuOpen(false);
+                                }}
+                                className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all relative group"
+                                aria-label="Reservation and Payment"
+                            >
+                                <CalendarCheck size={20} className={isResMenuOpen ? 'text-violet-600' : ''} />
+                            </button>
+
+                            {isResMenuOpen && (
+                                <div className="absolute right-0 mt-3 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
+                                    <div className="px-4 py-2 border-b border-slate-50 dark:border-slate-800 mb-1">
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">My Activities</p>
+                                    </div>
+                                    <Link 
+                                        to="/my/reservations"
+                                        onClick={() => setIsResMenuOpen(false)}
+                                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
+                                    >
+                                        <CalendarCheck size={16} /> 예약 내역
+                                    </Link>
+                                    <Link 
+                                        to="/my/payments"
+                                        onClick={() => setIsResMenuOpen(false)}
+                                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
+                                    >
+                                        <CreditCard size={16} /> 결제 관리
+                                    </Link>
+                                    <Link 
+                                        to="/my/coupons"
+                                        onClick={() => setIsResMenuOpen(false)}
+                                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
+                                    >
+                                        <Ticket size={16} /> 쿠폰/포인트
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* Theme Toggle */}
                     <button
                         onClick={toggleTheme}
@@ -117,6 +158,7 @@ const Header: React.FC = () => {
                                 setIsFavoritesOpen(!isFavoritesOpen);
                                 setIsCartOpen(false);
                                 setIsUserMenuOpen(false);
+                                setIsResMenuOpen(false);
                             }}
                             className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-rose-300 transition-all relative group"
                             aria-label="Favorites"
@@ -183,6 +225,7 @@ const Header: React.FC = () => {
                                 setIsCartOpen(!isCartOpen);
                                 setIsFavoritesOpen(false);
                                 setIsUserMenuOpen(false);
+                                setIsResMenuOpen(false);
                             }}
                             className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all relative group"
                             aria-label="Shopping Cart"
@@ -260,6 +303,7 @@ const Header: React.FC = () => {
                                 setIsUserMenuOpen(!isUserMenuOpen);
                                 setIsCartOpen(false);
                                 setIsFavoritesOpen(false);
+                                setIsResMenuOpen(false);
                             }}
                             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all group"
                         >
@@ -288,7 +332,7 @@ const Header: React.FC = () => {
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                         >
-                                            <Settings size={18} /> 예약 내역 확인
+                                            <CalendarCheck size={18} /> 예약 내역 확인
                                         </Link>
                                         <Link 
                                             to="/workshops/manage"
