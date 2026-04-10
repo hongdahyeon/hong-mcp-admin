@@ -3,6 +3,7 @@ package io.hong.admin.domain.useraccesslog.controller.api;
 import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLog;
 import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogList;
 import io.hong.admin.domain.useraccesslog.service.HUserAccessLogService;
+import io.hong.admin.golbal.common.BaseResponse;
 import io.hong.admin.golbal.common.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-14        home       최초 생성
+ * 2026-04-10        home       user-access-page 응답 수정
  */
 
 @RestController
@@ -30,8 +32,9 @@ public class UserAccessLogRestController {
     private final HUserAccessLogService service;
 
     @GetMapping("/page")
-    public ResponseEntity<PageResponseDto<UserAccessLogList>> findUserAccessLogPage(SearchUserAccessLog search) {
+    public ResponseEntity<BaseResponse<PageResponseDto<UserAccessLogList>>> findUserAccessLogPage(SearchUserAccessLog search) {
         PageResponseDto<UserAccessLogList> page = service.findUserAccessLogPage(search);
-        return ResponseEntity.ok().body(page);
+        BaseResponse<PageResponseDto<UserAccessLogList>> response = BaseResponse.ok(page);
+        return ResponseEntity.ok().body(response);
     }
 }
