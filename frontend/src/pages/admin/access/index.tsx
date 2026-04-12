@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminTable from '@/components/common/AdminTable';
 import api from '@/api';
-import { PageResponseDto, PageRequestDto } from '@/types/common';
+import { PageResponseDto, PageRequestDto, BaseResponse } from '@/types/common';
 
 interface UserAccessLogList {
     id: number;
@@ -29,8 +29,8 @@ const AccessLog: React.FC = () => {
                 size: pageSize,
                 search: search || undefined
             };
-            const response = await api.get<PageResponseDto<UserAccessLogList>>('/api/admin/user-access/page', { params });
-            const data = response.data;
+            const response = await api.get<BaseResponse<PageResponseDto<UserAccessLogList>>>('/api/admin/user-access/page', { params });
+            const data = response.data.data;
             setLogs(data.content);
             setTotalPages(data.totalPages);
             setCurrentPage(data.pageNumber);

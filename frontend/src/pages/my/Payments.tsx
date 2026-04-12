@@ -17,6 +17,10 @@ const Payments: React.FC = () => {
         theme: 'violet' as PaymentMethodItem['theme']
     });
 
+    // Payment History Modal State
+    const [selectedHistory, setSelectedHistory] = useState<typeof MOCK_PAYMENT_HISTORY[0] | null>(null);
+    const [isHistoryDetailOpen, setIsHistoryDetailOpen] = useState(false);
+
     // Utility for card themes
     const getCardGradient = (theme: string) => {
         switch (theme) {
@@ -115,6 +119,11 @@ const Payments: React.FC = () => {
             setCards(prev => [...prev, newCard]);
         }
         setIsModalOpen(false);
+    };
+
+    const handleHistoryClick = (item: typeof MOCK_PAYMENT_HISTORY[0]) => {
+        setSelectedHistory(item);
+        setIsHistoryDetailOpen(true);
     };
 
     return (
@@ -243,7 +252,11 @@ const Payments: React.FC = () => {
                                     const usedCard = cards.find(m => m.id === item.paymentMethodId) || MOCK_PAYMENT_METHODS.find(m => m.id === item.paymentMethodId);
                                     
                                     return (
-                                        <tr key={item.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                                        <tr 
+                                            key={item.id} 
+                                            onClick={() => handleHistoryClick(item)}
+                                            className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all cursor-pointer group/row"
+                                        >
                                             <td className="py-5 px-6 text-sm text-slate-500 dark:text-slate-400 font-mono whitespace-nowrap hidden sm:table-cell">
                                                 {item.transactionDate}
                                             </td>
@@ -381,6 +394,97 @@ const Payments: React.FC = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+            {/* Payment History Detail Modal */}
+            {isHistoryDetailOpen && selectedHistory && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                    <div 
+                        className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-300" 
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Receipt Top Section */}
+                        <div className="relative bg-violet-600 px-8 pt-8 pb-10 text-center overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                                <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl" />
+                                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white rounded-full blur-3xl" />
+                            </div>
+                            
+                            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl mb-3 text-white shadow-xl">
+                                <Receipt size={28} />
+                            </div>
+                            <h2 className="text-xl font-black text-white mb-0.5">결제 상세 정보</h2>
+                            <p className="text-violet-100 text-xs font-medium opacity-80">{selectedHistory.transactionDate} 결제</p>
+                            
+                            <button 
+                                onClick={() => setIsHistoryDetailOpen(false)} 
+                                className="absolute top-4 right-4 p-2 text-white/60 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* Receipt Middle Body */}
+                        <div className="px-6 pb-8">
+                            <div className="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 shadow-2xl border border-slate-100 dark:border-slate-800">
+                                <div className="space-y-6">
+                                    {/* Product Section */}
+                                    <div className="text-center pb-6 border-b border-dashed border-slate-200 dark:border-slate-700">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">PRODUCT INFO</p>
+                                        <h3 className="text-lg font-black text-slate-900 dark:text-white mb-3 leading-tight">
+                                            {selectedHistory.productName}
+                                        </h3>
+                                        <div className="flex justify-center">
+                                            {getStatusLabel(selectedHistory.status)}
+                                        </div>
+                                    </div>
+
+                                    {/* Detail Specs */}
+                                    <div className="space-y-4 pt-1">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">주문 번호</span>
+                                            <span className="text-xs font-mono font-black text-slate-700 dark:text-slate-300">{selectedHistory.transactionId}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">결제 수단</span>
+                                            <div className="text-right">
+                                                <div className="text-xs font-black text-slate-700 dark:text-slate-300">
+                                                    {(cards.find(c => c.id === selectedHistory.paymentMethodId) || MOCK_PAYMENT_METHODS.find(c => c.id === selectedHistory.paymentMethodId))?.cardName || '기타 결제'}
+                                                </div>
+                                                <div className="text-[10px] text-slate-400 font-mono">
+                                                    {(cards.find(c => c.id === selectedHistory.paymentMethodId) || MOCK_PAYMENT_METHODS.find(c => c.id === selectedHistory.paymentMethodId))?.cardNumberMasked.slice(-4) || '****'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">거래 일시</span>
+                                            <span className="text-xs font-bold text-slate-900 dark:text-white">{selectedHistory.transactionDate}</span>
+                                        </div>
+                                        
+                                        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-end">
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pb-0.5">TOTAL</span>
+                                            <span className="text-2xl font-black text-violet-600 dark:text-violet-400 tabular-nums">
+                                                {selectedHistory.amount.toLocaleString()}원
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Actions Internal */}
+                                    <div className="pt-2 flex gap-3">
+                                        <button className="flex-[1.5] py-3.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black rounded-[1rem] hover:bg-slate-800 dark:hover:bg-white transition-all shadow-xl text-xs flex items-center justify-center gap-2 active:scale-95">
+                                            <Receipt size={16} /> 영수증 저장
+                                        </button>
+                                        <button 
+                                            onClick={() => setIsHistoryDetailOpen(false)}
+                                            className="flex-1 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-black rounded-[1rem] hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-xs active:scale-95"
+                                        >
+                                            닫기
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
