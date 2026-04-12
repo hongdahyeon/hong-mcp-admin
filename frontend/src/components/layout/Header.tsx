@@ -24,7 +24,7 @@ const Header: React.FC = () => {
         {
             title: '공방 탐색',
             subMenus: [
-                { name: '카테고리별 클래스', path: '#' },
+                { name: '카테고리별 클래스', path: '/workshops' },
                 { name: '실시간 핫플레이스', path: '#' },
                 { name: '신규 공방', path: '#' }
             ]
