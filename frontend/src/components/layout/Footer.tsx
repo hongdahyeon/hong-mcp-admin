@@ -39,8 +39,18 @@ const Footer: React.FC = () => {
                     </div>
 
                     <div className="flex gap-6">
-                        <span className="text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors">이용약관</span>
-                        <span className="text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors">개인정보처리방침</span>
+                        <button 
+                            onClick={() => navigate('/terms')}
+                            className="text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors"
+                        >
+                            이용약관
+                        </button>
+                        <button 
+                            onClick={() => navigate('/privacy')}
+                            className="text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors"
+                        >
+                            개인정보처리방침
+                        </button>
                     </div>
                 </div>
             </div>

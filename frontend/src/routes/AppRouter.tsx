@@ -23,6 +23,8 @@ import ReviewPride from '@/pages/community/ReviewPride';
 import WriteReview from '@/pages/community/WriteReview';
 import WorkshopNews from '@/pages/community/WorkshopNews';
 import Interviews from '@/pages/community/Interviews';
+import Terms from '@/pages/legal/Terms';
+import Privacy from '@/pages/legal/Privacy';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -53,6 +55,8 @@ const AppRouter: React.FC = () => {
                     <Route path="/community/reviews/write" element={<WriteReview />} />
                     <Route path="/community/news" element={<WorkshopNews />} />
                     <Route path="/community/interviews" element={<Interviews />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
 
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />

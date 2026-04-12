@@ -19,3 +19,12 @@ export interface PageResponseDto<T> {
     totalElements: number;
     totalPages: number;
 }
+
+/**
+ * 전역 공통 응답 포맷
+ * 백엔드의 BaseResponse<T>와 대응합니다.
+ */
+export interface BaseResponse<T> {
+    message: string;
+    data: T;
+}
