@@ -8,6 +8,7 @@ interface CartContextType {
     removeFromCart: (id: string) => void;
     toggleFavorite: (item: Workshop) => void;
     isFavorite: (id: string) => boolean;
+    clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -41,8 +42,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return favoriteItems.some(i => i.id === id);
     };
 
+    const clearCart = () => {
+        setCartItems([]);
+    };
+
     return (
-        <CartContext.Provider value={{ cartItems, favoriteItems, addToCart, removeFromCart, toggleFavorite, isFavorite }}>
+        <CartContext.Provider value={{ cartItems, favoriteItems, addToCart, removeFromCart, toggleFavorite, isFavorite, clearCart }}>
             {children}
         </CartContext.Provider>
     );
