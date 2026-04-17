@@ -2,10 +2,12 @@ import React from 'react';
 import { useCart } from '@/hooks/CartContext';
 import { ShoppingCart, Trash2, ArrowRight, Home } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import CheckoutModal from './components/CheckoutModal';
 
 const CartPage: React.FC = () => {
     const navigate = useNavigate();
     const { cartItems, removeFromCart } = useCart();
+    const [isCheckoutModalOpen, setIsCheckoutModalOpen] = React.useState(false);
 
     const totalPrice = cartItems.reduce((acc, item) => {
         const price = parseInt(item.price.replace(/,/g, ''));
@@ -91,13 +93,23 @@ const CartPage: React.FC = () => {
                                     </span>
                                 </div>
                             </div>
-                            <button className="w-full py-4 bg-violet-600 dark:bg-violet-600 text-white rounded-2xl font-black hover:bg-violet-700 transition-all flex items-center justify-center gap-2 group border-0">
+                            <button 
+                                onClick={() => setIsCheckoutModalOpen(true)}
+                                className="w-full py-4 bg-violet-600 dark:bg-violet-600 text-white rounded-2xl font-black hover:bg-violet-700 transition-all flex items-center justify-center gap-2 group border-0"
+                            >
                                 결제하기 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Checkout Modal */}
+            <CheckoutModal 
+                isOpen={isCheckoutModalOpen} 
+                onClose={() => setIsCheckoutModalOpen(false)}
+                totalPrice={totalPrice}
+            />
         </div>
     );
 };
