@@ -1,12 +1,18 @@
 package io.hong.admin.domain.user.service;
 
+import io.hong.admin.domain.user.dto.request.SearchUserRequest;
+import io.hong.admin.domain.user.dto.request.UserSaveRequest;
+import io.hong.admin.domain.user.dto.response.UserListResponse;
 import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.enumcd.UserRole;
 import io.hong.admin.domain.user.repository.HUserRepository;
-import io.hong.admin.domain.user.dto.request.UserSaveRequest;
+import io.hong.admin.golbal.common.page.PageResponseDto;
 import io.hong.admin.golbal.exception.HongException;
 import io.hong.admin.golbal.exception.error.HongErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-04-18        note       {findUserPage} 추가
  */
 
 @Service
@@ -65,5 +72,11 @@ public class HUserService {
         } catch (HongException e) {
             return null;
         }
+    }
+
+    public PageResponseDto<UserListResponse> findUserPage(SearchUserRequest search) {
+        Pageable pageable = search.toPageable(Sort.by("id").descending());
+        Page<UserListResponse> userPage = userRepository.findAllUser(pageable);
+        return new PageResponseDto<>(userPage);
     }
 }
