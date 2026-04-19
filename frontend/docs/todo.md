@@ -210,5 +210,14 @@
 - [x] 결제 프로세스 시뮬레이션 (로딩 상태, 완료 메시지)
 - [x] 결제 완료 후 장바구니 비우기 및 결과 페이지(또는 예약 내역) 이동
 
+## 34. 시스템 관리 > 사용자 관리 기능 구현
+- [x] `src/types/user.ts` 신규 생성 및 `UserListResponse` 정의
+- [x] `UserManagement` 페이지 실데이터 연동 리팩토링 (`admin/user/index.tsx`)
+    - [x] `fetchData` 로직 구현 및 상태 관리
+    - [x] 검색 필터 연동
+    - [x] `AdminTable` 컬럼 정의 (상태 배지 포함)
+- [x] UI 및 동작 확인 완료
+- [x] `todo.md` 업데이트 (완료 표시)
+
 ---
 *Last Updated: 2026-04-17*
