@@ -10,11 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * packageName    : io.hong.admin.domain.user.controller.api
- * fileName       : HUserRestController
+ * fileName       : HUserAuthRestController
  * author         : home
  * date           : 2026-03-03
  * description    :
@@ -23,12 +21,13 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
  * 2026-04-02        home       signup -> CREATED, return Entity
+ * 2026-04-21        note       RestController 이름 변경
  */
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth-user")
-public class HUserRestController {
+public class HUserAuthRestController {
 
     private final HUserService hUserService;
 
