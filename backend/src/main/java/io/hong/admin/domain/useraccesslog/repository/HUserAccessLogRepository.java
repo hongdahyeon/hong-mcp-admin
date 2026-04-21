@@ -1,6 +1,6 @@
 package io.hong.admin.domain.useraccesslog.repository;
 
-import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogList;
+import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogListResponse;
 import io.hong.admin.domain.useraccesslog.entity.HUserAccessLog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +23,11 @@ public interface HUserAccessLogRepository extends JpaRepository<HUserAccessLog, 
 
     @Query(value = "" +
             "SELECT " +
-                "new io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogList(" +
+                "new io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogListResponse(" +
                 "l.id, l.ipAddress, l.userAgent, l.loginAt, u.id, u.username, u.email) " +
               "FROM HUserAccessLog l " +
               "JOIN HUser u ON l.userId = u.id",
             countQuery = "SELECT count(l) FROM HUserAccessLog l" +
     "") // 카운트 쿼리 최적화
-    Page<UserAccessLogList> findAllWithUserInfo(Pageable pageable);
+    Page<UserAccessLogListResponse> findAllWithUserInfo(Pageable pageable);
 }
