@@ -1,7 +1,7 @@
 package io.hong.admin.domain.useraccesslog.controller.api;
 
-import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLog;
-import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogList;
+import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLogRequest;
+import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogListResponse;
 import io.hong.admin.domain.useraccesslog.service.HUserAccessLogService;
 import io.hong.admin.golbal.common.BaseResponse;
 import io.hong.admin.golbal.common.page.PageResponseDto;
@@ -32,9 +32,9 @@ public class UserAccessLogRestController {
     private final HUserAccessLogService service;
 
     @GetMapping("/page")
-    public ResponseEntity<BaseResponse<PageResponseDto<UserAccessLogList>>> findUserAccessLogPage(SearchUserAccessLog search) {
-        PageResponseDto<UserAccessLogList> page = service.findUserAccessLogPage(search);
-        BaseResponse<PageResponseDto<UserAccessLogList>> response = BaseResponse.ok(page);
+    public ResponseEntity<BaseResponse<PageResponseDto<UserAccessLogListResponse>>> findUserAccessLogPage(SearchUserAccessLogRequest search) {
+        PageResponseDto<UserAccessLogListResponse> page = service.findUserAccessLogPage(search);
+        BaseResponse<PageResponseDto<UserAccessLogListResponse>> response = BaseResponse.ok(page);
         return ResponseEntity.ok().body(response);
     }
 }
