@@ -1,7 +1,7 @@
 package io.hong.admin.domain.useraccesslog.service;
 
-import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLog;
-import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogList;
+import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLogRequest;
+import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogListResponse;
 import io.hong.admin.domain.useraccesslog.entity.HUserAccessLog;
 import io.hong.admin.domain.useraccesslog.repository.HUserAccessLogRepository;
 import io.hong.admin.golbal.common.page.PageResponseDto;
@@ -47,9 +47,9 @@ public class HUserAccessLogService {
         repository.save(log);
     }
 
-    public PageResponseDto<UserAccessLogList> findUserAccessLogPage(SearchUserAccessLog search) {
+    public PageResponseDto<UserAccessLogListResponse> findUserAccessLogPage(SearchUserAccessLogRequest search) {
         Pageable pageable = search.toPageable(Sort.by("id").descending());
-        Page<UserAccessLogList> userPage = repository.findAllWithUserInfo(pageable);
+        Page<UserAccessLogListResponse> userPage = repository.findAllWithUserInfo(pageable);
         return new PageResponseDto<>(userPage);
     }
 }

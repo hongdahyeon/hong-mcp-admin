@@ -1,13 +1,12 @@
 package io.hong.admin.domain.useraccesslog.dto.response;
 
-import io.hong.admin.domain.useraccesslog.entity.HUserAccessLog;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 /**
  * packageName    : io.hong.admin.domain.useraccesslog.dto.response
- * fileName       : UserAccessLog
+ * fileName       : UserAccessLogListResponse
  * author         : home
  * date           : 2026-03-14
  * description    : User 접근 이력 목록 응답 DTO
@@ -15,10 +14,11 @@ import java.time.LocalDateTime;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-14        home       최초 생성
+ * 2026-04-22        note       클래스명 변경
  */
 
 @Getter
-public class UserAccessLogList {
+public class UserAccessLogListResponse {
     private final Long id;
     private final String ipAddress;
     private final String userAgent;
@@ -30,9 +30,9 @@ public class UserAccessLogList {
 
 
     // (주의) 쿼리문의 순서와 데이터 타입 정확 일치
-    public UserAccessLogList( Long id, String ipAddress, String userAgent,
-                              LocalDateTime loginAt, Long userId,
-                              String userName, String userEmail ) {
+    public UserAccessLogListResponse(Long id, String ipAddress, String userAgent,
+                                     LocalDateTime loginAt, Long userId,
+                                     String userName, String userEmail ) {
         this.id = id;
         this.ipAddress = ipAddress;
         this.userAgent = userAgent;
