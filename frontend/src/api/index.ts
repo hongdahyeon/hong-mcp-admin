@@ -51,9 +51,9 @@ api.interceptors.response.use(
 
         console.log("--- Axios Error Detected ---");
 
-        // [A005] Access Token 만료 시 처리
-        if (errorCode === 'A005') {
-            console.log("Detected A005 - Attempting Reissue");
+        // [AUTH-005] Access Token 만료 시 처리
+        if (errorCode === 'AUTH-005') {
+            console.log("Detected AUTH-005 - Attempting Reissue");
 
             // 이미 한 번 시도한 요청이라면 즉시 종료 (무한 루프 방지)
             if (originalRequest._retry) {
@@ -97,8 +97,8 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        // 그 외의 인증 에러 (미인증 등)
-        if (errorCode === 'A001' || errorCode === 'A002') {
+        // [AUTH-001] Unauthorized, [AUTH-002] Invalid Token, [AUTH-003] User Not Found
+        if (errorCode === 'AUTH-001' || errorCode === 'AUTH-002' || errorCode === 'AUTH-003') {
             localStorage.removeItem('AUTH_DATA');
             location.href = '/login';
             return Promise.reject(error);
