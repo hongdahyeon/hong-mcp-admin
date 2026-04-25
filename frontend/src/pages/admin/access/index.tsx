@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RotateCw, Search } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
 import api from '@/api';
 import { PageResponseDto, PageRequestDto, BaseResponse } from '@/types/common';
@@ -41,6 +42,10 @@ const AccessLog: React.FC = () => {
         }
     };
 
+    const handleRefresh = () => {
+        fetchLogs();
+    };
+
     useEffect(() => {
         fetchLogs();
     }, [currentPage, pageSize, search]);
@@ -63,22 +68,40 @@ const AccessLog: React.FC = () => {
 
     return (
         <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-black text-slate-900 dark:text-white">접속 이력 관리</h1>
-                <div className="flex gap-2 items-center">
-                    <input
-                        type="text"
-                        placeholder="검색어 입력..."
-                        value={search}
-                        onChange={(e) => {
-                            setSearch(e.target.value);
-                            setCurrentPage(1); // Reset page on search
-                        }}
-                        className="px-4 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg text-sm outline-none focus:border-violet-500 text-slate-900 dark:text-white"
-                    />
-                    <button className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors whitespace-nowrap">
-                        로그 내보내기 (CSV)
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div>
+                    <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
+                        접속 이력 관리
+                        <span className="text-sm font-medium text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
+                            시스템 로그
+                        </span>
+                    </h1>
+                    <p className="text-slate-400 text-sm mt-1 font-medium">사용자의 로그인 및 서비스 접근 이력을 확인합니다.</p>
+                </div>
+
+                <div className="flex items-center gap-2 w-full md:w-auto">
+                    <button
+                        onClick={handleRefresh}
+                        className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 hover:text-violet-600 transition-all shadow-sm active:scale-95"
+                        title="새로고침"
+                    >
+                        <RotateCw size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
+                    <div className="relative group flex-1 md:flex-none">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-violet-500 transition-colors">
+                            <Search size={18} />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="사용자 검색..."
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            className="w-full md:w-64 pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500 transition-all outline-none text-sm font-bold shadow-sm"
+                        />
+                    </div>
                 </div>
             </div>
 
