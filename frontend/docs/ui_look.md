@@ -91,7 +91,7 @@ When creating new admin prototypes:
 
 ### 1. 공통 타입 사용
 ```tsx
-import { PageRequestDto, PageResponseDto } from '@/types/common';
+import { PageRequestDto, PageResponseDto, BaseResponse } from '@/types/common';
 ```
 
 ### 2. 표준 데이터 패칭 패턴
@@ -108,8 +108,9 @@ const fetchData = async () => {
         search: searchStr // 선택 사항
     };
     
-    const response = await api.get<PageResponseDto<ItemType>>('/your-api-path', { params });
-    const { content, totalPages, pageNumber } = response.data;
+    // BaseResponse<T>로 감싸서 응답을 받음
+    const response = await api.get<BaseResponse<PageResponseDto<ItemType>>>('/your-api-path', { params });
+    const { content, totalPages, pageNumber } = response.data.data; // response.data.data에서 실제 데이터 추출
     
     setData(content);
     setTotalPages(totalPages);
