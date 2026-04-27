@@ -32,15 +32,17 @@ public class HUserAuthRestController {
     private final HUserService hUserService;
 
     @GetMapping("/check-email")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@RequestParam String email) {
+    public ResponseEntity<BaseResponse<Boolean>> checkEmailDuplicate(@RequestParam String email) {
         boolean check = hUserService.checkEmailDuplicate(email);
-        return ResponseEntity.ok(check);
+        BaseResponse<Boolean> response = BaseResponse.ok(check);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/check-username")
-    public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
+    public ResponseEntity<BaseResponse<Boolean>> checkUsername(@RequestParam String username) {
         boolean check = hUserService.checkUsernameDuplicate(username);
-        return ResponseEntity.ok(check);
+        BaseResponse<Boolean> response = BaseResponse.ok(check);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/roles")
@@ -51,10 +53,11 @@ public class HUserAuthRestController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<HUser> signup(@RequestBody UserSaveRequest dto) {
+    public ResponseEntity<BaseResponse<HUser>> signup(@RequestBody UserSaveRequest dto) {
         HUser hUser = hUserService.saveUser(dto);
+        BaseResponse<HUser> response = BaseResponse.ok(hUser);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(hUser);
+                .body(response);
     }
 }
