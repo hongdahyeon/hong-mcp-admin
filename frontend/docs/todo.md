@@ -226,12 +226,15 @@
 - [x] '새로고침' 버튼 추가 및 스타일 통일
 - [x] `RotateCw` 아이콘 애니메이션 및 기능 연동
 
----
-
 ## 36. 전역 API 응답 구조(`BaseResponse`) 통합 및 버그 수정
 - [x] `authService` 내 모든 메서드 `BaseResponse<T>` 적용 및 리팩토링
 - [x] 회원가입 역할 목록(`roles.map`) 오류 수정
 - [x] `ui_look.md` 내 표준 API 호출 패턴 최신화
+
+## 37. 관리자 API 호출 로직 분리 및 리팩토링
+- [x] `UserAccessLogList` 타입 이동 (`src/types/user.ts`)
+- [x] `adminService.ts` 신규 생성 및 API 호출 로직 통합
+- [x] `UserManagement` 및 `AccessLog` 페이지 리팩토링
 
 ---
 *Last Updated: 2026-04-26*
