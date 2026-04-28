@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { RotateCw, Search } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
-import api from '@/api';
-import { PageResponseDto, PageRequestDto, BaseResponse } from '@/types/common';
-
-interface UserAccessLogList {
-    id: number;
-    userId: number;
-    userName: string;
-    userEmail: string;
-    ipAddress: string;
-    userAgent: string;
-    loginAt: string;
-}
+import { adminService } from '@/api/admin';
+import { PageRequestDto } from '@/types/common';
+import { UserAccessLogList } from '@/types/user';
 
 const AccessLog: React.FC = () => {
     const [logs, setLogs] = useState<UserAccessLogList[]>([]);
@@ -30,8 +21,7 @@ const AccessLog: React.FC = () => {
                 size: pageSize,
                 search: search || undefined
             };
-            const response = await api.get<BaseResponse<PageResponseDto<UserAccessLogList>>>('/api/admin/user-access/page', { params });
-            const data = response.data.data;
+            const data = await adminService.findAccessLogPage(params);
             setLogs(data.content);
             setTotalPages(data.totalPages);
             setCurrentPage(data.pageNumber);

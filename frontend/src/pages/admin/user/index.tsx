@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, RotateCw, UserPlus, Shield, Lock, BellOff, Trash2 } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
-import api from '@/api';
-import { BaseResponse, PageResponseDto } from '@/types/common';
+import { adminService } from '@/api/admin';
 import { UserListResponse, SearchUserRequest } from '@/types/user';
 
 const UserManagement: React.FC = () => {
@@ -26,8 +25,8 @@ const UserManagement: React.FC = () => {
                 search: appliedSearch || undefined
             };
 
-            const response = await api.get<BaseResponse<PageResponseDto<UserListResponse>>>('/api/admin/user/page', { params });
-            const { content, totalPages, totalElements, pageNumber } = response.data.data;
+            const data = await adminService.findUserPage(params);
+            const { content, totalPages, totalElements, pageNumber } = data;
 
             setUsers(content);
             setTotalPages(totalPages);
