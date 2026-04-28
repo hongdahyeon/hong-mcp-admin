@@ -21,3 +21,13 @@ export interface UserListResponse {
 export interface SearchUserRequest extends PageRequestDto {
     search?: string;
 }
+
+export interface UserAccessLogList {
+    id: number;
+    userId: number;
+    userName: string;
+    userEmail: string;
+    ipAddress: string;
+    userAgent: string;
+    loginAt: string;
+}
