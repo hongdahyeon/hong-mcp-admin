@@ -237,4 +237,9 @@
 - [x] `UserManagement` 및 `AccessLog` 페이지 리팩토링
 
 ---
-*Last Updated: 2026-04-26*
+---
+*Last Updated: 2026-04-28*
+
+## 38. 로그인 페이지 이메일 수정 및 테스트 계정 추가
+- [x] 로그인 페이지 기본 관리자 이메일 수정 (`admin@hong.craft` -> `admin@craft.day`)
+- [x] 테스트 계정 추가 (`user@craft.day` / `1234`)
