@@ -128,7 +128,11 @@ const Login: React.FC = () => {
 
                     {/* Footer Info */}
                     <div className="mt-8 flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500">
-                        <div>테스트 계정: admin@hong.craft / 1234</div>
+                        <div className="flex flex-col gap-0.5">
+                            <span className="text-slate-500 dark:text-slate-400">테스트 계정</span>
+                            <span>- admin@craft.day / 1234</span>
+                            <span>- user@craft.day / 1234</span>
+                        </div>
                         <Link
                             to="/signup"
                             className="flex items-center gap-1 text-violet-600 dark:text-violet-400 hover:text-violet-700 transition-colors"
