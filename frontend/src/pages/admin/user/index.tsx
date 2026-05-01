@@ -3,6 +3,7 @@ import { Search, RotateCw, UserPlus, Shield, Lock, BellOff, Trash2 } from 'lucid
 import AdminTable from '@/components/common/AdminTable';
 import { adminService } from '@/api/admin';
 import { UserListResponse, SearchUserRequest } from '@/types/user';
+import UserCreateModal from './components/UserCreateModal';
 
 const UserManagement: React.FC = () => {
     // 1. 상태 관리
@@ -14,6 +15,7 @@ const UserManagement: React.FC = () => {
     const [totalElements, setTotalElements] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [appliedSearch, setAppliedSearch] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     // 2. 데이터 페칭 로직
     const fetchUsers = async () => {
@@ -165,7 +167,10 @@ const UserManagement: React.FC = () => {
                     >
                         <RotateCw size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
-                    <button className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-black transition-all shadow-lg shadow-violet-200 dark:shadow-none active:scale-95 text-sm">
+                    <button 
+                        onClick={() => setIsModalOpen(true)}
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-black transition-all shadow-lg shadow-violet-200 dark:shadow-none active:scale-95 text-sm"
+                    >
                         <UserPlus size={18} />
                         사용자 등록
                     </button>
@@ -208,6 +213,13 @@ const UserManagement: React.FC = () => {
                     }}
                 />
             </div>
+
+            {/* Registration Modal */}
+            <UserCreateModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={handleRefresh}
+            />
         </div>
     );
 };
