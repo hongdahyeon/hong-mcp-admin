@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 
 /**
  * packageName    : io.hong.admin.domain.user.dto.response
- * fileName       : UserResponse
+ * fileName       : UserListResponse
  * author         : note
  * date           : 2026-04-18
- * description    : 유저 정보 응답
+ * description    : 유저 정보 목록 응답
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
