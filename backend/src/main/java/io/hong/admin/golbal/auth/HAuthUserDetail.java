@@ -102,4 +102,8 @@ public record HAuthUserDetail(
         // 승인되었고, 삭제되지 않았으며, 활성화 상태여야 함
         return isApproved && !isDeleted && isEnabled;
     }
+
+    public Long getUserId() {
+        return this.userId;
+    }
 }
