@@ -3,6 +3,7 @@ package io.hong.admin.domain.user.service;
 import io.hong.admin.domain.user.dto.request.SearchUserRequest;
 import io.hong.admin.domain.user.dto.request.UserSaveRequest;
 import io.hong.admin.domain.user.dto.response.UserListResponse;
+import io.hong.admin.domain.user.dto.response.UserViewResponse;
 import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.enumcd.UserRole;
 import io.hong.admin.domain.user.repository.HUserRepository;
@@ -78,5 +79,9 @@ public class HUserService {
         Pageable pageable = search.toPageable(Sort.by("id").descending());
         Page<UserListResponse> userPage = userRepository.findAllUser(pageable);
         return new PageResponseDto<>(userPage);
+    }
+
+    public UserViewResponse findUserView(Long id) {
+        return userRepository.findUserView(id);
     }
 }
