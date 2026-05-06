@@ -324,9 +324,13 @@ const Header: React.FC = () => {
                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">My Account</p>
                                             <p className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">{username}님 반갑습니다!</p>
                                         </div>
-                                        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all">
+                                        <Link 
+                                            to="/my/profile"
+                                            onClick={() => setIsUserMenuOpen(false)}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
+                                        >
                                             <UserCircle size={18} /> 내 정보 관리
-                                        </button>
+                                        </Link>
                                         <Link 
                                             to="/my/reservations"
                                             onClick={() => setIsUserMenuOpen(false)}
