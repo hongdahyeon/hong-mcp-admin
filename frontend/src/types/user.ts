@@ -31,3 +31,15 @@ export interface UserAccessLogList {
     userAgent: string;
     loginAt: string;
 }
+
+export interface UserViewResponse {
+    id: number;
+    email: string;
+    username: string;
+    role: UserRole;
+    isApproved: boolean;
+    isLocked: boolean;
+    isDeleted: boolean;
+    isEnabled: boolean;
+    lastPasswordChangedDate: string;
+}
