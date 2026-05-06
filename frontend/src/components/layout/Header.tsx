@@ -241,7 +241,7 @@ const Header: React.FC = () => {
                         {isCartOpen && (
                             <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in duration-200">
                                 <div className="px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-2 flex justify-between items-center">
-                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">주문 대기함</p>
+                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">장바구니</p>
                                     <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{cartItems.length}개</span>
                                 </div>
                                 <div className="max-h-64 overflow-y-auto px-2 space-y-1">
@@ -321,7 +321,6 @@ const Header: React.FC = () => {
                                 {isLoggedIn ? (
                                     <>
                                         <div className="px-4 py-2 border-b border-slate-50 dark:border-slate-800 mb-1">
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">My Account</p>
                                             <p className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">{username}님 반갑습니다!</p>
                                         </div>
                                         <Link 
