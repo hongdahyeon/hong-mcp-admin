@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { User, ChevronDown, LogOut, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight, LayoutDashboard, CalendarCheck, CreditCard, Ticket } from 'lucide-react';
 import { useTheme } from '@/hooks/ThemeContext';
 import { useCart } from '@/hooks/CartContext';
@@ -13,6 +13,37 @@ const Header: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
     const { cartItems, favoriteItems, removeFromCart, toggleFavorite } = useCart();
     const navigate = useNavigate();
+
+    // 🔗 Refs for Click Outside Detection
+    const resMenuRef = useRef<HTMLDivElement>(null);
+    const favoritesRef = useRef<HTMLDivElement>(null);
+    const cartRef = useRef<HTMLDivElement>(null);
+    const userMenuRef = useRef<HTMLDivElement>(null);
+
+    // 🖱️ Click Outside Detection Logic
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+
+            if (isResMenuOpen && resMenuRef.current && !resMenuRef.current.contains(target)) {
+                setIsResMenuOpen(false);
+            }
+            if (isFavoritesOpen && favoritesRef.current && !favoritesRef.current.contains(target)) {
+                setIsFavoritesOpen(false);
+            }
+            if (isCartOpen && cartRef.current && !cartRef.current.contains(target)) {
+                setIsCartOpen(false);
+            }
+            if (isUserMenuOpen && userMenuRef.current && !userMenuRef.current.contains(target)) {
+                setIsUserMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isResMenuOpen, isFavoritesOpen, isCartOpen, isUserMenuOpen]);
 
     // ✅ 로그인 상태 및 사용자 정보 확인
     const authDataString = localStorage.getItem('AUTH_DATA');
@@ -97,7 +128,7 @@ const Header: React.FC = () => {
                 <div className="flex items-center gap-2 md:gap-4">
                     {/* Reservation/Payment Dropdown Menu */}
                     {isLoggedIn && (
-                        <div className="relative">
+                        <div className="relative" ref={resMenuRef}>
                             <button
                                 onClick={() => {
                                     setIsResMenuOpen(!isResMenuOpen);
@@ -152,7 +183,7 @@ const Header: React.FC = () => {
                     </button>
 
                     {/* Favorites Toggle */}
-                    <div className="relative">
+                    <div className="relative" ref={favoritesRef}>
                         <button
                             onClick={() => {
                                 setIsFavoritesOpen(!isFavoritesOpen);
@@ -219,7 +250,7 @@ const Header: React.FC = () => {
                     </div>
 
                     {/* Cart Toggle */}
-                    <div className="relative">
+                    <div className="relative" ref={cartRef}>
                         <button
                             onClick={() => {
                                 setIsCartOpen(!isCartOpen);
@@ -297,7 +328,7 @@ const Header: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="relative">
+                    <div className="relative" ref={userMenuRef}>
                         <button
                             onClick={() => {
                                 setIsUserMenuOpen(!isUserMenuOpen);
