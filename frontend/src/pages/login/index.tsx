@@ -132,6 +132,7 @@ const Login: React.FC = () => {
                             <span className="text-slate-500 dark:text-slate-400">테스트 계정</span>
                             <span>- admin@craft.day / 1234</span>
                             <span>- user@craft.day / 1234</span>
+                            <span>- host@craft.day / 1234</span>
                         </div>
                         <Link
                             to="/signup"
