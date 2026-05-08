@@ -279,6 +279,7 @@
 
 - [x] 로그인 페이지 기본 관리자 이메일 수정 (`admin@hong.craft` -> `admin@craft.day`)
 - [x] 테스트 계정 추가 (`user@craft.day` / `1234`)
+- [x] 호스트 테스트 계정 추가 (`host@craft.day` / `1234`)
 
 ## 39. 시스템 관리 > 사용자 등록 기능 구현 (모달형)
 
