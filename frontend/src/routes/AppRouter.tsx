@@ -9,6 +9,7 @@ import UserManagement from '@/pages/admin/user';
 import WorkplaceManagement from '@/pages/admin/workplace';
 import AccessLog from '@/pages/admin/access';
 import PaymentManagement from '@/pages/admin/payment';
+import BoardManagement from '@/pages/admin/board';
 import Cart from '@/pages/cart';
 import Favorites from '@/pages/favorites';
 import Workshops from '@/pages/workshops';
@@ -65,6 +66,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/admin/workplace" element={<WorkplaceManagement />} />
                     <Route path="/admin/access" element={<AccessLog />} />
                     <Route path="/admin/payment" element={<PaymentManagement />} />
+                    <Route path="/admin/board" element={<BoardManagement />} />
                 </Route>
 
                 {/* 404 페이지 - 최상단 수준에서 렌더링 */}
