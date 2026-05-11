@@ -1,6 +1,7 @@
 import api from './index';
 import { BaseResponse, PageResponseDto, PageRequestDto } from '@/types/common';
 import { UserListResponse, SearchUserRequest, UserAccessLogList } from '@/types/user';
+import { BoardListResponse, SearchBoardRequest } from '@/types/board';
 
 /**
  * 🛠️ Admin Management API Service
@@ -19,6 +20,14 @@ export const adminService = {
      */
     findAccessLogPage: async (params: PageRequestDto): Promise<PageResponseDto<UserAccessLogList>> => {
         const response = await api.get<BaseResponse<PageResponseDto<UserAccessLogList>>>('/api/admin/user-access/page', { params });
+        return response.data.data;
+    },
+
+    /**
+     * 게시판 목록 조회 (Paging)
+     */
+    findBoardPage: async (params: SearchBoardRequest): Promise<PageResponseDto<BoardListResponse>> => {
+        const response = await api.get<BaseResponse<PageResponseDto<BoardListResponse>>>('/api/admin/board/page', { params });
         return response.data.data;
     }
 };
