@@ -86,6 +86,7 @@ const Header: React.FC = () => {
             subMenus: [
                 { name: '사용자 관리', path: '/admin/user' },
                 { name: '공방 관리', path: '/admin/workplace' },
+                { name: '게시판 관리', path: '/admin/board' },
                 { name: '접속 이력 관리', path: '/admin/access' },
                 { name: '결제 정보 관리', path: '/admin/payment' }
             ]
