@@ -318,6 +318,10 @@
 - [x] 게시판 관리 페이지 (`admin/board/index.tsx`) UI 개발
 - [x] 헤더 메뉴 및 라우터 연동
 
+## 45. 시스템 관리 > 게시판 코드 조회 API 추가
+- [x] 게시판 코드 관련 타입 정의 (`types/board.ts`)
+- [x] `adminService` 내 게시판 코드 목록 조회 API 연동
+
 ---
 
 _Last Updated: 2026-05-07_
