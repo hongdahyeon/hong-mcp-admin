@@ -45,4 +45,11 @@ public class HBoardAdminRestController {
         BaseResponse<BoardCode[]> response = BaseResponse.ok(values);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping
+    public ResponseEntity<BaseResponse<Long>> saveBoard(@RequestBody SaveBoardRequest request) {
+        Long uid = service.saveBoard(request);
+        BaseResponse<Long> response = BaseResponse.ok(uid);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }

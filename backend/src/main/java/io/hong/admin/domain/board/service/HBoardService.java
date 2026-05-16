@@ -1,7 +1,10 @@
 package io.hong.admin.domain.board.service;
 
+import io.hong.admin.domain.board.dto.request.SaveBoardRequest;
 import io.hong.admin.domain.board.dto.request.SearchBoardRequest;
 import io.hong.admin.domain.board.dto.response.BoardListResponse;
+import io.hong.admin.domain.board.entity.HBoard;
+import io.hong.admin.domain.board.enumcd.BoardCode;
 import io.hong.admin.domain.board.repository.HBoardRepository;
 import io.hong.admin.golbal.common.page.PageResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -36,4 +39,16 @@ public class HBoardService {
         return new PageResponseDto<>(userPage);
     }
 
+
+    @Transactional(readOnly = false)
+    public Long saveBoard(SaveBoardRequest request) {
+        HBoard bean = HBoard.builder()
+                .code(BoardCode.valueOf(request.code()))
+                .name(request.name())
+                .isUsed(request.isUsed())
+                .isDeleted(false)
+                .build();
+        HBoard boardId = boardRepository.save(bean);
+        return boardId.getId();
+    }
 }
