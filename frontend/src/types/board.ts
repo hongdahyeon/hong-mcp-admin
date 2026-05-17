@@ -24,3 +24,9 @@ export type BoardCode =
     | 'FAQ' 
     | 'TERMS' 
     | 'PRIVACY';
+
+export interface SaveBoardRequest {
+    code: string;
+    name: string;
+    isUsed: boolean;
+}

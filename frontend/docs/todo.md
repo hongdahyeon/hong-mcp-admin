@@ -324,4 +324,12 @@
 
 ---
 
-_Last Updated: 2026-05-07_
+## 46. 시스템 관리 > 게시판 생성 기능 구현 (모달형)
+- [x] 게시판 생성 API 연동 (`adminService.saveBoard`)
+- [x] 게시판 생성 모달 컴포넌트 (`BoardCreateModal.tsx`) 구현
+  - [x] 게시판 코드 API (`findBoardCodes`) 연동 및 선택 기능
+  - [x] 게시판 명칭 및 사용 여부 입력 폼 구성
+- [x] `BoardManagement` 페이지 내 생성 모달 연동 및 성공 시 새로고침
+- [x] 최종 테스트 및 예외 처리
+
+_Last Updated: 2026-05-16_
