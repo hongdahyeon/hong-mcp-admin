@@ -16,3 +16,17 @@ export interface BoardListResponse {
 export interface SearchBoardRequest extends PageRequestDto {
     search?: string;
 }
+
+export type BoardCode = 
+    | 'NOTICE' 
+    | 'FREE' 
+    | 'QNA' 
+    | 'FAQ' 
+    | 'TERMS' 
+    | 'PRIVACY';
+
+export interface SaveBoardRequest {
+    code: string;
+    name: string;
+    isUsed: boolean;
+}

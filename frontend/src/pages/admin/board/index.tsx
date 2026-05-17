@@ -3,6 +3,7 @@ import { Search, RotateCw, ClipboardList, CheckCircle2, XCircle, Trash2 } from '
 import AdminTable from '@/components/common/AdminTable';
 import { adminService } from '@/api/admin';
 import { BoardListResponse, SearchBoardRequest } from '@/types/board';
+import BoardCreateModal from './components/BoardCreateModal';
 
 const BoardManagement: React.FC = () => {
     // 1. 상태 관리
@@ -14,6 +15,7 @@ const BoardManagement: React.FC = () => {
     const [totalElements, setTotalElements] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
     const [appliedSearch, setAppliedSearch] = useState('');
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     // 2. 데이터 페칭 로직
     const fetchBoards = async () => {
@@ -138,6 +140,7 @@ const BoardManagement: React.FC = () => {
                         <RotateCw size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
                     <button 
+                        onClick={() => setIsCreateModalOpen(true)}
                         className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-black transition-all shadow-lg shadow-violet-200 dark:shadow-none active:scale-95 text-sm"
                     >
                         <ClipboardList size={18} />
@@ -182,6 +185,13 @@ const BoardManagement: React.FC = () => {
                     }}
                 />
             </div>
+
+            {/* Creation Modal */}
+            <BoardCreateModal 
+                isOpen={isCreateModalOpen} 
+                onClose={() => setIsCreateModalOpen(false)} 
+                onSuccess={fetchBoards}
+            />
         </div>
     );
 };
