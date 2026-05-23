@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * -----------------------------------------------------------
  * 2026-05-11        note       최초 생성
  * 2026-05-14        note       게시판 코드 조회 API 추가
+ * 2026-05-23        note       게시판 생성 API 추가
  */
 
 @RestController
