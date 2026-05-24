@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * 2026-03-03        home       최초 생성
  * 2026-04-02        home       signup -> CREATED, return Entity
  * 2026-04-21        note       RestController 이름 변경
+ * 2026-05-24        note       roles 조회 API
  */
 
 @RestController
