@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCw, ClipboardList, CheckCircle2, XCircle, Trash2 } from 'lucide-react';
+import { Search, RotateCw, ClipboardList, CheckCircle2, XCircle, Trash2, Edit2 } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
 import { adminService } from '@/api/admin';
 import { BoardListResponse, SearchBoardRequest } from '@/types/board';
 import BoardCreateModal from './components/BoardCreateModal';
+import BoardEditModal from './components/BoardEditModal';
 
 const BoardManagement: React.FC = () => {
     // 1. 상태 관리
@@ -16,6 +17,8 @@ const BoardManagement: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [appliedSearch, setAppliedSearch] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedBoard, setSelectedBoard] = useState<BoardListResponse | null>(null);
 
     // 2. 데이터 페칭 로직
     const fetchBoards = async () => {
@@ -107,8 +110,18 @@ const BoardManagement: React.FC = () => {
             header: '관리',
             key: 'actions',
             align: 'right' as const,
-            render: () => (
+            render: (board: BoardListResponse) => (
                 <div className="flex justify-end gap-2">
+                    <button 
+                        onClick={() => {
+                            setSelectedBoard(board);
+                            setIsEditModalOpen(true);
+                        }}
+                        className="text-slate-400 hover:text-emerald-600 transition-colors font-black text-xs px-3 py-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg flex items-center gap-1"
+                    >
+                        <Edit2 size={12} />
+                        수정
+                    </button>
                     <button className="text-slate-400 hover:text-violet-600 transition-colors font-black text-xs px-3 py-1.5 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg">
                         설정
                     </button>
@@ -191,6 +204,17 @@ const BoardManagement: React.FC = () => {
                 isOpen={isCreateModalOpen} 
                 onClose={() => setIsCreateModalOpen(false)} 
                 onSuccess={fetchBoards}
+            />
+
+            {/* Edit Modal */}
+            <BoardEditModal 
+                isOpen={isEditModalOpen} 
+                onClose={() => {
+                    setIsEditModalOpen(false);
+                    setSelectedBoard(null);
+                }} 
+                onSuccess={fetchBoards}
+                board={selectedBoard}
             />
         </div>
     );
