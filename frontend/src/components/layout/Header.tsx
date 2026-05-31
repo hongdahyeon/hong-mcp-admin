@@ -3,6 +3,7 @@ import { User, ChevronDown, LogOut, UserCircle, LogIn, UserPlus, Sun, Moon, Hear
 import { useTheme } from '@/hooks/ThemeContext';
 import { useCart } from '@/hooks/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { getNavigationMenus } from '@/constants/navigation';
 
 const Header: React.FC = () => {
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -51,47 +52,7 @@ const Header: React.FC = () => {
     const isLoggedIn = !!authData?.accessToken;
     const username = authData?.username || '사용자';
 
-    const menus = [
-        {
-            title: '공방 탐색',
-            subMenus: [
-                { name: '카테고리별 클래스', path: '/workshops' },
-                { name: '실시간 핫플레이스', path: '#' },
-                { name: '신규 공방', path: '#' }
-            ]
-        },
-
-        {
-            title: '커뮤니티',
-            subMenus: [
-                { name: '찐 후기 자랑', path: '/community/reviews' },
-                { name: '공방 소식', path: '/community/news' },
-                { name: '작가님 인터뷰', path: '/community/interviews' }
-            ]
-        },
-        {
-            title: '제휴 문의',
-            subMenus: [
-                { name: '공방 입점 안내', path: '#' },
-                { name: '작가 신청', path: '#' },
-                { name: '광고/제휴', path: '#' }
-            ]
-        },
-    ];
-
-    // ✅ 관리자(ROLE_ADMIN)일 경우 시스템 관리 메뉴 추가
-    if (authData?.role === 'ROLE_ADMIN') {
-        menus.push({
-            title: '시스템 관리',
-            subMenus: [
-                { name: '사용자 관리', path: '/admin/user' },
-                { name: '공방 관리', path: '/admin/workplace' },
-                { name: '게시판 관리', path: '/admin/board' },
-                { name: '접속 이력 관리', path: '/admin/access' },
-                { name: '결제 정보 관리', path: '/admin/payment' }
-            ]
-        });
-    }
+    const menus = getNavigationMenus(authData?.role);
 
     return (
         <header
