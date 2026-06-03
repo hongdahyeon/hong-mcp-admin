@@ -1,11 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { User, Mail, Shield, Calendar, Activity, CheckCircle2, Lock, AlertCircle, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { User, Mail, Shield, Calendar, Activity, CheckCircle2, Lock, AlertCircle, ShieldCheck, Camera } from 'lucide-react';
 import { userService } from '@/api/userService';
 import { UserViewResponse } from '@/types/user';
 
 const Profile: React.FC = () => {
     const [user, setUser] = useState<UserViewResponse | null>(null);
     const [loading, setLoading] = useState(true);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleEditClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 선택할 수 있습니다.');
+                return;
+            }
+            console.log('선택된 파일 정보:', {
+                name: file.name,
+                type: file.type,
+                size: `${(file.size / 1024).toFixed(2)} KB`
+            });
+            const url = URL.createObjectURL(file);
+            setPreviewUrl(url);
+        }
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -56,8 +79,28 @@ const Profile: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Left: Simple Avatar & Key Info */}
                 <div className="md:col-span-1 bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col items-center text-center">
-                    <div className="w-24 h-24 bg-violet-100 dark:bg-violet-900/30 rounded-3xl flex items-center justify-center mb-6 border-2 border-violet-200 dark:border-violet-800 shadow-inner">
-                        <User size={48} className="text-violet-600 dark:text-violet-400" />
+                    <div className="relative mb-6 group">
+                        <div className="w-24 h-24 bg-violet-100 dark:bg-violet-900/30 rounded-3xl flex items-center justify-center border-2 border-violet-200 dark:border-violet-800 shadow-inner overflow-hidden">
+                            {previewUrl ? (
+                                <img src={previewUrl} alt="Profile Preview" className="w-full h-full object-cover" />
+                            ) : (
+                                <User size={48} className="text-violet-600 dark:text-violet-400" />
+                            )}
+                        </div>
+                        <button
+                            onClick={handleEditClick}
+                            className="absolute -bottom-2 -right-2 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white p-2.5 rounded-2xl shadow-lg hover:shadow-violet-500/30 transition-all duration-200 cursor-pointer border border-violet-500/20 flex items-center justify-center"
+                            title="프로필 이미지 수정"
+                        >
+                            <Camera size={16} />
+                        </button>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                            className="hidden"
+                        />
                     </div>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white mb-1">{user.username}</h2>
                     <p className="text-slate-400 text-sm font-medium mb-4">{user.email}</p>
