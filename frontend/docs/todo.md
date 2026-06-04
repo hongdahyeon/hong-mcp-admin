@@ -351,4 +351,12 @@
 - [ ] 프로필 영역에 수정 아이콘(Camera 등) 배치
 - [ ] 아이콘 클릭 시 이미지 파일 선택 기능 구현 (임시 프리뷰 지원)
 
-_Last Updated: 2026-06-03_
+---
+
+## 49. 시스템 관리 > 게시판 수정 API 연동 및 모달 개선
+- [ ] `types/board.ts`에 `ChangeBoardRequest` 인터페이스 추가
+- [ ] `adminService`에 `changeBoard` API 메서드 구현
+- [ ] `BoardEditModal`에서 게시판 코드 입력란을 ReadOnly input으로 변경하고 관련 불필요한 API Fetch 로직 제거
+- [ ] `BoardEditModal` 저장 시 실제 `changeBoard` API 호출 연동 및 성공 피드백 구현
+
+_Last Updated: 2026-06-05_

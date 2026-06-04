@@ -30,3 +30,8 @@ export interface SaveBoardRequest {
     name: string;
     isUsed: boolean;
 }
+
+export interface ChangeBoardRequest {
+    name: string;
+    isUsed: boolean;
+}
