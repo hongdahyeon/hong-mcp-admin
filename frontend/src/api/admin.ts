@@ -1,7 +1,7 @@
 import api from './index';
 import { BaseResponse, PageResponseDto, PageRequestDto } from '@/types/common';
 import { UserListResponse, SearchUserRequest, UserAccessLogList } from '@/types/user';
-import { BoardListResponse, SearchBoardRequest, BoardCode, SaveBoardRequest } from '@/types/board';
+import { BoardListResponse, SearchBoardRequest, BoardCode, SaveBoardRequest, ChangeBoardRequest } from '@/types/board';
 
 /**
  * 🛠️ Admin Management API Service
@@ -44,6 +44,14 @@ export const adminService = {
      */
     saveBoard: async (request: SaveBoardRequest): Promise<number> => {
         const response = await api.post<BaseResponse<number>>('/api/admin/board', request);
+        return response.data.data;
+    },
+
+    /**
+     * 게시판 수정
+     */
+    changeBoard: async (id: number, request: ChangeBoardRequest): Promise<number> => {
+        const response = await api.put<BaseResponse<number>>(`/api/admin/board/${id}`, request);
         return response.data.data;
     }
 };
