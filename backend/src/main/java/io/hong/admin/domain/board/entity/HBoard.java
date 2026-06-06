@@ -1,5 +1,6 @@
 package io.hong.admin.domain.board.entity;
 
+import io.hong.admin.domain.board.dto.request.ChangeBoardRequest;
 import io.hong.admin.domain.board.enumcd.BoardCode;
 import io.hong.admin.golbal.audit.BaseEntity;
 import jakarta.persistence.*;
@@ -48,5 +49,10 @@ public class HBoard extends BaseEntity {
         this.name = name;
         this.isUsed = isUsed;
         this.isDeleted = isDeleted;
+    }
+
+    public void update(String name, boolean isUsed) {
+        this.name = name;
+        this.isUsed = isUsed;
     }
 }
