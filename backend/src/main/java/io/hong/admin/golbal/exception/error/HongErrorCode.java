@@ -37,8 +37,10 @@ public enum HongErrorCode {
     USER_FORBIDDEN(HttpStatus.FORBIDDEN, "USER-006", "비활성화된 계정입니다. 관리자에게 문의바랍니다."),
     PASSWORD_EXPIRED(HttpStatus.FORBIDDEN, "USER-007", "비밀번호가 만료되었습니다. 비밀번호를 변경해주세요."),
     USER_ID_DUPLICATE(HttpStatus.BAD_REQUEST, "USER-008", "이미 존재하는 이메일입니다."),
-    USER_NAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER-008", "이미 존재하닌 이름입니다.");
+    USER_NAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER-008", "이미 존재하닌 이름입니다."),
 
+    // 게시판 관련
+    BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD-001", "해당 게시판이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
