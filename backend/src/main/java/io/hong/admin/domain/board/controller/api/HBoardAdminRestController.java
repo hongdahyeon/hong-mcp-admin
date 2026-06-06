@@ -1,5 +1,6 @@
 package io.hong.admin.domain.board.controller.api;
 
+import io.hong.admin.domain.board.dto.request.ChangeBoardRequest;
 import io.hong.admin.domain.board.dto.request.SaveBoardRequest;
 import io.hong.admin.domain.board.dto.request.SearchBoardRequest;
 import io.hong.admin.domain.board.dto.response.BoardListResponse;
@@ -7,6 +8,7 @@ import io.hong.admin.domain.board.enumcd.BoardCode;
 import io.hong.admin.domain.board.service.HBoardService;
 import io.hong.admin.golbal.common.BaseResponse;
 import io.hong.admin.golbal.common.page.PageResponseDto;
+import io.hong.admin.golbal.exception.HongException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +54,12 @@ public class HBoardAdminRestController {
         Long uid = service.saveBoard(request);
         BaseResponse<Long> response = BaseResponse.ok(uid);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponse<Long>> changeBoard(@PathVariable Long id, @RequestBody ChangeBoardRequest request) throws HongException {
+        Long uid = service.changeBoard(id, request);
+        BaseResponse<Long> response = BaseResponse.ok(uid);
+        return ResponseEntity.ok(response);
     }
 }
