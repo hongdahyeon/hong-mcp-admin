@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCw, ClipboardList, CheckCircle2, XCircle, Trash2, Edit2 } from 'lucide-react';
+import { Search, RotateCw, ClipboardList, CheckCircle2, XCircle, Trash2, Edit2, Eye } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
 import { adminService } from '@/api/admin';
 import { BoardListResponse, SearchBoardRequest } from '@/types/board';
@@ -122,8 +122,11 @@ const BoardManagement: React.FC = () => {
                         <Edit2 size={12} />
                         수정
                     </button>
-                    <button className="text-slate-400 hover:text-violet-600 transition-colors font-black text-xs px-3 py-1.5 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg">
-                        설정
+                    <button 
+                        className="text-slate-400 hover:text-violet-600 transition-colors font-black text-xs p-2 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg flex items-center justify-center"
+                        title="게시글 보러가기"
+                    >
+                        <Eye size={14} />
                     </button>
                 </div>
             )

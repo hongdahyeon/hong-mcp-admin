@@ -348,15 +348,23 @@
 
 ## 48. 내 정보 관리 > 프로필 수정 아이콘 및 파일 선택 기능 추가
 
-- [ ] 프로필 영역에 수정 아이콘(Camera 등) 배치
-- [ ] 아이콘 클릭 시 이미지 파일 선택 기능 구현 (임시 프리뷰 지원)
+- [x] 프로필 영역에 수정 아이콘(Camera 등) 배치
+- [x] 아이콘 클릭 시 이미지 파일 선택 기능 구현 (임시 프리뷰 지원)
 
 ---
 
 ## 49. 시스템 관리 > 게시판 수정 API 연동 및 모달 개선
-- [ ] `types/board.ts`에 `ChangeBoardRequest` 인터페이스 추가
-- [ ] `adminService`에 `changeBoard` API 메서드 구현
-- [ ] `BoardEditModal`에서 게시판 코드 입력란을 ReadOnly input으로 변경하고 관련 불필요한 API Fetch 로직 제거
-- [ ] `BoardEditModal` 저장 시 실제 `changeBoard` API 호출 연동 및 성공 피드백 구현
 
-_Last Updated: 2026-06-05_
+- [x] `types/board.ts`에 `ChangeBoardRequest` 인터페이스 추가
+- [x] `adminService`에 `changeBoard` API 메서드 구현
+- [x] `BoardEditModal`에서 게시판 코드 입력란을 ReadOnly input으로 변경하고 관련 불필요한 API Fetch 로직 제거
+- [x] `BoardEditModal` 저장 시 실제 `changeBoard` API 호출 연동 및 성공 피드백 구현
+
+---
+
+## 50. 시스템 관리 > 게시판 관리 테이블 '설정' 버튼을 '게시글 보러가기' 눈 아이콘으로 변경
+
+- [x] `BoardManagement` 페이지에서 `lucide-react` `Eye` 아이콘 추가
+- [x] 테이블의 '설정' 버튼을 `Eye` 아이콘 버튼으로 대체하고 호버 시 '게시글 보러가기' 툴팁 표시
+
+_Last Updated: 2026-06-07_
