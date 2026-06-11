@@ -32,7 +32,8 @@ export const BASE_MENUS: NavigationMenu[] = [
         subMenus: [
             { name: '공방 입점 안내', path: '#' },
             { name: '작가 신청', path: '#' },
-            { name: '광고/제휴', path: '#' }
+            { name: '광고/제휴', path: '#' },
+            { name: '도움말', path: '#' }
         ]
     },
 ];
