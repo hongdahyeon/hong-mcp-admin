@@ -14,7 +14,8 @@ export const BASE_MENUS: NavigationMenu[] = [
         subMenus: [
             { name: '카테고리별 클래스', path: '/workshops' },
             { name: '실시간 핫플레이스', path: '#' },
-            { name: '신규 공방', path: '#' }
+            { name: '신규 공방', path: '#' },
+            { name: '지도로 공방기', path: '#' }
         ]
     },
     {
@@ -22,7 +23,8 @@ export const BASE_MENUS: NavigationMenu[] = [
         subMenus: [
             { name: '찐 후기 자랑', path: '/community/reviews' },
             { name: '공방 소식', path: '/community/news' },
-            { name: '작가님 인터뷰', path: '/community/interviews' }
+            { name: '작가님 인터뷰', path: '/community/interviews' },
+            { name: '이벤트', path: '/community/events' }
         ]
     },
     {
@@ -30,7 +32,8 @@ export const BASE_MENUS: NavigationMenu[] = [
         subMenus: [
             { name: '공방 입점 안내', path: '#' },
             { name: '작가 신청', path: '#' },
-            { name: '광고/제휴', path: '#' }
+            { name: '광고/제휴', path: '#' },
+            { name: '도움말', path: '#' }
         ]
     },
 ];
