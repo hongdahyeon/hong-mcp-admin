@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-04        home       최초 생성
+ * 2026-05-24        note       게시판 수정을 위한 생성자 추가
  */
 @Entity
 @Table(name = "h_board")
