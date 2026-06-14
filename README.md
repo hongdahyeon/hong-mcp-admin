@@ -1,4 +1,5 @@
 # 🚀 Hong MCP Admin Platform (v1.0.0)
+### Latest version: 2026.06.14
 
 Java 25의 최신 기능과 Spring Boot 4.0, React를 활용한 차세대 어드민 관리 플랫폼입니다. 백엔드와 프론트엔드가 완전히 분리된 **Separation Architecture**로 설계되었습니다.
 
