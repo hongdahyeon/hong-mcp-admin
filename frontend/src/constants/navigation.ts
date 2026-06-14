@@ -45,7 +45,8 @@ export const ADMIN_MENU: NavigationMenu = {
         { name: '공방 관리', path: '/admin/workplace' },
         { name: '게시판 관리', path: '/admin/board' },
         { name: '접속 이력 관리', path: '/admin/access' },
-        { name: '결제 정보 관리', path: '/admin/payment' }
+        { name: '결제 정보 관리', path: '/admin/payment' },
+        { name: '설정 관리', path: '/admin/config' }
     ]
 };
 
