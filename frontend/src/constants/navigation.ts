@@ -24,7 +24,8 @@ export const BASE_MENUS: NavigationMenu[] = [
             { name: '찐 후기 자랑', path: '/community/reviews' },
             { name: '공방 소식', path: '/community/news' },
             { name: '작가님 인터뷰', path: '/community/interviews' },
-            { name: '이벤트', path: '/community/events' }
+            { name: '이벤트', path: '/community/events' },
+            { name: '공지사항', path: '/community/notice' }
         ]
     },
     {
