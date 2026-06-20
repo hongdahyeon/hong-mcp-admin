@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
  * 2026-04-18        note       {findUserPage} 추가
+ * 2026-04-29        note       {findUserView} 추가
  */
 
 @Service
