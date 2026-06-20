@@ -24,7 +24,8 @@ export const BASE_MENUS: NavigationMenu[] = [
             { name: '찐 후기 자랑', path: '/community/reviews' },
             { name: '공방 소식', path: '/community/news' },
             { name: '작가님 인터뷰', path: '/community/interviews' },
-            { name: '이벤트', path: '/community/events' }
+            { name: '이벤트', path: '/community/events' },
+            { name: '공지사항', path: '/community/notice' }
         ]
     },
     {
@@ -45,7 +46,8 @@ export const ADMIN_MENU: NavigationMenu = {
         { name: '공방 관리', path: '/admin/workplace' },
         { name: '게시판 관리', path: '/admin/board' },
         { name: '접속 이력 관리', path: '/admin/access' },
-        { name: '결제 정보 관리', path: '/admin/payment' }
+        { name: '결제 정보 관리', path: '/admin/payment' },
+        { name: '설정 관리', path: '/admin/config' }
     ]
 };
 
