@@ -367,4 +367,14 @@
 - [x] `BoardManagement` 페이지에서 `lucide-react` `Eye` 아이콘 추가
 - [x] 테이블의 '설정' 버튼을 `Eye` 아이콘 버튼으로 대체하고 호버 시 '게시글 보러가기' 툴팁 표시
 
-_Last Updated: 2026-06-07_
+---
+
+## 51. 시스템 관리 > 게시판별 게시글 목록 조회 기능 구현
+
+- [x] 게시글 관련 타입 정의 (`types/post.ts`)
+- [x] 게시글 API 서비스 구현 (`api/postService.ts` 또는 `api/admin.ts`에 추가)
+- [x] 게시글 관리 페이지 (`admin/post/index.tsx`) 구현 및 `AdminTable` 연동
+- [x] 게시판 관리 페이지 (`admin/board/index.tsx`) 내 '게시글 보러가기' 눈 아이콘에 페이지 이동 링크 연결 (boardId 전달)
+- [x] 라우터 (`routes/AppRouter.tsx`)에 `/admin/post` 경로 추가 및 연동
+
+_Last Updated: 2026-06-23_
