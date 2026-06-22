@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, RotateCw, ClipboardList, CheckCircle2, XCircle, Trash2, Edit2, Eye } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
 import { adminService } from '@/api/admin';
@@ -7,6 +8,8 @@ import BoardCreateModal from './components/BoardCreateModal';
 import BoardEditModal from './components/BoardEditModal';
 
 const BoardManagement: React.FC = () => {
+    const navigate = useNavigate();
+
     // 1. 상태 관리
     const [boards, setBoards] = useState<BoardListResponse[]>([]);
     const [loading, setLoading] = useState(true);
@@ -123,6 +126,7 @@ const BoardManagement: React.FC = () => {
                         수정
                     </button>
                     <button 
+                        onClick={() => navigate(`/admin/post?boardId=${board.id}`, { state: { boardName: board.name } })}
                         className="text-slate-400 hover:text-violet-600 transition-colors font-black text-xs p-2 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg flex items-center justify-center"
                         title="게시글 보러가기"
                     >
