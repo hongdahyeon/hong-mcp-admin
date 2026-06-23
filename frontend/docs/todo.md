@@ -378,3 +378,4 @@
 - [x] 라우터 (`routes/AppRouter.tsx`)에 `/admin/post` 경로 추가 및 연동
 
 _Last Updated: 2026-06-23_
+_가장 최근 수정사항: 시스템 관리_
