@@ -1,4 +1,4 @@
-package io.hong.admin.domain.post.controller.api;
+package io.hong.admin.domain.post.controller;
 
 import io.hong.admin.domain.post.dto.request.SearchPostRequest;
 import io.hong.admin.domain.post.dto.response.PostListResponse;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * packageName    : io.hong.admin.domain.post.controller.api
+ * packageName    : io.hong.admin.domain.post.controller
  * fileName       : HPostRestController
  * author         : note
  * date           : 2026-06-21

@@ -1,4 +1,4 @@
-package io.hong.admin.domain.board.controller.api;
+package io.hong.admin.domain.board.controller;
 
 import io.hong.admin.domain.board.dto.request.ChangeBoardRequest;
 import io.hong.admin.domain.board.dto.request.SaveBoardRequest;
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * packageName    : io.hong.admin.domain.board.controller.api
+ * packageName    : io.hong.admin.domain.board.controller
  * fileName       : HBoardAdminRestController
  * author         : note
  * date           : 2026-05-11

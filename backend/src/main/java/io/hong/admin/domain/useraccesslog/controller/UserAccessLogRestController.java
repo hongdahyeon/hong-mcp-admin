@@ -1,4 +1,4 @@
-package io.hong.admin.domain.useraccesslog.controller.api;
+package io.hong.admin.domain.useraccesslog.controller;
 
 import io.hong.admin.domain.useraccesslog.dto.request.SearchUserAccessLogRequest;
 import io.hong.admin.domain.useraccesslog.dto.response.UserAccessLogListResponse;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * packageName    : io.hong.admin.domain.useraccesslog.controller.api
+ * packageName    : io.hong.admin.domain.useraccesslog.controller
  * fileName       : UserAccessLogRestController
  * author         : home
  * date           : 2026-03-14
