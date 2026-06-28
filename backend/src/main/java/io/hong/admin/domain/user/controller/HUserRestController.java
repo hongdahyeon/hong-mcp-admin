@@ -1,4 +1,4 @@
-package io.hong.admin.domain.user.controller.api;
+package io.hong.admin.domain.user.controller;
 
 import io.hong.admin.domain.user.dto.response.UserViewResponse;
 import io.hong.admin.domain.user.service.HUserService;
@@ -8,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * packageName    : io.hong.admin.domain.user.controller.api
+ * packageName    : io.hong.admin.domain.user.controller
  * fileName       : HUserRestController
  * author         : note
  * date           : 2026-04-29
