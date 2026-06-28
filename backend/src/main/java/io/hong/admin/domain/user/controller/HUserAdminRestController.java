@@ -1,4 +1,4 @@
-package io.hong.admin.domain.user.controller.api;
+package io.hong.admin.domain.user.controller;
 
 import io.hong.admin.domain.user.dto.request.SearchUserRequest;
 import io.hong.admin.domain.user.dto.response.UserListResponse;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * packageName    : io.hong.admin.domain.user.controller.api
+ * packageName    : io.hong.admin.domain.user.controller
  * fileName       : HUserAdminRestController
  * author         : note
  * date           : 2026-04-18

@@ -1,4 +1,4 @@
-package io.hong.admin.domain.user.controller.api;
+package io.hong.admin.domain.user.controller;
 
 import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.enumcd.UserRole;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * packageName    : io.hong.admin.domain.user.controller.api
+ * packageName    : io.hong.admin.domain.user.controller
  * fileName       : HUserAuthRestController
  * author         : home
  * date           : 2026-03-03
