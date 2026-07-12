@@ -101,12 +101,14 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({ isOpen, onClose, onSu
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            alert('비밀번호가 일치하지 않습니다.');
+            const message = '비밀번호가 일치하지 않습니다.';
+            alert(message);
             return;
         }
 
         if (checks.email.status !== 'success' || checks.username.status !== 'success') {
-            alert('이메일 및 아이디 중복 확인이 필요합니다.');
+            const message = '이메일 및 아이디 중복 확인이 필요합니다.';
+            alert(message);
             return;
         }
 
@@ -114,7 +116,8 @@ const UserCreateModal: React.FC<UserCreateModalProps> = ({ isOpen, onClose, onSu
         try {
             const { confirmPassword, ...signupData } = formData;
             await authService.signup(signupData);
-            alert('사용자 등록이 완료되었습니다!');
+            const message = '사용자 등록이 완료되었습니다!';
+            alert(message);
             onSuccess();
             onClose();
         } catch (err: any) {
