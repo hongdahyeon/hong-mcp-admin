@@ -62,14 +62,16 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
         e.preventDefault();
 
         if (!formData.code || !formData.name) {
-            alert('모든 필수 항목을 입력해 주세요.');
+            const message = '모든 필수 항목을 입력해 주세요.';
+            alert(message);
             return;
         }
 
         setIsLoading(true);
         try {
             await adminService.saveBoard(formData);
-            alert('게시판이 성공적으로 생성되었습니다!');
+            const message = '게시판이 성공적으로 생성되었습니다!';
+            alert(message);
             onSuccess();
             onClose();
         } catch (err: any) {

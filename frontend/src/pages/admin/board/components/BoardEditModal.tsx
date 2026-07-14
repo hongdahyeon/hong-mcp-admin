@@ -44,7 +44,8 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
         e.preventDefault();
 
         if (!formData.name) {
-            alert('게시판 명칭을 입력해 주세요.');
+            const message = '게시판 명칭을 입력해 주세요.';
+            alert(message);
             return;
         }
 
@@ -54,7 +55,8 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                 name: formData.name,
                 isUsed: formData.isUsed
             });
-            alert('게시판이 성공적으로 수정되었습니다.');
+            const message = '게시판이 성공적으로 수정되었습니다.';
+            alert(message);
             onSuccess();
             onClose();
         } catch (err: any) {
