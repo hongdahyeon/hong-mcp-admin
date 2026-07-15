@@ -380,3 +380,12 @@
 _Last Updated: 2026-06-23_
 
 # 가장 최근 수정사항: 시스템 관리 -> 게시판별 게시글 목록 조회 기능 구현
+
+---
+
+## 52. 공통 주소(Address) 컴포넌트 및 DTO 모듈화
+
+- [x] 주소 공통 DTO 정의 (`src/types/address.ts`)
+- [x] 주소 입력용 공통 컴포넌트 구현 (`src/components/common/AddressInput.tsx`)
+
+_Last Updated: 2026-07-15_
