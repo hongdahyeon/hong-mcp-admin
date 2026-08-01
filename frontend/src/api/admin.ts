@@ -1,7 +1,8 @@
 import api from './index';
 import { BaseResponse, PageResponseDto, PageRequestDto } from '@/types/common';
-import { UserListResponse, SearchUserRequest, UserAccessLogList } from '@/types/user';
+import { UserListResponse, SearchUserRequest, UserAccessLogList, UpdateUserFlagRequest } from '@/types/user';
 import { BoardListResponse, SearchBoardRequest, BoardCode, SaveBoardRequest, ChangeBoardRequest } from '@/types/board';
+import { WorkshopListResponse, SearchWorkshopRequest } from '@/types/workshop';
 
 /**
  * 🛠️ Admin Management API Service
@@ -14,6 +15,15 @@ export const adminService = {
         const response = await api.get<BaseResponse<PageResponseDto<UserListResponse>>>('/api/admin/user/page', { params });
         return response.data.data;
     },
+
+    /**
+     * 사용자 플래그 상태 변경 (approved, locked, enabled)
+     */
+    changeUserFlag: async (request: UpdateUserFlagRequest): Promise<string> => {
+        const response = await api.put<BaseResponse<string>>('/api/admin/user/flag-change', request);
+        return response.data.data;
+    },
+
 
     /**
      * 접속 이력 조회 (Paging)
@@ -52,6 +62,14 @@ export const adminService = {
      */
     changeBoard: async (id: number, request: ChangeBoardRequest): Promise<number> => {
         const response = await api.put<BaseResponse<number>>(`/api/admin/board/${id}`, request);
+        return response.data.data;
+    },
+
+    /**
+     * 공방 목록 조회 (Paging)
+     */
+    findWorkshopPage: async (params: SearchWorkshopRequest): Promise<PageResponseDto<WorkshopListResponse>> => {
+        const response = await api.get<BaseResponse<PageResponseDto<WorkshopListResponse>>>('/api/admin/workshop/page', { params });
         return response.data.data;
     }
 };
