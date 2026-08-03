@@ -43,3 +43,10 @@ export interface UserViewResponse {
     isEnabled: boolean;
     lastPasswordChangedDate: string;
 }
+
+export interface UpdateUserFlagRequest {
+    type: 'approved' | 'locked' | 'enabled';
+    value: boolean;
+    email: string;
+}
+

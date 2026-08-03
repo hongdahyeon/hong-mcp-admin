@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, RotateCw, UserPlus, Shield, Lock, BellOff, Trash2 } from 'lucide-react';
+import { Search, RotateCw, UserPlus, Shield, Lock, BellOff, Trash2, CheckCircle2 } from 'lucide-react';
 import AdminTable from '@/components/common/AdminTable';
 import { adminService } from '@/api/admin';
 import { UserListResponse, SearchUserRequest } from '@/types/user';
@@ -57,6 +57,31 @@ const UserManagement: React.FC = () => {
         fetchUsers();
     };
 
+    const handleToggleFlag = async (user: UserListResponse, type: 'approved' | 'locked' | 'enabled', newValue: boolean) => {
+        const actionText = type === 'enabled'
+            ? (newValue ? '활성화' : '비활성화')
+            : type === 'approved'
+                ? (newValue ? '승인' : '미승인')
+                : (newValue ? '잠금' : '잠금 해제');
+
+        if (!window.confirm(`${user.username}님의 상태를 ${actionText} 상태로 변경하시겠습니까?`)) {
+            return;
+        }
+
+        try {
+            const message = await adminService.changeUserFlag({
+                type,
+                value: newValue,
+                email: user.email
+            });
+            alert(message || '상태가 변경되었습니다.');
+            fetchUsers();
+        } catch (error) {
+            console.error('Failed to change user flag:', error);
+            alert('상태 변경 중 오류가 발생했습니다.');
+        }
+    };
+
     // 5. 테이블 컬럼 정의
     const columns = [
         {
@@ -95,25 +120,47 @@ const UserManagement: React.FC = () => {
             header: '상태',
             key: 'status',
             render: (user: UserListResponse) => (
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1.5">
                     {/* 활성화 여부 */}
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${user.isEnabled ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
+                    <button
+                        onClick={() => handleToggleFlag(user, 'enabled', !user.isEnabled)}
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-black transition-all hover:scale-105 active:scale-95 ${
+                            user.isEnabled 
+                            ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/50' 
+                            : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        }`}
+                        title={user.isEnabled ? '클릭하여 비활성화' : '클릭하여 활성화'}
+                    >
                         {user.isEnabled ? 'ACTIVE' : 'DISABLED'}
-                    </span>
+                    </button>
 
-                    {/* 승인 여부 (미승인 시 노출) */}
-                    {!user.isApproved && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 flex items-center gap-1">
-                            <BellOff size={10} /> PENDING
-                        </span>
-                    )}
+                    {/* 승인 여부 */}
+                    <button
+                        onClick={() => handleToggleFlag(user, 'approved', !user.isApproved)}
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-black flex items-center gap-1 transition-all hover:scale-105 active:scale-95 ${
+                            user.isApproved
+                            ? 'bg-violet-100 text-violet-600 dark:bg-violet-900/30 dark:text-violet-400 hover:bg-violet-200 dark:hover:bg-violet-900/50'
+                            : 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50'
+                        }`}
+                        title={user.isApproved ? '클릭하여 승인 취소(대기 상태로 변경)' : '클릭하여 승인'}
+                    >
+                        {user.isApproved ? <CheckCircle2 size={10} /> : <BellOff size={10} />}
+                        {user.isApproved ? 'APPROVED' : 'PENDING'}
+                    </button>
 
                     {/* 잠금 여부 */}
-                    {user.isLocked && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 flex items-center gap-1">
-                            <Lock size={10} /> LOCKED
-                        </span>
-                    )}
+                    <button
+                        onClick={() => handleToggleFlag(user, 'locked', !user.isLocked)}
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-black flex items-center gap-1 transition-all hover:scale-105 active:scale-95 ${
+                            user.isLocked
+                            ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 hover:bg-rose-200 dark:hover:bg-rose-900/50'
+                            : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        }`}
+                        title={user.isLocked ? '클릭하여 잠금 해제' : '클릭하여 잠금'}
+                    >
+                        <Lock size={10} className={user.isLocked ? 'text-rose-600 dark:text-rose-400' : 'text-slate-400 dark:text-slate-600'} />
+                        {user.isLocked ? 'LOCKED' : 'UNLOCKED'}
+                    </button>
 
                     {/* 삭제 여부 */}
                     {user.isDeleted && (
