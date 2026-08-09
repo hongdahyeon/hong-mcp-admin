@@ -388,4 +388,10 @@ _Last Updated: 2026-06-23_
 - [x] 주소 공통 DTO 정의 (`src/types/address.ts`)
 - [x] 주소 입력용 공통 컴포넌트 구현 (`src/components/common/AddressInput.tsx`)
 
+---
+
+## 53. 정리
+
+- 공방 목록 조회 API 추가
+
 _Last Updated: 2026-07-15_
