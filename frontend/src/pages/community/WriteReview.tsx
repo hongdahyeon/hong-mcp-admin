@@ -5,9 +5,11 @@ import { reservationService } from '@/api/reservationService';
 import { Reservation } from '@/types/reservation';
 import { MOCK_WORKSHOPS } from '@/constants/workshop';
 import { MOCK_REVIEWS } from '@/constants/reviews';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const WriteReview: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [selectedWorkshopId, setSelectedWorkshopId] = useState<string>('');
     const [rating, setRating] = useState(5);
@@ -25,7 +27,7 @@ const WriteReview: React.FC = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         if (images.length + files.length > 5) {
-            alert('사진은 최대 5장까지 첨부 가능합니다.');
+            alert(t('community.review.maxPhotoLimit'));
             return;
         }
         
@@ -45,15 +47,15 @@ const WriteReview: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedWorkshopId) {
-            alert('후기를 작성할 공방을 선택해주세요.');
+            alert(t('community.review.errorSelectWorkshop'));
             return;
         }
         if (content.length < 10) {
-            alert('후기 내용은 최소 10자 이상 작성해주세요.');
+            alert(t('community.review.errorMinLength'));
             return;
         }
         if (images.length === 0) {
-            alert('최소 1장 이상의 사진을 첨부해주세요.');
+            alert(t('community.review.errorMinPhoto'));
             return;
         }
 
@@ -62,7 +64,7 @@ const WriteReview: React.FC = () => {
         const newReview = {
             id: `rev-${Date.now()}`,
             workshopId: selectedWorkshopId,
-            workshopTitle: workshop?.title || '알 수 없는 공방',
+            workshopTitle: workshop?.title || t('workshop.unknown'),
             authorName: '강나은', // Mock user for now
             rating,
             content,
@@ -84,25 +86,25 @@ const WriteReview: React.FC = () => {
                 onClick={() => navigate('/community/reviews')}
                 className="flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors mb-8 font-bold"
             >
-                <ArrowLeft size={18} /> 커뮤니티로 돌아가기
+                <ArrowLeft size={18} /> {t('community.review.backToCommunity')}
             </button>
             
             <div className="mb-10">
                 <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
-                    후기 작성하기
+                    {t('community.review.write')}
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 font-medium">
-                    직접 경험한 워크숍의 생생한 후기를 나누어 주세요.
+                    {t('community.review.writeDesc')}
                 </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-8">
                 {/* 1. 클래스 선택 */}
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
-                    <h2 className="text-lg font-black text-slate-900 dark:text-white mb-4">1. 방문한 공방 선택</h2>
+                    <h2 className="text-lg font-black text-slate-900 dark:text-white mb-4">{t('community.review.selectWorkshopTitle')}</h2>
                     {reservations.length === 0 ? (
                         <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl text-center text-sm font-bold text-slate-500 border border-dashed border-slate-200 dark:border-slate-800">
-                            후기를 작성할 수 있는 방문 완료 공방이 없습니다.
+                            {t('community.review.noReservationsForReview')}
                         </div>
                     ) : (
                         <select
@@ -110,7 +112,7 @@ const WriteReview: React.FC = () => {
                             onChange={(e) => setSelectedWorkshopId(e.target.value)}
                             className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl font-bold text-slate-900 dark:text-white outline-none focus:border-violet-500 transition-colors"
                         >
-                            <option value="">예약 내역에서 선택해주세요</option>
+                            <option value="">{t('community.review.selectFromReservations')}</option>
                             {reservations.map(res => {
                                 const ws = MOCK_WORKSHOPS.find(w => w.id === res.workshopId);
                                 return (
@@ -125,7 +127,7 @@ const WriteReview: React.FC = () => {
 
                 {/* 2. 별점 */}
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
-                    <h2 className="text-lg font-black text-slate-900 dark:text-white mb-4">2. 공방은 어떠셨나요?</h2>
+                    <h2 className="text-lg font-black text-slate-900 dark:text-white mb-4">{t('community.review.howWasWorkshop')}</h2>
                     <div className="flex items-center gap-2">
                         {[1, 2, 3, 4, 5].map((star) => (
                             <button
@@ -142,14 +144,14 @@ const WriteReview: React.FC = () => {
                                 />
                             </button>
                         ))}
-                        <span className="ml-4 text-xl font-black text-amber-500">{hoverRating || rating}점</span>
+                        <span className="ml-4 text-xl font-black text-amber-500">{t('community.review.ratingScore', { score: hoverRating || rating })}</span>
                     </div>
                 </div>
 
                 {/* 3. 사진 첨부 */}
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-black text-slate-900 dark:text-white">3. 멋진 작품 사진 (최대 5장)</h2>
+                        <h2 className="text-lg font-black text-slate-900 dark:text-white">{t('community.review.uploadPhotosTitle')}</h2>
                         <span className="text-xs font-bold text-slate-400">{images.length} / 5</span>
                     </div>
                     
@@ -169,7 +171,7 @@ const WriteReview: React.FC = () => {
                         {images.length < 5 && (
                             <label className="w-24 h-24 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 hover:border-violet-500 hover:text-violet-500 transition-colors cursor-pointer bg-slate-50 dark:bg-slate-950">
                                 <Upload size={24} className="mb-2" />
-                                <span className="text-[10px] font-bold">사진 첨부</span>
+                                <span className="text-[10px] font-bold">{t('community.review.attachPhoto')}</span>
                                 <input 
                                     type="file" 
                                     accept="image/*" 
@@ -184,16 +186,16 @@ const WriteReview: React.FC = () => {
 
                 {/* 4. 내용 작성 */}
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
-                    <h2 className="text-lg font-black text-slate-900 dark:text-white mb-4">4. 솔직한 리뷰 작성</h2>
+                    <h2 className="text-lg font-black text-slate-900 dark:text-white mb-4">{t('community.review.writeReviewTitle')}</h2>
                     <textarea
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        placeholder="공방의 분위기, 선생님의 친절함, 완성된 작품에 대한 만족도 등을 10자 이상 자유롭게 적어주세요!"
+                        placeholder={t('community.review.contentPlaceholder')}
                         className="w-full h-48 px-4 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium text-slate-900 dark:text-white outline-none focus:border-violet-500 transition-colors resize-none placeholder:text-slate-400"
                     />
                     <div className="text-right mt-2">
                         <span className={`text-xs font-bold ${content.length < 10 ? 'text-rose-500' : 'text-slate-400'}`}>
-                            {content.length} 자
+                            {t('community.review.charCount', { count: content.length })}
                         </span>
                     </div>
                 </div>
@@ -204,14 +206,14 @@ const WriteReview: React.FC = () => {
                         onClick={() => navigate('/community/reviews')}
                         className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-[1.5rem] font-black hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                     >
-                        취소
+                        {t('common.buttons.cancel')}
                     </button>
                     <button 
                         type="submit"
                         disabled={!selectedWorkshopId || content.length < 10 || images.length === 0}
                         className="flex-[2] py-4 bg-violet-600 text-white rounded-[1.5rem] font-black hover:bg-violet-700 transition-colors shadow-xl shadow-violet-200 dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        등록하기
+                        {t('common.buttons.create')}
                     </button>
                 </div>
             </form>
