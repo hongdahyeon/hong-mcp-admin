@@ -6,9 +6,11 @@ import { adminService } from '@/api/admin';
 import { BoardListResponse, SearchBoardRequest } from '@/types/board';
 import BoardCreateModal from './components/BoardCreateModal';
 import BoardEditModal from './components/BoardEditModal';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const BoardManagement: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     // 1. 상태 관리
     const [boards, setBoards] = useState<BoardListResponse[]>([]);
@@ -73,7 +75,7 @@ const BoardManagement: React.FC = () => {
             )
         },
         {
-            header: '게시판 코드',
+            header: t('admin.board.code'),
             key: 'boardCode',
             render: (board: BoardListResponse) => (
                 <div className="flex flex-col">
@@ -83,14 +85,14 @@ const BoardManagement: React.FC = () => {
             )
         },
         {
-            header: '게시판 명칭',
+            header: t('admin.board.name'),
             key: 'name',
             render: (board: BoardListResponse) => (
                 <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{board.name}</span>
             )
         },
         {
-            header: '상태',
+            header: t('common.labels.status'),
             key: 'status',
             render: (board: BoardListResponse) => (
                 <div className="flex gap-2">
@@ -110,7 +112,7 @@ const BoardManagement: React.FC = () => {
             )
         },
         {
-            header: '관리',
+            header: t('common.labels.actions'),
             key: 'actions',
             align: 'right' as const,
             render: (board: BoardListResponse) => (
@@ -123,12 +125,12 @@ const BoardManagement: React.FC = () => {
                         className="text-slate-400 hover:text-emerald-600 transition-colors font-black text-xs px-3 py-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg flex items-center gap-1"
                     >
                         <Edit2 size={12} />
-                        수정
+                        {t('common.buttons.edit')}
                     </button>
                     <button 
                         onClick={() => navigate(`/admin/post?boardId=${board.id}`, { state: { boardName: board.name } })}
                         className="text-slate-400 hover:text-violet-600 transition-colors font-black text-xs p-2 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg flex items-center justify-center"
-                        title="게시글 보러가기"
+                        title={t('admin.board.viewPosts')}
                     >
                         <Eye size={14} />
                     </button>
@@ -143,19 +145,19 @@ const BoardManagement: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
                     <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-                        게시판 관리
+                        {t('admin.board.title')}
                         <span className="text-sm font-medium text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
-                            전체 {totalElements}개
+                            {t('common.labels.totalCount', { count: totalElements })}
                         </span>
                     </h1>
-                    <p className="text-slate-400 text-sm mt-1 font-medium">시스템 내 게시판 설정을 조회하고 관리합니다.</p>
+                    <p className="text-slate-400 text-sm mt-1 font-medium">{t('admin.board.manageDesc')}</p>
                 </div>
 
                 <div className="flex items-center gap-2 w-full md:w-auto">
                     <button
                         onClick={handleRefresh}
                         className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 hover:text-violet-600 transition-all shadow-sm active:scale-95"
-                        title="새로고침"
+                        title={t('common.buttons.refresh')}
                     >
                         <RotateCw size={20} className={loading ? 'animate-spin' : ''} />
                     </button>
@@ -164,7 +166,7 @@ const BoardManagement: React.FC = () => {
                         className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-black transition-all shadow-lg shadow-violet-200 dark:shadow-none active:scale-95 text-sm"
                     >
                         <ClipboardList size={18} />
-                        신규 생성
+                        {t('admin.board.create')}
                     </button>
                 </div>
             </div>
@@ -177,14 +179,14 @@ const BoardManagement: React.FC = () => {
                     </div>
                     <input
                         type="text"
-                        placeholder="게시판 명칭으로 검색..."
+                        placeholder={t('admin.board.searchPlaceholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full max-w-md pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500 transition-all outline-none text-sm font-bold shadow-sm"
                     />
                     {searchQuery !== appliedSearch && (
                         <span className="absolute ml-3 text-[10px] font-black text-amber-500 animate-pulse">
-                            Enter를 눌러 검색
+                            {t('common.labels.pressEnterToSearch')}
                         </span>
                     )}
                 </form>
