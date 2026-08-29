@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { User, ChevronDown, LogOut, UserCircle, LogIn, UserPlus, Sun, Moon, Heart, ShoppingCart, Trash2, ArrowRight, LayoutDashboard, CalendarCheck, CreditCard, Ticket } from 'lucide-react';
 import { useTheme } from '@/hooks/ThemeContext';
 import { useCart } from '@/hooks/CartContext';
+import { useLanguage } from '@/hooks/LanguageContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { getNavigationMenus } from '@/constants/navigation';
 
@@ -13,6 +14,7 @@ const Header: React.FC = () => {
     const [isResMenuOpen, setIsResMenuOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
     const { cartItems, favoriteItems, removeFromCart, toggleFavorite } = useCart();
+    const { language, setLanguage, t } = useLanguage();
     const navigate = useNavigate();
 
     // 🔗 Refs for Click Outside Detection
@@ -50,7 +52,7 @@ const Header: React.FC = () => {
     const authDataString = localStorage.getItem('AUTH_DATA');
     const authData = authDataString ? JSON.parse(authDataString) : null;
     const isLoggedIn = !!authData?.accessToken;
-    const username = authData?.username || '사용자';
+    const username = authData?.username || t('layout.header.userDefault');
 
     const menus = getNavigationMenus(authData?.role);
 
@@ -79,7 +81,7 @@ const Header: React.FC = () => {
                                 } text-lg`}
                             onMouseEnter={() => setActiveMenu(menu.title)}
                         >
-                            {menu.title}
+                            {t(menu.title)}
                             <ChevronDown size={14} className={`ml-1 transition-transform ${activeMenu === menu.title ? 'rotate-180 text-violet-600' : ''}`} />
                             <div className={`absolute bottom-0 left-4 right-4 h-0.5 bg-violet-600 transition-transform origin-left ${activeMenu === menu.title ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
                         </div>
@@ -114,21 +116,21 @@ const Header: React.FC = () => {
                                         onClick={() => setIsResMenuOpen(false)}
                                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                     >
-                                        <CalendarCheck size={16} /> 예약 내역
+                                        <CalendarCheck size={16} /> {t('layout.header.reservations')}
                                     </Link>
                                     <Link 
                                         to="/my/payments"
                                         onClick={() => setIsResMenuOpen(false)}
                                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                     >
-                                        <CreditCard size={16} /> 결제 관리
+                                        <CreditCard size={16} /> {t('layout.header.payments')}
                                     </Link>
                                     <Link 
                                         to="/my/coupons"
                                         onClick={() => setIsResMenuOpen(false)}
                                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                     >
-                                        <Ticket size={16} /> 쿠폰/포인트
+                                        <Ticket size={16} /> {t('layout.header.coupons')}
                                     </Link>
                                 </div>
                             )}
@@ -138,11 +140,35 @@ const Header: React.FC = () => {
                     {/* Theme Toggle */}
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-violet-300 transition-all cursor-pointer"
                         aria-label="Toggle Theme"
                     >
                         {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
                     </button>
+
+                    {/* Language Toggle */}
+                    <div className="flex items-center bg-slate-50 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 h-[38px]">
+                        <button
+                            onClick={() => setLanguage('ko')}
+                            className={`px-2.5 h-full flex items-center text-xs font-black rounded-lg transition-all cursor-pointer ${
+                                language === 'ko'
+                                    ? 'bg-violet-600 text-white shadow-md'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400'
+                            }`}
+                        >
+                            KO
+                        </button>
+                        <button
+                            onClick={() => setLanguage('en')}
+                            className={`px-2.5 h-full flex items-center text-xs font-black rounded-lg transition-all cursor-pointer ${
+                                language === 'en'
+                                    ? 'bg-violet-600 text-white shadow-md'
+                                    : 'text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400'
+                            }`}
+                        >
+                            EN
+                        </button>
+                    </div>
 
                     {/* Favorites Toggle */}
                     <div className="relative" ref={favoritesRef}>
@@ -167,13 +193,13 @@ const Header: React.FC = () => {
                         {isFavoritesOpen && (
                             <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in duration-200">
                                 <div className="px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-2 flex justify-between items-center">
-                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">관심 목록</p>
-                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{favoriteItems.length}개</span>
+                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{t('layout.header.favorites')}</p>
+                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{t('layout.header.favoritesCount', { count: favoriteItems.length })}</span>
                                 </div>
                                 <div className="max-h-64 overflow-y-auto px-2 space-y-1">
                                     {favoriteItems.length === 0 ? (
                                         <div className="py-8 text-center">
-                                            <p className="text-sm text-slate-400 font-medium">관심있는 공방이 없어요</p>
+                                            <p className="text-sm text-slate-400 font-medium">{t('layout.header.noFavorites')}</p>
                                         </div>
                                     ) : (
                                         favoriteItems.slice(0, 5).map(item => (
@@ -204,7 +230,7 @@ const Header: React.FC = () => {
                                         }}
                                         className="w-full mt-2 flex items-center justify-center gap-2 py-2 px-4 text-xs font-black text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all border-t border-slate-50 dark:border-slate-800"
                                     >
-                                        관심 목록 더보기 <ArrowRight size={12} />
+                                        {t('layout.header.moreFavorites')} <ArrowRight size={12} />
                                     </button>
                                 )}
                             </div>
@@ -234,13 +260,13 @@ const Header: React.FC = () => {
                         {isCartOpen && (
                             <div className="absolute right-0 mt-3 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-3 z-50 animate-in fade-in zoom-in duration-200">
                                 <div className="px-4 pb-2 border-b border-slate-50 dark:border-slate-800 mb-2 flex justify-between items-center">
-                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">장바구니</p>
-                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{cartItems.length}개</span>
+                                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{t('layout.header.cart')}</p>
+                                    <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded-full">{t('layout.header.cartCount', { count: cartItems.length })}</span>
                                 </div>
                                 <div className="max-h-64 overflow-y-auto px-2 space-y-1">
                                     {cartItems.length === 0 ? (
                                         <div className="py-8 text-center">
-                                            <p className="text-sm text-slate-400 font-medium">장바구니가 비어있어요</p>
+                                            <p className="text-sm text-slate-400 font-medium">{t('layout.header.emptyCart')}</p>
                                         </div>
                                     ) : (
                                         cartItems.slice(0, 5).map(item => (
@@ -271,7 +297,7 @@ const Header: React.FC = () => {
                                         }}
                                         className="w-full mt-2 flex items-center justify-center gap-2 py-2 px-4 text-xs font-black text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all border-t border-slate-50 dark:border-slate-800"
                                     >
-                                        장바구니 전체 보기 <ArrowRight size={12} />
+                                        {t('layout.header.moreCart')} <ArrowRight size={12} />
                                     </button>
                                 ) : cartItems.length > 0 && (
                                     <div className="px-2 mt-2">
@@ -282,7 +308,7 @@ const Header: React.FC = () => {
                                             }}
                                             className="w-full py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black rounded-xl transition-all shadow-lg shadow-violet-200 dark:shadow-none"
                                         >
-                                            주문하러 가기
+                                            {t('layout.header.goCheckout')}
                                         </button>
                                     </div>
                                 )}
@@ -304,7 +330,7 @@ const Header: React.FC = () => {
                                 <User size={18} />
                             </div>
                             {isLoggedIn && (
-                                <span className="hidden sm:block text-sm font-bold text-slate-800 dark:text-slate-200">{username}님</span>
+                                <span className="hidden sm:block text-sm font-bold text-slate-800 dark:text-slate-200">{t('layout.header.userGreeting', { username })}</span>
                             )}
                             <ChevronDown size={14} className={`text-slate-400 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                         </button>
@@ -314,56 +340,56 @@ const Header: React.FC = () => {
                                 {isLoggedIn ? (
                                     <>
                                         <div className="px-4 py-2 border-b border-slate-50 dark:border-slate-800 mb-1">
-                                            <p className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">{username}님 반갑습니다!</p>
+                                            <p className="text-sm font-black text-slate-900 dark:text-white line-clamp-1">{t('layout.header.welcomeGreeting', { username })}</p>
                                         </div>
                                         <Link 
                                             to="/my/profile"
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                         >
-                                            <UserCircle size={18} /> 내 정보 관리
+                                            <UserCircle size={18} /> {t('layout.header.profile')}
                                         </Link>
                                         <Link 
                                             to="/my/reservations"
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                         >
-                                            <CalendarCheck size={18} /> 예약 내역 확인
+                                            <CalendarCheck size={18} /> {t('layout.header.checkReservations')}
                                         </Link>
                                         <Link 
                                             to="/workshops/manage"
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-violet-50 dark:hover:bg-slate-800 hover:text-violet-600 dark:hover:text-violet-400 font-bold transition-all"
                                         >
-                                            <LayoutDashboard size={18} /> 내 공방 관리
+                                            <LayoutDashboard size={18} /> {t('layout.header.manageWorkshop')}
                                         </Link>
                                         <Link
                                             to="/logout"
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 font-black transition-all border-t border-slate-50 dark:border-slate-800 mt-1"
                                         >
-                                            <LogOut size={18} /> 로그아웃
+                                            <LogOut size={18} /> {t('layout.header.logout')}
                                         </Link>
                                     </>
                                 ) : (
                                     <>
                                         <div className="px-4 py-2 border-b border-slate-50 dark:border-slate-800 mb-1">
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Guest</p>
-                                            <p className="text-sm font-black text-slate-900 dark:text-white">로그인이 필요합니다</p>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('layout.header.guest')}</p>
+                                            <p className="text-sm font-black text-slate-900 dark:text-white">{t('layout.header.loginRequired')}</p>
                                         </div>
                                         <Link
                                             to="/login"
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-violet-600 hover:bg-violet-50 dark:hover:bg-slate-800 font-black transition-all"
                                         >
-                                            <LogIn size={18} /> 로그인하기
+                                            <LogIn size={18} /> {t('layout.header.login')}
                                         </Link>
                                         <Link
                                             to="/signup"
                                             onClick={() => setIsUserMenuOpen(false)}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold transition-all"
                                         >
-                                            <UserPlus size={18} /> 회원가입
+                                            <UserPlus size={18} /> {t('layout.header.signup')}
                                         </Link>
                                     </>
                                 )}
@@ -386,7 +412,7 @@ const Header: React.FC = () => {
                             <div key={menu.title} className="transition-opacity duration-300">
                                 <h4 className={`text-xs font-black uppercase tracking-widest mb-4 ${activeMenu === menu.title ? 'text-violet-600' : 'text-slate-300 dark:text-slate-600'
                                     }`}>
-                                    {menu.title}
+                                    {t(menu.title)}
                                 </h4>
                                 <ul className="space-y-2">
                                     {menu.subMenus.map((sub) => (
@@ -396,7 +422,7 @@ const Header: React.FC = () => {
                                                 onClick={() => setActiveMenu(null)}
                                                 className="text-base font-bold text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors"
                                             >
-                                                {sub.name}
+                                                {t(sub.name)}
                                             </Link>
                                         </li>
                                     ))}
