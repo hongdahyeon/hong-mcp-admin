@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Edit2, Tag, Type, CheckCircle, ChevronRight } from 'lucide-react';
 import { adminService } from '@/api/admin';
 import { BoardCode, BoardListResponse } from '@/types/board';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 interface BoardEditModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface BoardEditModalProps {
 }
 
 const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSuccess, board }) => {
+    const { t } = useLanguage();
     const [formData, setFormData] = useState({
         code: '',
         name: '',
@@ -44,7 +46,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
         e.preventDefault();
 
         if (!formData.name) {
-            const message = '게시판 명칭을 입력해 주세요.';
+            const message = t('admin.board.errorNameRequired');
             alert(message);
             return;
         }
@@ -55,7 +57,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                 name: formData.name,
                 isUsed: formData.isUsed
             });
-            const message = '게시판이 성공적으로 수정되었습니다.';
+            const message = t('admin.board.successEdit');
             alert(message);
             onSuccess();
             onClose();
@@ -95,8 +97,8 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                         <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-3 border border-white/30 shadow-inner">
                             <Edit2 size={28} className="text-white" />
                         </div>
-                        <h1 className="text-2xl font-black mb-1 tracking-tight">게시판 수정</h1>
-                        <p className="text-emerald-100 text-xs opacity-90 font-medium">기존 게시판의 설정을 변경합니다</p>
+                        <h1 className="text-2xl font-black mb-1 tracking-tight">{t('admin.board.edit')}</h1>
+                        <p className="text-emerald-100 text-xs opacity-90 font-medium">{t('admin.board.editDesc')}</p>
                     </div>
                 </div>
 
@@ -107,7 +109,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1 flex items-center gap-2" htmlFor="code">
                                 <Tag size={14} className="text-emerald-500" />
-                                게시판 코드
+                                {t('admin.board.code')}
                             </label>
                             <div className="relative">
                                 <input
@@ -124,7 +126,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1 flex items-center gap-2" htmlFor="name">
                                 <Type size={14} className="text-emerald-500" />
-                                게시판 명칭
+                                {t('admin.board.name')}
                             </label>
                             <input
                                 id="name"
@@ -132,7 +134,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                                 value={formData.name}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium text-sm"
-                                placeholder="예: 공지사항, 자유게시판 등"
+                                placeholder={t('admin.board.namePlaceholder')}
                                 required
                             />
                         </div>
@@ -141,7 +143,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                         <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-2">
                                 <CheckCircle size={16} className={formData.isUsed ? "text-emerald-500" : "text-slate-400"} />
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">사용 여부</span>
+                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t('admin.board.isUsed')}</span>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input 
@@ -165,7 +167,7 @@ const BoardEditModal: React.FC<BoardEditModalProps> = ({ isOpen, onClose, onSucc
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                             <>
-                                수정 완료 <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                {t('common.buttons.save')} <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </>
                         )}
                     </button>
