@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, MessageSquarePlus, Tag, Type, CheckCircle, ChevronRight, AlertCircle } from 'lucide-react';
 import { adminService } from '@/api/admin';
 import { BoardCode, SaveBoardRequest } from '@/types/board';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 interface BoardCreateModalProps {
     isOpen: boolean;
@@ -10,6 +11,7 @@ interface BoardCreateModalProps {
 }
 
 const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, onSuccess }) => {
+    const { t } = useLanguage();
     const [formData, setFormData] = useState<SaveBoardRequest>({
         code: '',
         name: '',
@@ -62,7 +64,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
         e.preventDefault();
 
         if (!formData.code || !formData.name) {
-            const message = '모든 필수 항목을 입력해 주세요.';
+            const message = t('common.errors.fillAllFields');
             alert(message);
             return;
         }
@@ -70,7 +72,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
         setIsLoading(true);
         try {
             await adminService.saveBoard(formData);
-            const message = '게시판이 성공적으로 생성되었습니다!';
+            const message = t('admin.board.successCreate');
             alert(message);
             onSuccess();
             onClose();
@@ -111,8 +113,8 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                         <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-3 border border-white/30 shadow-inner">
                             <MessageSquarePlus size={28} className="text-white" />
                         </div>
-                        <h1 className="text-2xl font-black mb-1 tracking-tight">게시판 생성</h1>
-                        <p className="text-indigo-100 text-xs opacity-90 font-medium">시스템에 새로운 게시판 기능을 추가합니다</p>
+                        <h1 className="text-2xl font-black mb-1 tracking-tight">{t('admin.board.create')}</h1>
+                        <p className="text-indigo-100 text-xs opacity-90 font-medium">{t('admin.board.createDesc')}</p>
                     </div>
                 </div>
 
@@ -123,7 +125,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1 flex items-center gap-2" htmlFor="code">
                                 <Tag size={14} className="text-indigo-500" />
-                                게시판 코드
+                                {t('admin.board.code')}
                             </label>
                             <div className="relative">
                                 <select
@@ -134,7 +136,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                                     className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none text-slate-900 dark:text-slate-100 font-bold appearance-none cursor-pointer text-sm"
                                 >
                                     {isFetchingCodes ? (
-                                        <option>로딩 중...</option>
+                                        <option>{t('common.labels.loading')}</option>
                                     ) : (
                                         boardCodes.map(code => (
                                             <option key={code} value={code} className="dark:bg-slate-900">{code}</option>
@@ -151,7 +153,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1 flex items-center gap-2" htmlFor="name">
                                 <Type size={14} className="text-indigo-500" />
-                                게시판 명칭
+                                {t('admin.board.name')}
                             </label>
                             <input
                                 id="name"
@@ -159,7 +161,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                                 value={formData.name}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium text-sm"
-                                placeholder="예: 공지사항, 자유게시판 등"
+                                placeholder={t('admin.board.namePlaceholder')}
                                 required
                             />
                         </div>
@@ -168,7 +170,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                         <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-2">
                                 <CheckCircle size={16} className={formData.isUsed ? "text-emerald-500" : "text-slate-400"} />
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">사용 여부</span>
+                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{t('admin.board.isUsed')}</span>
                             </div>
                             <label className="relative inline-flex items-center cursor-pointer">
                                 <input 
@@ -192,7 +194,7 @@ const BoardCreateModal: React.FC<BoardCreateModalProps> = ({ isOpen, onClose, on
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                             <>
-                                게시판 저장하기 <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                {t('common.buttons.save')} <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </>
                         )}
                     </button>
