@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Footer: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     const handleRegisterWorkshop = () => {
         const authDataString = localStorage.getItem('AUTH_DATA');
@@ -28,13 +30,13 @@ const Footer: React.FC = () => {
 
                     <div className="flex flex-col items-center gap-2">
                         <p className="text-slate-400 dark:text-slate-500 text-sm font-medium text-center md:text-left">
-                            &copy; {new Date().getFullYear()} CraftDay. All rights reserved. 대한민국 No.1 공방 예약 플랫폼.
+                            &copy; {new Date().getFullYear()} CraftDay. All rights reserved. {t('layout.footer.description')}
                         </p>
                         <button
                             onClick={handleRegisterWorkshop}
                             className="text-violet-600 dark:text-violet-400 text-sm font-bold hover:underline cursor-pointer transition-colors"
                         >
-                            나도 공방 주인! 공방 등록하기 &rarr;
+                            {t('layout.footer.registerWorkshop')}
                         </button>
                     </div>
 
@@ -43,13 +45,13 @@ const Footer: React.FC = () => {
                             onClick={() => navigate('/terms')}
                             className="text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors"
                         >
-                            이용약관
+                            {t('layout.footer.terms')}
                         </button>
                         <button 
                             onClick={() => navigate('/privacy')}
                             className="text-slate-500 dark:text-slate-400 text-xs font-bold hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-colors"
                         >
-                            개인정보처리방침
+                            {t('layout.footer.privacy')}
                         </button>
                     </div>
                 </div>
