@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PenTool, X, ChevronRight, Quote } from 'lucide-react';
 import { MOCK_INTERVIEWS, InterviewItem } from '@/constants/interviews';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Interviews: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [selectedInterview, setSelectedInterview] = useState<InterviewItem | null>(null);
 
     return (
@@ -15,12 +17,12 @@ const Interviews: React.FC = () => {
                     <PenTool size={14} /> CraftDay Original
                 </div>
                 <h1 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter mb-6 leading-tight">
-                    창작의 순간을<br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">인터뷰하다</span>
+                    {t('community.interview.titleLine1')}<br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">{t('community.interview.titleLine2')}</span>
                 </h1>
                 <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                    단순한 공방을 넘어선, 혼을 담아 예술을 빚어내는 작가님들의 진솔한 스토리를 담았습니다.<br className="hidden md:block" /> 
-                    CraftDay가 만난 우리 주변 장인들의 영감을 얻어가세요.
+                    {t('community.interview.desc1')}<br className="hidden md:block" /> 
+                    {t('community.interview.desc2')}
                 </p>
             </div>
 
@@ -133,7 +135,7 @@ const Interviews: React.FC = () => {
                             {/* Call to action */}
                             <div className="mt-16 pt-12 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 bg-slate-50 dark:bg-slate-900 p-8 rounded-[2rem]">
                                 <div className="text-center md:text-left">
-                                    <p className="text-slate-900 dark:text-white font-black text-lg mb-1">{selectedInterview.authorName} 작가님을 만나고 싶다면?</p>
+                                    <p className="text-slate-900 dark:text-white font-black text-lg mb-1">{t('community.interview.meetAuthor', { name: selectedInterview.authorName })}</p>
                                     <p className="text-slate-500 dark:text-slate-400 text-sm font-bold">{selectedInterview.workshopName}</p>
                                 </div>
                                 <button 
@@ -143,7 +145,7 @@ const Interviews: React.FC = () => {
                                     }}
                                     className="w-full md:w-auto px-8 py-4 bg-violet-600 hover:bg-violet-700 text-white text-sm font-black rounded-2xl transition-all shadow-xl shadow-violet-200 dark:shadow-none whitespace-nowrap"
                                 >
-                                    해당 공방 예약하기
+                                    {t('community.interview.bookThisWorkshop')}
                                 </button>
                             </div>
                         </div>
