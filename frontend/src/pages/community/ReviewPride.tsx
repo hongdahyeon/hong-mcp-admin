@@ -7,9 +7,11 @@ import {
     Share2, MoreVertical
 } from 'lucide-react';
 import { MOCK_REVIEWS, ReviewPrideItem } from '@/constants/reviews';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const ReviewPride: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [selectedCategory, setSelectedCategory] = useState('전체');
     const [selectedReview, setSelectedReview] = useState<ReviewPrideItem | null>(null);
 
@@ -29,17 +31,17 @@ const ReviewPride: React.FC = () => {
                         <TrendingUp size={16} /> Community
                     </div>
                     <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
-                        찐 후기 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">자랑하기</span>
+                        {t('community.review.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">{t('community.review.titleHighlight')}</span>
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">
-                        크래프트데이를 통해 완성된 나만의 작품을 공유하고 함께 기쁨을 나눠요.
+                        {t('community.review.desc')}
                     </p>
                 </div>
                 <button 
                     onClick={() => navigate('/community/reviews/write')}
                     className="flex items-center gap-2 px-8 py-4 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-[1.5rem] font-black hover:scale-105 transition-all shadow-xl shadow-slate-200 dark:shadow-none shrink-0"
                 >
-                    <Plus size={20} /> 후기 작성하기
+                    <Plus size={20} /> {t('community.review.write')}
                 </button>
             </div>
 
@@ -47,9 +49,9 @@ const ReviewPride: React.FC = () => {
             <section className="mb-20">
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        🏆 이달의 베스트 후기
+                        {t('community.review.bestTitle')}
                     </h2>
-                    <span className="text-sm font-bold text-slate-400">실시간 인기 급상승 중</span>
+                    <span className="text-sm font-bold text-slate-400">{t('community.review.trending')}</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {bestReviews.map((review) => (
@@ -67,7 +69,7 @@ const ReviewPride: React.FC = () => {
                             
                             <div className="absolute top-6 left-6">
                                 <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-white text-[10px] font-black tracking-widest uppercase border border-white/30">
-                                    {review.category}
+                                    {t('category.' + review.category)}
                                 </span>
                             </div>
 
@@ -111,7 +113,7 @@ const ReviewPride: React.FC = () => {
                                     : 'bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                 }`}
                             >
-                                {cat}
+                                {t('category.' + cat)}
                             </button>
                         ))}
                     </div>
@@ -119,7 +121,7 @@ const ReviewPride: React.FC = () => {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-violet-600 transition-colors" size={18} />
                         <input 
                             type="text" 
-                            placeholder="워크숍 정보나 내용 검색..."
+                            placeholder={t('community.review.searchPlaceholder')}
                             className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl focus:ring-2 focus:ring-violet-600 focus:bg-white dark:focus:bg-slate-950 transition-all text-sm outline-none font-bold"
                         />
                     </div>
@@ -156,7 +158,7 @@ const ReviewPride: React.FC = () => {
                                 <div className="flex items-center gap-2 mb-2">
                                     <Star size={12} className="fill-amber-400 text-amber-400" />
                                     <span className="text-[10px] font-black text-slate-900 dark:text-white">{review.rating}</span>
-                                    <span className="text-[10px] font-bold text-slate-400">• {review.category}</span>
+                                    <span className="text-[10px] font-bold text-slate-400">• {t('category.' + review.category)}</span>
                                 </div>
                                 <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200 line-clamp-1 mb-1">
                                     {review.workshopTitle}
@@ -205,7 +207,7 @@ const ReviewPride: React.FC = () => {
                                     </div>
                                     <div>
                                         <div className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{selectedReview.authorName}</div>
-                                        <div className="text-[10px] font-bold text-slate-400">📍 {selectedReview.category} 전문가</div>
+                                        <div className="text-[10px] font-bold text-slate-400">{t('community.review.expert', { category: t('category.' + selectedReview.category) })}</div>
                                     </div>
                                 </div>
                                 <button onClick={() => setSelectedReview(null)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400">
@@ -227,18 +229,18 @@ const ReviewPride: React.FC = () => {
                                         {selectedReview.content}
                                     </p>
                                     <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                        <span className="text-[10px] font-black text-violet-600 uppercase tracking-widest block mb-1">참여 워크숍</span>
+                                        <span className="text-[10px] font-black text-violet-600 uppercase tracking-widest block mb-1">{t('community.review.participatedWorkshop')}</span>
                                         <span className="text-xs font-black text-slate-900 dark:text-white">{selectedReview.workshopTitle}</span>
                                     </div>
                                 </div>
 
                                 <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
                                     <h4 className="text-xs font-black text-slate-900 dark:text-white mb-4 flex items-center gap-1.5 underline decoration-violet-500 underline-offset-4">
-                                        댓글 {selectedReview.comments.length}개
+                                        {t('community.review.commentsCount', { count: selectedReview.comments.length })}
                                     </h4>
                                     {selectedReview.comments.length === 0 ? (
                                         <div className="py-10 text-center text-slate-400 text-xs font-bold bg-slate-50 dark:bg-slate-950 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-                                            첫 댓글을 남겨보세요!
+                                            {t('community.review.firstComment')}
                                         </div>
                                     ) : (
                                         <div className="space-y-4">
@@ -280,11 +282,11 @@ const ReviewPride: React.FC = () => {
                                 <div className="relative">
                                     <input 
                                         type="text" 
-                                        placeholder="따뜻한 댓글로 작가님을 응원하세요..." 
+                                        placeholder={t('community.review.commentPlaceholder')} 
                                         className="w-full pl-0 pr-12 py-2 bg-transparent border-none focus:ring-0 text-xs font-bold outline-none placeholder:text-slate-300 text-slate-900 dark:text-white"
                                     />
                                     <button className="absolute right-0 top-1/2 -translate-y-1/2 text-violet-600 font-black text-xs hover:text-violet-700 transition-colors">
-                                        게시
+                                        {t('common.buttons.create')}
                                     </button>
                                 </div>
                             </div>
