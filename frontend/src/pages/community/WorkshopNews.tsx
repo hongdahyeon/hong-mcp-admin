@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Newspaper, Eye, X, ChevronRight, Calendar } from 'lucide-react';
 import { MOCK_NEWS, WorkshopNewsItem } from '@/constants/news';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const WorkshopNews: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [selectedCategory, setSelectedCategory] = useState('전체');
     const [selectedNews, setSelectedNews] = useState<WorkshopNewsItem | null>(null);
 
@@ -28,10 +30,10 @@ const WorkshopNews: React.FC = () => {
                         <Newspaper size={16} /> Community
                     </div>
                     <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
-                        공방 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">소식</span>
+                        {t('community.news.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-600">{t('community.news.titleHighlight')}</span>
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">
-                        CraftDay 작가님들이 전하는 특별한 이벤트와 새로운 클래스 소식을 구독해보세요.
+                        {t('community.news.desc')}
                     </p>
                 </div>
             </div>
@@ -51,7 +53,7 @@ const WorkshopNews: React.FC = () => {
                         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/50 to-transparent flex items-center">
                             <div className="px-8 md:px-16 md:w-1/2">
                                 <span className="inline-block px-4 py-1 rounded-full bg-violet-600 text-white text-xs font-black tracking-widest uppercase mb-6 animate-pulse">
-                                    {featuredNews.category}
+                                    {t('category.' + featuredNews.category)}
                                 </span>
                                 <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-6">
                                     {featuredNews.title}
@@ -82,7 +84,7 @@ const WorkshopNews: React.FC = () => {
                                 : 'bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                             }`}
                         >
-                            {cat}
+                            {t('category.' + cat)}
                         </button>
                     ))}
                 </div>
@@ -104,7 +106,7 @@ const WorkshopNews: React.FC = () => {
                             />
                             <div className="absolute top-4 left-4">
                                 <span className="bg-white/90 backdrop-blur text-slate-900 dark:bg-slate-900/90 dark:text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase shadow-sm">
-                                    {news.category}
+                                    {t('category.' + news.category)}
                                 </span>
                             </div>
                         </div>
@@ -134,7 +136,7 @@ const WorkshopNews: React.FC = () => {
                     <div className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in slide-in-from-bottom-10 duration-500">
                         {/* Modal Header */}
                         <div className="sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-8 py-6 flex items-center justify-between z-10 border-b border-slate-200 dark:border-slate-800">
-                            <span className="text-violet-600 font-black text-xs uppercase tracking-widest">{selectedNews.category}</span>
+                            <span className="text-violet-600 font-black text-xs uppercase tracking-widest">{t('category.' + selectedNews.category)}</span>
                             <button onClick={() => setSelectedNews(null)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400">
                                 <X size={20} />
                             </button>
@@ -175,7 +177,7 @@ const WorkshopNews: React.FC = () => {
                                         }}
                                         className="inline-flex items-center justify-center gap-2 px-10 py-5 bg-violet-600 text-white rounded-[2rem] font-black text-lg hover:bg-violet-700 transition-all shadow-xl shadow-violet-200 dark:shadow-none hover:-translate-y-1"
                                     >
-                                        공방 둘러보기 <ChevronRight size={20} />
+                                        {t('community.news.exploreWorkshops')} <ChevronRight size={20} />
                                     </button>
                                 </div>
                             </div>
