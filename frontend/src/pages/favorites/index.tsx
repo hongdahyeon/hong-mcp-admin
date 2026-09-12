@@ -2,8 +2,10 @@ import React from 'react';
 import { useCart } from '@/hooks/CartContext';
 import { Heart, Home, Star, ShoppingCart } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const FavoritesPage: React.FC = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const { favoriteItems, toggleFavorite, addToCart } = useCart();
 
@@ -12,14 +14,14 @@ const FavoritesPage: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-900/30 border border-rose-100 dark:border-rose-800/50 text-rose-600 dark:text-rose-400 text-[10px] font-black uppercase tracking-wider mb-4">
-                        My Favorites
+                        {t('favorites.badge')}
                     </div>
-                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">관심 공방 목록</h1>
+                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">{t('favorites.title')}</h1>
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="text-right">
-                        <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">총 담긴 개수</p>
-                        <p className="text-2xl font-black text-slate-900 dark:text-white">{favoriteItems.length}개</p>
+                        <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{t('favorites.totalSaved')}</p>
+                        <p className="text-2xl font-black text-slate-900 dark:text-white">{t('favorites.itemCount', { count: favoriteItems.length })}</p>
                     </div>
                 </div>
             </div>
@@ -29,10 +31,10 @@ const FavoritesPage: React.FC = () => {
                     <div className="w-20 h-20 bg-rose-50 dark:bg-rose-900/20 rounded-full flex items-center justify-center mx-auto mb-6 text-rose-300 dark:text-rose-700">
                         <Heart size={40} />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">마음에 드는 클래스가 없나요?</h2>
-                    <p className="text-slate-500 dark:text-slate-400 mb-10 font-medium">흥미로운 공방들을 하트로 찜해보세요!</p>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">{t('favorites.emptyTitle')}</h2>
+                    <p className="text-slate-500 dark:text-slate-400 mb-10 font-medium">{t('favorites.emptyDesc')}</p>
                     <Link to="/" className="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black hover:scale-105 transition-all shadow-xl">
-                        <Home size={20} /> 실시간 랭킹 공방 보러가기
+                        <Home size={20} /> {t('favorites.viewTrending')}
                     </Link>
                 </div>
             ) : (
