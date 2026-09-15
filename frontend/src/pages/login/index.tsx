@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, LogIn, UserPlus, ArrowRight, Mail } from 'lucide-react';
 import { authService } from '@/api/auth';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const STORAGE_KEY = 'HONG_CRAFT_DAY';
 
 const Login: React.FC = () => {
+    const { t } = useLanguage();
     const [userId, setUserId] = useState(() => localStorage.getItem(STORAGE_KEY) || '');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem(STORAGE_KEY));
@@ -46,7 +48,7 @@ const Login: React.FC = () => {
                             <LogIn size={32} className="text-white" />
                         </div>
                         <h1 className="text-3xl font-black mb-1">CraftDay</h1>
-                        <p className="text-violet-100 text-sm opacity-80 font-medium italic">감성이 숨 쉬는 공방, 크래프트데이</p>
+                        <p className="text-violet-100 text-sm opacity-80 font-medium italic">{t('auth.login.slogan')}</p>
                     </div>
                 </div>
 
@@ -54,7 +56,7 @@ const Login: React.FC = () => {
                 <form onSubmit={handleLogin} className="p-8">
                     <div className="mb-6">
                         <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="userId">
-                            이메일 아이디
+                            {t('auth.login.emailLabel')}
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -74,7 +76,7 @@ const Login: React.FC = () => {
 
                     <div className="mb-6">
                         <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="password">
-                            비밀번호
+                            {t('auth.login.passwordLabel')}
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -86,7 +88,7 @@ const Login: React.FC = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium"
-                                placeholder="비밀번호를 입력하세요"
+                                placeholder={t('auth.login.passwordPlaceholder')}
                                 required
                             />
                         </div>
@@ -101,7 +103,7 @@ const Login: React.FC = () => {
                             className="w-4 h-4 text-violet-600 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 rounded focus:ring-violet-500 outline-none cursor-pointer"
                         />
                         <label htmlFor="rememberMe" className="ml-2 text-sm font-bold text-slate-500 dark:text-slate-400 cursor-pointer">
-                            로그인 상태 유지
+                            {t('auth.login.rememberMe')}
                         </label>
                     </div>
 
@@ -114,14 +116,14 @@ const Login: React.FC = () => {
                             <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                             <>
-                                공방 탐색 시작하기 <LogIn size={18} className="group-hover:translate-x-1 transition-transform" />
+                                {t('auth.login.submit')} <LogIn size={18} className="group-hover:translate-x-1 transition-transform" />
                             </>
                         )}
                     </button>
 
                     <div className="text-center mb-8">
                         <Link to="/" className="text-sm font-bold text-slate-400 dark:text-slate-500 hover:text-violet-600 dark:hover:text-violet-400 transition-colors inline-flex items-center gap-1 group">
-                            로그인 없이 <span className="text-violet-600 dark:text-violet-400 underline underline-offset-4 decoration-2">둘러보기</span>
+                            {t('auth.login.withoutLogin')}<span className="text-violet-600 dark:text-violet-400 underline underline-offset-4 decoration-2">{t('auth.login.explore')}</span>
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
@@ -129,7 +131,7 @@ const Login: React.FC = () => {
                     {/* Footer Info */}
                     <div className="mt-8 flex items-center justify-between text-[11px] font-bold text-slate-400 dark:text-slate-500">
                         <div className="flex flex-col gap-0.5">
-                            <span className="text-slate-500 dark:text-slate-400">테스트 계정</span>
+                            <span className="text-slate-500 dark:text-slate-400">{t('auth.login.testAccounts')}</span>
                             <span>- admin@craft.day / 1234</span>
                             <span>- user@craft.day / 1234</span>
                             <span>- host@craft.day / 1234</span>
@@ -138,7 +140,7 @@ const Login: React.FC = () => {
                             to="/signup"
                             className="flex items-center gap-1 text-violet-600 dark:text-violet-400 hover:text-violet-700 transition-colors"
                         >
-                            <UserPlus size={14} /> 간편 회원가입
+                            <UserPlus size={14} /> {t('auth.login.quickSignup')}
                         </Link>
                     </div>
                 </form>
