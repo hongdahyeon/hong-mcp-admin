@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Ticket, Coins, Clock, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
 import { MOCK_COUPONS, MOCK_POINT_SUMMARY, MOCK_POINT_HISTORY } from '@/constants/rewards';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Coupons: React.FC = () => {
+    const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState<'COUPON' | 'POINT'>('COUPON');
 
     const availableCoupons = MOCK_COUPONS.filter(c => c.status === 'AVAILABLE');
@@ -11,8 +13,8 @@ const Coupons: React.FC = () => {
         <div className="max-w-[1000px] mx-auto px-6 py-12 animate-in fade-in duration-700">
             {/* Page Header */}
             <div className="mb-10">
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">혜택 관리</h1>
-                <p className="text-slate-500 dark:text-slate-400 font-medium">보유하신 쿠폰과 마일리지를 알차게 사용해보세요.</p>
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{t('my.coupon.title')}</h1>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">{t('my.coupon.desc')}</p>
             </div>
 
             {/* Top Dashboard: VIP Card Style Summary */}
@@ -26,7 +28,7 @@ const Coupons: React.FC = () => {
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2 text-violet-200">
                             <Coins size={20} />
-                            <span className="font-bold text-sm tracking-widest uppercase">My Points</span>
+                            <span className="font-bold text-sm tracking-widest uppercase">{t('my.coupon.myPoints')}</span>
                         </div>
                         <div className="flex items-baseline gap-2 mb-3">
                             <span className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300">
@@ -36,7 +38,7 @@ const Coupons: React.FC = () => {
                         </div>
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold">
                             <AlertCircle size={14} />
-                            이번 달 소멸 예정 : {MOCK_POINT_SUMMARY.expiringThisMonth.toLocaleString()} P
+                            {t('my.coupon.expiringThisMonth', { amount: MOCK_POINT_SUMMARY.expiringThisMonth.toLocaleString() })}
                         </div>
                     </div>
 
@@ -47,12 +49,12 @@ const Coupons: React.FC = () => {
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-4 text-violet-200">
                             <Ticket size={20} />
-                            <span className="font-bold text-sm tracking-widest uppercase">My Coupons</span>
+                            <span className="font-bold text-sm tracking-widest uppercase">{t('my.coupon.myCoupons')}</span>
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="flex flex-col">
                                 <span className="text-4xl font-black text-white">{availableCoupons.length}</span>
-                                <span className="text-xs font-bold text-slate-400">사용 가능</span>
+                                <span className="text-xs font-bold text-slate-400">{t('my.coupon.usable')}</span>
                             </div>
                             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md">
                                 <ChevronRight size={24} className="text-white" />
@@ -72,7 +74,7 @@ const Coupons: React.FC = () => {
                         : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
-                    사용 가능한 쿠폰
+                    {t('my.coupon.usableCoupons')}
                 </button>
                 <button
                     onClick={() => setActiveTab('POINT')}
@@ -82,7 +84,7 @@ const Coupons: React.FC = () => {
                         : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
-                    포인트 내역
+                    {t('my.coupon.pointHistory')}
                 </button>
             </div>
 
@@ -94,7 +96,7 @@ const Coupons: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {availableCoupons.length === 0 ? (
                             <div className="col-span-full py-20 text-center">
-                                <p className="text-slate-500 font-medium">현재 사용 가능한 쿠폰이 없습니다.</p>
+                                <p className="text-slate-500 font-medium">{t('my.coupon.noCoupons')}</p>
                             </div>
                         ) : (
                             availableCoupons.map(coupon => (
@@ -106,7 +108,7 @@ const Coupons: React.FC = () => {
                                         <span className="text-violet-600 dark:text-violet-400 font-black text-3xl mb-1">
                                             {coupon.discountType === 'PERCENT' ? `${coupon.discountValue}%` : `${coupon.discountValue.toLocaleString()}원`}
                                         </span>
-                                        <span className="text-xs font-bold text-violet-500 dark:text-violet-500">할인</span>
+                                        <span className="text-xs font-bold text-violet-500 dark:text-violet-500">{t('my.coupon.discount')}</span>
                                     </div>
                                     
                                     {/* Right Ticket Body */}
@@ -114,20 +116,20 @@ const Coupons: React.FC = () => {
                                         <div>
                                             <div className="flex items-center gap-2 mb-2">
                                                 <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-black rounded uppercase tracking-wider">
-                                                    APP 쿠폰
+                                                    {t('my.coupon.appCoupon')}
                                                 </span>
                                             </div>
                                             <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight mb-2 line-clamp-2">
                                                 {coupon.name}
                                             </h3>
                                             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium font-mono">
-                                                {coupon.minOrderAmount === 0 ? '조건 없이 사용 가능' : `${coupon.minOrderAmount.toLocaleString()}원 이상 결제 시`}
+                                                {coupon.minOrderAmount === 0 ? t('my.coupon.noCondition') : t('my.coupon.minOrderDesc', { amount: coupon.minOrderAmount.toLocaleString() })}
                                             </p>
                                         </div>
                                         <div className="mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
                                             <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold">
                                                 <Clock size={12} />
-                                                {coupon.validUntil} 까지
+                                                {t('my.coupon.untilDate', { date: coupon.validUntil })}
                                             </div>
                                         </div>
                                     </div>
@@ -144,10 +146,10 @@ const Coupons: React.FC = () => {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm">
-                                        <th className="font-bold py-4 px-6 whitespace-nowrap">일자</th>
-                                        <th className="font-bold py-4 px-6 whitespace-nowrap">내역</th>
-                                        <th className="font-bold py-4 px-6 whitespace-nowrap text-right">포인트 증감</th>
-                                        <th className="font-bold py-4 px-6 whitespace-nowrap text-right">잔액</th>
+                                        <th className="font-bold py-4 px-6 whitespace-nowrap">{t('my.coupon.tableDate')}</th>
+                                        <th className="font-bold py-4 px-6 whitespace-nowrap">{t('my.coupon.tableDesc')}</th>
+                                        <th className="font-bold py-4 px-6 whitespace-nowrap text-right">{t('my.coupon.tableAmount')}</th>
+                                        <th className="font-bold py-4 px-6 whitespace-nowrap text-right">{t('my.coupon.tableBalance')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
