@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { CreditCard, Plus, Receipt, CheckCircle2, AlertCircle, RefreshCcw, Trash2, Pencil, Star, X } from 'lucide-react';
 import { MOCK_PAYMENT_METHODS, MOCK_PAYMENT_HISTORY, PaymentMethodItem } from '@/constants/payments';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Payments: React.FC = () => {
+    const { t } = useLanguage();
     // State management for cards to enable CRUD
     const [cards, setCards] = useState<PaymentMethodItem[]>(MOCK_PAYMENT_METHODS);
     
@@ -35,11 +37,11 @@ const Payments: React.FC = () => {
     const getStatusLabel = (status: string) => {
         switch (status) {
             case 'COMPLETED':
-                return <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-xs font-black rounded-full"><CheckCircle2 size={12} /> 결제 완료</span>;
+                return <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-xs font-black rounded-full"><CheckCircle2 size={12} /> {t('my.payment.statusCompleted')}</span>;
             case 'REFUNDED':
-                return <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 text-xs font-black rounded-full"><AlertCircle size={12} /> 전액 환불</span>;
+                return <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 text-xs font-black rounded-full"><AlertCircle size={12} /> {t('my.payment.statusRefunded')}</span>;
             case 'PARTIAL_REFUND':
-                return <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-xs font-black rounded-full"><RefreshCcw size={12} /> 부분 환불</span>;
+                return <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-xs font-black rounded-full"><RefreshCcw size={12} /> {t('my.payment.statusPartialRefund')}</span>;
             default:
                 return null;
         }
@@ -56,7 +58,7 @@ const Payments: React.FC = () => {
 
     const handleDelete = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (window.confirm('정말로 이 결제 카드를 삭제하시겠습니까?')) {
+        if (window.confirm(t('my.payment.confirmDelete'))) {
             setCards(prev => prev.filter(card => card.id !== id));
         }
     };
@@ -130,8 +132,8 @@ const Payments: React.FC = () => {
         <div className="max-w-[1000px] mx-auto px-6 py-12 animate-in fade-in duration-700 relative">
             {/* Page Header */}
             <div className="mb-10">
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">결제 관리</h1>
-                <p className="text-slate-500 dark:text-slate-400 font-medium">안전하고 간편한 결제 수단과 지난 결제 내역을 확인하세요.</p>
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{t('my.payment.title')}</h1>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">{t('my.payment.desc')}</p>
             </div>
 
             {/* Section 1: Payment Methods (Cards) */}
@@ -139,7 +141,7 @@ const Payments: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <CreditCard className="text-violet-600" size={20} />
-                        내 결제 수단
+                        {t('my.payment.myMethods')}
                     </h2>
                 </div>
 
@@ -168,7 +170,7 @@ const Payments: React.FC = () => {
                                         {!card.isDefault && (
                                             <button 
                                                 className="w-7 h-7 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md flex items-center justify-center transition-colors" 
-                                                title="기본 카드 설정"
+                                                title={t('my.payment.setDefaultCard')}
                                                 onClick={(e) => handleSetDefault(card.id, e)}
                                             >
                                                 <Star size={12} className="text-white" />
@@ -176,14 +178,14 @@ const Payments: React.FC = () => {
                                         )}
                                         <button 
                                             className="w-7 h-7 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md flex items-center justify-center transition-colors" 
-                                            title="카드 정보 수정"
+                                            title={t('my.payment.editCard')}
                                             onClick={(e) => openEditModal(card, e)}
                                         >
                                             <Pencil size={12} className="text-white" />
                                         </button>
                                         <button 
                                             className="w-7 h-7 rounded-full bg-rose-500/90 hover:bg-rose-500 backdrop-blur-md flex items-center justify-center transition-colors shadow-lg" 
-                                            title="카드 삭제"
+                                            title={t('my.payment.deleteCard')}
                                             onClick={(e) => handleDelete(card.id, e)}
                                         >
                                             <Trash2 size={12} className="text-white" />
@@ -200,11 +202,11 @@ const Payments: React.FC = () => {
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <div className="text-xs font-medium opacity-70">
-                                            {card.cardType === 'CREDIT' ? '신용카드' : '체크카드'}
+                                            {card.cardType === 'CREDIT' ? t('my.payment.typeCredit') : t('my.payment.typeCheck')}
                                         </div>
                                         {card.isDefault && (
                                             <span className="text-[10px] font-black uppercase tracking-wider bg-white/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-                                                기본 결제
+                                                {t('my.payment.defaultBadge')}
                                             </span>
                                         )}
                                     </div>
@@ -221,7 +223,7 @@ const Payments: React.FC = () => {
                         <div className="w-12 h-12 rounded-full bg-slate-200/50 dark:bg-slate-700/50 group-hover:bg-violet-100 dark:group-hover:bg-violet-900/50 flex items-center justify-center mb-3 transition-colors">
                             <Plus size={24} />
                         </div>
-                        <span className="font-bold text-sm">새 결제 수단 등록</span>
+                        <span className="font-bold text-sm">{t('my.payment.addNewCard')}</span>
                     </div>
                 </div>
             </div>
@@ -231,7 +233,7 @@ const Payments: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <Receipt className="text-violet-600" size={20} />
-                        결제 및 환불 내역
+                        {t('my.payment.historyTitle')}
                     </h2>
                 </div>
 
@@ -240,11 +242,11 @@ const Payments: React.FC = () => {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 text-sm">
-                                    <th className="font-bold py-4 px-6 whitespace-nowrap hidden sm:table-cell">승인일시</th>
-                                    <th className="font-bold py-4 px-6 whitespace-nowrap">결제처/상품명</th>
-                                    <th className="font-bold py-4 px-6 whitespace-nowrap">결제수단</th>
-                                    <th className="font-bold py-4 px-6 whitespace-nowrap text-right">금액</th>
-                                    <th className="font-bold py-4 px-6 whitespace-nowrap text-center">상태</th>
+                                    <th className="font-bold py-4 px-6 whitespace-nowrap hidden sm:table-cell">{t('my.payment.tableDate')}</th>
+                                    <th className="font-bold py-4 px-6 whitespace-nowrap">{t('my.payment.tableProduct')}</th>
+                                    <th className="font-bold py-4 px-6 whitespace-nowrap">{t('my.payment.tableMethod')}</th>
+                                    <th className="font-bold py-4 px-6 whitespace-nowrap text-right">{t('my.payment.tableAmount')}</th>
+                                    <th className="font-bold py-4 px-6 whitespace-nowrap text-center">{t('my.payment.tableStatus')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -271,12 +273,12 @@ const Payments: React.FC = () => {
                                             </td>
                                             <td className="py-5 px-6 whitespace-nowrap">
                                                 <div className="flex flex-col">
-                                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{usedCard?.cardName || '기타 결제'}</span>
-                                                    <span className="text-[10px] text-slate-400 font-mono">{usedCard ? `끝자리 ${usedCard.cardNumberMasked.slice(-4)}` : '-'}</span>
+                                                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{usedCard?.cardName || t('my.payment.otherMethod')}</span>
+                                                    <span className="text-[10px] text-slate-400 font-mono">{usedCard ? t('my.payment.lastDigits', { number: usedCard.cardNumberMasked.slice(-4) }) : '-'}</span>
                                                 </div>
                                             </td>
                                             <td className="py-5 px-6 text-right whitespace-nowrap text-slate-900 dark:text-white font-black">
-                                                {item.amount.toLocaleString()}원
+                                                {t('my.payment.amountCurrency', { amount: item.amount.toLocaleString() })}
                                             </td>
                                             <td className="py-5 px-6 text-center whitespace-nowrap">
                                                 {getStatusLabel(item.status)}
@@ -297,7 +299,7 @@ const Payments: React.FC = () => {
                         <div className="px-6 py-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
                             <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
                                 <CreditCard size={18} className="text-violet-600" />
-                                {editingId ? '결제 카드 수정' : '새 결제 카드 등록'}
+                                {editingId ? t('my.payment.editCardTitle') : t('my.payment.addCardTitle')}
                             </h3>
                             <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-rose-500 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                                 <X size={20} />
@@ -308,7 +310,7 @@ const Payments: React.FC = () => {
                             <div className="space-y-5">
                                 {/* Card Name */}
                                 <div>
-                                    <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">카드 별칭 (이름)</label>
+                                    <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">{t('my.payment.cardAliasLabel')}</label>
                                     <input 
                                         type="text"
                                         required
@@ -316,13 +318,13 @@ const Payments: React.FC = () => {
                                         value={formData.cardName}
                                         onChange={e => setFormData({...formData, cardName: e.target.value})}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-bold rounded-xl px-4 py-3 outline-none focus:border-violet-500 dark:focus:border-violet-500 transition-colors placeholder:font-medium placeholder:text-slate-400"
-                                        placeholder="예: 현대카드 M3, 토스 체크카드"
+                                        placeholder={t('my.payment.cardAliasPlaceholder')}
                                     />
                                 </div>
 
                                 {/* Last Four Digits */}
                                 <div>
-                                    <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">카드 끝자리 4번호</label>
+                                    <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">{t('my.payment.lastFourLabel')}</label>
                                     <input 
                                         type="text"
                                         required
@@ -331,25 +333,25 @@ const Payments: React.FC = () => {
                                         value={formData.lastFourDigits}
                                         onChange={e => setFormData({...formData, lastFourDigits: e.target.value.replace(/\D/g, '')})}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-mono rounded-xl px-4 py-3 outline-none focus:border-violet-500 dark:focus:border-violet-500 transition-colors placeholder:font-sans placeholder:font-medium placeholder:text-slate-400"
-                                        placeholder="예: 1234"
+                                        placeholder={t('my.payment.lastFourPlaceholder')}
                                     />
                                 </div>
 
                                 {/* Multi Selectors */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">결제 형식</label>
+                                        <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">{t('my.payment.cardTypeLabel')}</label>
                                         <select 
                                             value={formData.cardType}
                                             onChange={e => setFormData({...formData, cardType: e.target.value as any})}
                                             className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-bold rounded-xl px-4 py-3 outline-none focus:border-violet-500 transition-colors appearance-none"
                                         >
-                                            <option value="CREDIT">신용카드</option>
-                                            <option value="CHECK">체크카드</option>
+                                            <option value="CREDIT">{t('my.payment.typeCredit')}</option>
+                                            <option value="CHECK">{t('my.payment.typeCheck')}</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">브랜드</label>
+                                        <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-1.5 uppercase">{t('my.payment.brandLabel')}</label>
                                         <select 
                                             value={formData.brand}
                                             onChange={e => setFormData({...formData, brand: e.target.value as any})}
@@ -358,14 +360,14 @@ const Payments: React.FC = () => {
                                             <option value="VISA">VISA</option>
                                             <option value="MASTER">MasterCard</option>
                                             <option value="UNIONPAY">UnionPay</option>
-                                            <option value="LOCAL">국내전용</option>
+                                            <option value="LOCAL">{t('my.payment.brandLocal')}</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 {/* Theme Color Picker */}
                                 <div>
-                                    <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-2 uppercase">디자인 테마 선택</label>
+                                    <label className="block text-xs font-black text-slate-500 dark:text-slate-400 mb-2 uppercase">{t('my.payment.themeLabel')}</label>
                                     <div className="flex gap-3">
                                         {[
                                             { id: 'violet', color: 'bg-violet-500' },
@@ -390,7 +392,7 @@ const Payments: React.FC = () => {
                             {/* Submit */}
                             <div className="mt-8">
                                 <button type="submit" className="w-full py-3.5 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-xl transition-all shadow-lg shadow-violet-200 dark:shadow-none focus:ring-4 focus:ring-violet-500/20">
-                                    {editingId ? '변경 사항 저장' : '새 카드 등록 완료하기'}
+                                    {editingId ? t('my.payment.saveChanges') : t('my.payment.completeAddCard')}
                                 </button>
                             </div>
                         </form>
@@ -414,8 +416,8 @@ const Payments: React.FC = () => {
                             <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl mb-3 text-white shadow-xl">
                                 <Receipt size={28} />
                             </div>
-                            <h2 className="text-xl font-black text-white mb-0.5">결제 상세 정보</h2>
-                            <p className="text-violet-100 text-xs font-medium opacity-80">{selectedHistory.transactionDate} 결제</p>
+                            <h2 className="text-xl font-black text-white mb-0.5">{t('my.payment.detailTitle')}</h2>
+                            <p className="text-violet-100 text-xs font-medium opacity-80">{t('my.payment.paidOnDate', { date: selectedHistory.transactionDate })}</p>
                             
                             <button 
                                 onClick={() => setIsHistoryDetailOpen(false)} 
@@ -443,14 +445,14 @@ const Payments: React.FC = () => {
                                     {/* Detail Specs */}
                                     <div className="space-y-4 pt-1">
                                         <div className="flex justify-between items-center">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">주문 번호</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{t('my.payment.orderId')}</span>
                                             <span className="text-xs font-mono font-black text-slate-700 dark:text-slate-300">{selectedHistory.transactionId}</span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">결제 수단</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{t('my.payment.tableMethod')}</span>
                                             <div className="text-right">
                                                 <div className="text-xs font-black text-slate-700 dark:text-slate-300">
-                                                    {(cards.find(c => c.id === selectedHistory.paymentMethodId) || MOCK_PAYMENT_METHODS.find(c => c.id === selectedHistory.paymentMethodId))?.cardName || '기타 결제'}
+                                                    {(cards.find(c => c.id === selectedHistory.paymentMethodId) || MOCK_PAYMENT_METHODS.find(c => c.id === selectedHistory.paymentMethodId))?.cardName || t('my.payment.otherMethod')}
                                                 </div>
                                                 <div className="text-[10px] text-slate-400 font-mono">
                                                     {(cards.find(c => c.id === selectedHistory.paymentMethodId) || MOCK_PAYMENT_METHODS.find(c => c.id === selectedHistory.paymentMethodId))?.cardNumberMasked.slice(-4) || '****'}
@@ -458,14 +460,14 @@ const Payments: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">거래 일시</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{t('my.payment.transactionTime')}</span>
                                             <span className="text-xs font-bold text-slate-900 dark:text-white">{selectedHistory.transactionDate}</span>
                                         </div>
                                         
                                         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-end">
                                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest pb-0.5">TOTAL</span>
                                             <span className="text-2xl font-black text-violet-600 dark:text-violet-400 tabular-nums">
-                                                {selectedHistory.amount.toLocaleString()}원
+                                                {t('my.payment.amountCurrency', { amount: selectedHistory.amount.toLocaleString() })}
                                             </span>
                                         </div>
                                     </div>
@@ -473,13 +475,13 @@ const Payments: React.FC = () => {
                                     {/* Actions Internal */}
                                     <div className="pt-2 flex gap-3">
                                         <button className="flex-[1.5] py-3.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black rounded-[1rem] hover:bg-slate-800 dark:hover:bg-white transition-all shadow-xl text-xs flex items-center justify-center gap-2 active:scale-95">
-                                            <Receipt size={16} /> 영수증 저장
+                                            <Receipt size={16} /> {t('my.payment.saveReceipt')}
                                         </button>
                                         <button 
                                             onClick={() => setIsHistoryDetailOpen(false)}
                                             className="flex-1 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-black rounded-[1rem] hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-xs active:scale-95"
                                         >
-                                            닫기
+                                            {t('common.buttons.close')}
                                         </button>
                                     </div>
                                 </div>
