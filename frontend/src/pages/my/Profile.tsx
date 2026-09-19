@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { User, Mail, Shield, Calendar, Activity, CheckCircle2, Lock, AlertCircle, ShieldCheck, Camera } from 'lucide-react';
 import { userService } from '@/api/userService';
 import { UserViewResponse } from '@/types/user';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Profile: React.FC = () => {
+    const { t } = useLanguage();
     const [user, setUser] = useState<UserViewResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -17,7 +19,7 @@ const Profile: React.FC = () => {
         const file = event.target.files?.[0];
         if (file) {
             if (!file.type.startsWith('image/')) {
-                alert('이미지 파일만 선택할 수 있습니다.');
+                alert(t('my.profile.onlyImageAllowed'));
                 return;
             }
             console.log('선택된 파일 정보:', {
@@ -57,7 +59,7 @@ const Profile: React.FC = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px] text-slate-500">
                 <AlertCircle size={48} className="mb-4 text-rose-500 opacity-50" />
-                <p className="font-bold">사용자 정보를 불러올 수 없습니다.</p>
+                <p className="font-bold">{t('my.profile.unableToLoadUser')}</p>
             </div>
         );
     }
@@ -67,12 +69,12 @@ const Profile: React.FC = () => {
             {/* Header Section */}
             <div className="mb-8">
                 <h1 className="text-3xl font-black text-slate-900 dark:text-white flex items-center gap-3">
-                    내 정보 관리
+                    {t('my.profile.title')}
                     <span className="text-sm font-medium text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
-                        Account Settings
+                        {t('my.profile.subtitle')}
                     </span>
                 </h1>
-                <p className="text-slate-400 text-sm mt-1 font-medium">내 프로필 정보를 확인하고 계정 상태를 관리합니다.</p>
+                <p className="text-slate-400 text-sm mt-1 font-medium">{t('my.profile.desc')}</p>
             </div>
 
             {/* Profile Card */}
@@ -90,7 +92,7 @@ const Profile: React.FC = () => {
                         <button
                             onClick={handleEditClick}
                             className="absolute -bottom-2 -right-2 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white p-2.5 rounded-2xl shadow-lg hover:shadow-violet-500/30 transition-all duration-200 cursor-pointer border border-violet-500/20 flex items-center justify-center"
-                            title="프로필 이미지 수정"
+                            title={t('my.profile.editAvatar')}
                         >
                             <Camera size={16} />
                         </button>
@@ -121,7 +123,7 @@ const Profile: React.FC = () => {
                     <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
                         <h3 className="text-lg font-black text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                             <ShieldCheck size={20} className="text-violet-600" />
-                            상세 정보
+                            {t('my.profile.details')}
                         </h3>
                         
                         <div className="space-y-6">
@@ -130,7 +132,7 @@ const Profile: React.FC = () => {
                                     <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-400">
                                         <Mail size={18} />
                                     </div>
-                                    <span className="text-sm font-bold text-slate-500">이메일</span>
+                                    <span className="text-sm font-bold text-slate-500">{t('my.profile.email')}</span>
                                 </div>
                                 <span className="text-sm font-black text-slate-900 dark:text-white">{user.email}</span>
                             </div>
@@ -140,7 +142,7 @@ const Profile: React.FC = () => {
                                     <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-400">
                                         <User size={18} />
                                     </div>
-                                    <span className="text-sm font-bold text-slate-500">이름/닉네임</span>
+                                    <span className="text-sm font-bold text-slate-500">{t('my.profile.nickname')}</span>
                                 </div>
                                 <span className="text-sm font-black text-slate-900 dark:text-white">{user.username}</span>
                             </div>
@@ -150,10 +152,10 @@ const Profile: React.FC = () => {
                                     <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-400">
                                         <Calendar size={18} />
                                     </div>
-                                    <span className="text-sm font-bold text-slate-500">최근 비밀번호 변경</span>
+                                    <span className="text-sm font-bold text-slate-500">{t('my.profile.lastPasswordChange')}</span>
                                 </div>
                                 <span className="text-sm font-black text-slate-900 dark:text-white">
-                                    {user.lastPasswordChangedDate ? new Date(user.lastPasswordChangedDate).toLocaleDateString() : '기록 없음'}
+                                    {user.lastPasswordChangedDate ? new Date(user.lastPasswordChangedDate).toLocaleDateString() : t('my.profile.noRecord')}
                                 </span>
                             </div>
 
@@ -162,21 +164,21 @@ const Profile: React.FC = () => {
                                     <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-400">
                                         <Activity size={18} />
                                     </div>
-                                    <span className="text-sm font-bold text-slate-500">계정 상태</span>
+                                    <span className="text-sm font-bold text-slate-500">{t('my.profile.accountStatus')}</span>
                                 </div>
                                 <div className="flex gap-2">
                                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-black flex items-center gap-1 ${user.isEnabled ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30' : 'bg-slate-100 text-slate-400'}`}>
                                         {user.isEnabled ? <CheckCircle2 size={12} /> : <Lock size={12} />}
-                                        {user.isEnabled ? '활성' : '비활성'}
+                                        {user.isEnabled ? t('my.profile.statusActive') : t('my.profile.statusInactive')}
                                     </span>
                                     {!user.isApproved && (
                                         <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-600 dark:bg-amber-900/30 flex items-center gap-1">
-                                            <Activity size={12} /> 미승인
+                                            <Activity size={12} /> {t('my.profile.statusUnapproved')}
                                         </span>
                                     )}
                                     {user.isLocked && (
                                         <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-rose-100 text-rose-600 dark:bg-rose-900/30 flex items-center gap-1">
-                                            <Lock size={12} /> 잠김
+                                            <Lock size={12} /> {t('my.profile.statusLocked')}
                                         </span>
                                     )}
                                 </div>
@@ -187,7 +189,7 @@ const Profile: React.FC = () => {
                     {/* Security Info or Actions */}
                     <div className="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-6 border border-dashed border-slate-200 dark:border-slate-800 text-center">
                         <p className="text-xs font-medium text-slate-400 mb-0">
-                            계정 정보 수정 및 비밀번호 변경 기능은 추후 업데이트 예정입니다.
+                            {t('my.profile.upcomingNotice')}
                         </p>
                     </div>
                 </div>
