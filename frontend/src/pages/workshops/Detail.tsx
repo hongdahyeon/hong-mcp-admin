@@ -8,8 +8,10 @@ import {
 import { useCart } from '@/hooks/CartContext';
 import { MOCK_WORKSHOPS } from '@/constants/workshop';
 import ReservationModal from './components/ReservationModal';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const WorkshopDetail: React.FC = () => {
+    const { t } = useLanguage();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { addToCart, toggleFavorite, isFavorite } = useCart();
@@ -21,12 +23,12 @@ const WorkshopDetail: React.FC = () => {
     if (!workshop) {
         return (
             <div className="flex flex-col items-center justify-center py-20">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">공방을 찾을 수 없습니다.</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{t('workshopsDetail.notFound')}</h2>
                 <button 
                     onClick={() => navigate('/workshops')}
                     className="px-6 py-2 bg-violet-600 text-white rounded-xl font-bold hover:bg-violet-700 transition-all"
                 >
-                    목록으로 돌아가기
+                    {t('workshopsDetail.backToList')}
                 </button>
             </div>
         );
@@ -40,7 +42,7 @@ const WorkshopDetail: React.FC = () => {
                     onClick={() => navigate(-1)}
                     className="flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-bold"
                 >
-                    <ChevronLeft size={20} /> 뒤로가기
+                    <ChevronLeft size={20} /> {t('workshopsDetail.back')}
                 </button>
                 <div className="flex gap-2">
                     <button className="p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full text-slate-500 hover:text-violet-600 transition-all">
@@ -76,7 +78,7 @@ const WorkshopDetail: React.FC = () => {
                     <div className="flex items-center gap-2 text-amber-500 mb-4 bg-amber-50 dark:bg-amber-900/20 w-fit px-3 py-1 rounded-full border border-amber-100 dark:border-amber-800/50">
                         <Star size={16} fill="currentColor" />
                         <span className="text-sm font-black">{workshop.rating}</span>
-                        <span className="text-amber-400/80 text-xs font-bold">({workshop.reviews}+ 리뷰)</span>
+                        <span className="text-amber-400/80 text-xs font-bold">{t('workshopsDetail.reviewsCount', { count: workshop.reviews })}</span>
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 leading-tight tracking-tight">
@@ -87,14 +89,14 @@ const WorkshopDetail: React.FC = () => {
                         <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-2 text-slate-400 mb-1">
                                 <MapPin size={16} />
-                                <span className="text-xs font-bold uppercase tracking-wider">지역</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">{t('workshopsDetail.regionLabel')}</span>
                             </div>
                             <div className="text-slate-900 dark:text-white font-black">{workshop.region}</div>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-2 text-slate-400 mb-1">
                                 <User size={16} />
-                                <span className="text-xs font-bold uppercase tracking-wider">강사</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">{t('workshopsDetail.instructorLabel')}</span>
                             </div>
                             <div className="text-slate-900 dark:text-white font-black">{workshop.instructor}</div>
                         </div>
@@ -107,11 +109,11 @@ const WorkshopDetail: React.FC = () => {
                     <div className="flex items-center gap-6 text-slate-500 font-bold border-y border-slate-100 dark:border-slate-800 py-6 mb-8">
                         <div className="flex items-center gap-2">
                             <Clock size={18} className="text-violet-500" />
-                            <span>약 2시간 소요</span>
+                            <span>{t('workshopsDetail.duration')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Users size={18} className="text-violet-500" />
-                            <span>최대 4인</span>
+                            <span>{t('workshopsDetail.maxGuests')}</span>
                         </div>
                     </div>
                 </div>
@@ -121,10 +123,10 @@ const WorkshopDetail: React.FC = () => {
             <div className="bg-white dark:bg-slate-950 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
                 <div className="flex items-center gap-8 mb-10 overflow-x-auto pb-2 scrollbar-none">
                     {[
-                        { id: 'about', label: '클래스 소개', icon: Info },
-                        { id: 'curriculum', label: '커리큘럼', icon: BookOpen },
-                        { id: 'instructor', label: '강사 소개', icon: User },
-                        { id: 'reviews', label: '리얼 리뷰', icon: MessageSquare },
+                        { id: 'about', label: t('workshopsDetail.tabAbout'), icon: Info },
+                        { id: 'curriculum', label: t('workshopsDetail.tabCurriculum'), icon: BookOpen },
+                        { id: 'instructor', label: t('workshopsDetail.tabInstructor'), icon: User },
+                        { id: 'reviews', label: t('workshopsDetail.tabReviews'), icon: MessageSquare },
                     ].map(tab => (
                         <button
                             key={tab.id}
@@ -142,14 +144,18 @@ const WorkshopDetail: React.FC = () => {
                 <div className="min-h-[300px]">
                     {activeTab === 'about' && (
                         <div className="animate-in fade-in duration-500">
-                            <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-6">일상에 예술을 더하는 시간</h3>
+                            <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-6">{t('workshopsDetail.aboutHeading')}</h3>
                             <div className="prose prose-slate dark:prose-invert max-w-none">
                                 <p className="text-lg text-slate-600 dark:text-slate-400 mb-6 font-medium leading-relaxed">
-                                    {workshop.description} 본 클래스에서는 실생활에서 활용 가능한 작품을 직접 제작하며,
-                                    예술적 영감을 일상으로 가져옵니다. 초보자도 전문가의 세심한 지도 아래 완성도 높은 결과물을 얻으실 수 있습니다.
+                                    {workshop.description} {t('workshopsDetail.aboutDesc')}
                                 </p>
                                 <ul className="space-y-4">
-                                    {['모든 재료 포함', '전문가 피드백 제공', '소수 정예 진행', '웰컴 드링크 제공'].map(item => (
+                                    {[
+                                        t('workshopsDetail.aboutFeature1'),
+                                        t('workshopsDetail.aboutFeature2'),
+                                        t('workshopsDetail.aboutFeature3'),
+                                        t('workshopsDetail.aboutFeature4')
+                                    ].map(item => (
                                         <li key={item} className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-bold">
                                             <CheckCircle2 size={20} className="text-emerald-500 flex-shrink-0" />
                                             {item}
@@ -174,7 +180,7 @@ const WorkshopDetail: React.FC = () => {
                                     </div>
                                     <div className="pb-8">
                                         <h4 className="text-xl font-black text-slate-900 dark:text-white mb-2">{item}</h4>
-                                        <p className="text-slate-500 dark:text-slate-400 font-medium">실습 위주의 교육으로 핵심 노하우를 명확히 전달합니다.</p>
+                                        <p className="text-slate-500 dark:text-slate-400 font-medium">{t('workshopsDetail.curriculumDesc')}</p>
                                     </div>
                                 </div>
                             ))}
@@ -191,7 +197,7 @@ const WorkshopDetail: React.FC = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-2xl font-black text-slate-900 dark:text-white mb-1">{workshop.instructor}</h4>
-                                    <p className="text-violet-600 dark:text-violet-400 font-black">메인 튜터 / 마스터</p>
+                                    <p className="text-violet-600 dark:text-violet-400 font-black">{t('workshopsDetail.tutorRole')}</p>
                                 </div>
                             </div>
                             <div className="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800">
@@ -206,8 +212,8 @@ const WorkshopDetail: React.FC = () => {
                         <div className="animate-in fade-in duration-500">
                              <div className="flex items-center justify-between mb-8">
                                 <div>
-                                    <h4 className="text-2xl font-black text-slate-900 dark:text-white mb-1">사용자 후기 {workshop.reviews}개</h4>
-                                    <p className="text-slate-500 font-medium italic underline underline-offset-4 decoration-violet-300">평균 만족도 98%</p>
+                                    <h4 className="text-2xl font-black text-slate-900 dark:text-white mb-1">{t('workshopsDetail.reviewsHeading', { count: workshop.reviews })}</h4>
+                                    <p className="text-slate-500 font-medium italic underline underline-offset-4 decoration-violet-300">{t('workshopsDetail.avgSatisfaction')}</p>
                                 </div>
                                 <div className="text-right">
                                     <div className="text-4xl font-black text-slate-900 dark:text-white">{workshop.rating}</div>
@@ -226,11 +232,11 @@ const WorkshopDetail: React.FC = () => {
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-slate-400">U</div>
-                                                <div className="font-black text-slate-900 dark:text-white">사용자 {i}</div>
+                                                <div className="font-black text-slate-900 dark:text-white">{t('workshopsDetail.userSample', { index: i })}</div>
                                             </div>
                                             <div className="text-xs text-slate-400 font-bold">2026.03.{10+i}</div>
                                         </div>
-                                        <p className="text-slate-600 dark:text-slate-400 font-medium">강사님이 너무 친절하시고 공간 분위기도 정말 좋아요. 처음 해보는 건데도 결과물이 너무 예쁘게 나와서 만족스럽습니다!</p>
+                                        <p className="text-slate-600 dark:text-slate-400 font-medium">{t('workshopsDetail.reviewSample')}</p>
                                     </div>
                                 ))}
                              </div>
@@ -243,7 +249,7 @@ const WorkshopDetail: React.FC = () => {
             <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] max-w-[800px] z-50">
                 <div className="bg-slate-900/90 dark:bg-slate-800/90 backdrop-blur-xl border border-white/10 dark:border-slate-700/50 p-4 rounded-[2rem] flex items-center justify-between shadow-2xl shadow-violet-500/20">
                     <div className="pl-6">
-                        <div className="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">참가비 (1인 아티장 패키지)</div>
+                        <div className="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">{t('workshopsDetail.feeLabel')}</div>
                         <div className="text-white text-3xl font-black tracking-tighter">
                             <span className="text-lg mr-1 text-violet-400">₩</span>
                             {workshop.price}
@@ -263,7 +269,7 @@ const WorkshopDetail: React.FC = () => {
                             onClick={() => setIsReservationModalOpen(true)}
                             className="px-10 py-4 bg-violet-600 text-white rounded-2xl font-black text-lg hover:bg-violet-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 shadow-lg shadow-violet-500/30"
                         >
-                            <ShoppingCart size={22} /> 예약하기
+                            <ShoppingCart size={22} /> {t('workshopsDetail.bookNow')}
                         </button>
                     </div>
                 </div>
