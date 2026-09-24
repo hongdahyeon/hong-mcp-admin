@@ -10,8 +10,10 @@ import { Reservation, ReservationStatus } from '@/types/reservation';
 import { Workshop } from '@/types/workshop';
 import { MOCK_WORKSHOPS } from '@/constants/workshop';
 import RejectModal from './components/RejectModal';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const WorkshopReservations: React.FC = () => {
+    const { t } = useLanguage();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [workshop, setWorkshop] = useState<Workshop | null>(null);
@@ -110,8 +112,8 @@ const WorkshopReservations: React.FC = () => {
         return (
             <div className="p-10 text-center">
                 <AlertCircle size={48} className="mx-auto text-rose-500 mb-4" />
-                <h2 className="text-2xl font-bold">공방을 찾을 수 없습니다.</h2>
-                <button onClick={() => navigate('/workshops/manage')} className="mt-4 text-violet-600 font-bold">목록으로 돌아가기</button>
+                <h2 className="text-2xl font-bold">{t('workshopReservations.notFound')}</h2>
+                <button onClick={() => navigate('/workshops/manage')} className="mt-4 text-violet-600 font-bold">{t('workshopReservations.back')}</button>
             </div>
         );
     }
@@ -124,7 +126,7 @@ const WorkshopReservations: React.FC = () => {
                     onClick={() => navigate('/workshops/manage')}
                     className="flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors mb-4 font-bold"
                 >
-                    <ChevronLeft size={20} /> 관리 목록으로 돌아가기
+                    <ChevronLeft size={20} /> {t('workshopReservations.back')}
                 </button>
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
@@ -135,7 +137,7 @@ const WorkshopReservations: React.FC = () => {
                             <span className="text-xs font-bold text-slate-400">ID: {workshop.id}</span>
                         </div>
                         <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                            {workshop.title} <span className="text-slate-400 font-medium">예약 관리</span>
+                            {workshop.title} <span className="text-slate-400 font-medium">{t('workshopReservations.titleSuffix')}</span>
                         </h1>
                     </div>
                     
@@ -150,9 +152,9 @@ const WorkshopReservations: React.FC = () => {
                                     : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
                                 }`}
                             >
-                                {status === 'ALL' ? '전체' : 
-                                 status === 'PENDING' ? '대기' : 
-                                 status === 'CONFIRMED' ? '확정' : '반려'}
+                                {status === 'ALL' ? t('workshopReservations.filterAll') : 
+                                 status === 'PENDING' ? t('workshopReservations.filterPending') : 
+                                 status === 'CONFIRMED' ? t('workshopReservations.filterConfirmed') : t('workshopReservations.filterRejected')}
                             </button>
                         ))}
                     </div>
@@ -164,8 +166,8 @@ const WorkshopReservations: React.FC = () => {
                 {filteredReservations.length === 0 ? (
                     <div className="bg-white dark:bg-slate-950 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] py-20 text-center">
                         <Users size={48} className="mx-auto text-slate-300 mb-4" />
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">예약 내역이 없습니다</h3>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium tracking-tight">선택한 필터 조건에 맞는 예약 신청이 없습니다.</p>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{t('workshopReservations.emptyTitle')}</h3>
+                        <p className="text-slate-500 dark:text-slate-400 font-medium tracking-tight">{t('workshopReservations.emptySubtitle')}</p>
                     </div>
                 ) : (
                     filteredReservations.map((res) => (
@@ -190,24 +192,24 @@ const WorkshopReservations: React.FC = () => {
                                 {/* Middle side: Appointment & Guests */}
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 flex-1 lg:pl-10 lg:border-l border-slate-100 dark:border-slate-800">
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">예약 날짜</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{t('workshopReservations.date')}</span>
                                         <div className="flex items-center gap-1.5 text-slate-900 dark:text-white font-black">
                                             <Calendar size={14} className="text-violet-500" />
                                             <span className="text-sm">{res.date}</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">예약 시간</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{t('workshopReservations.time')}</span>
                                         <div className="flex items-center gap-1.5 text-slate-900 dark:text-white font-black">
                                             <Clock size={14} className="text-violet-500" />
                                             <span className="text-sm">{res.time}</span>
                                         </div>
                                     </div>
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">인원 및 금액</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{t('workshopReservations.guestsPrice')}</span>
                                         <div className="flex items-center gap-1.5 text-slate-900 dark:text-white font-black">
                                             <Users size={14} className="text-violet-500" />
-                                            <span className="text-sm">{res.guests}명 (₩{res.totalPrice.toLocaleString()})</span>
+                                            <span className="text-sm">{t('workshopReservations.guestsPriceFormat', { guests: res.guests, price: res.totalPrice.toLocaleString() })}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -224,7 +226,7 @@ const WorkshopReservations: React.FC = () => {
                                         {res.status === 'PENDING' && <AlertCircle size={14} />}
                                         {res.status === 'CONFIRMED' && <CheckCircle2 size={14} />}
                                         {res.status === 'REJECTED' && <XCircle size={14} />}
-                                        {res.status === 'PENDING' ? '대기 중' : res.status === 'CONFIRMED' ? '확정됨' : '반려됨'}
+                                        {res.status === 'PENDING' ? t('workshopReservations.statusPending') : res.status === 'CONFIRMED' ? t('workshopReservations.statusConfirmed') : t('workshopReservations.statusRejected')}
                                     </div>
 
                                     <div className="flex gap-2">
@@ -234,13 +236,13 @@ const WorkshopReservations: React.FC = () => {
                                                     onClick={() => handleStatusChange(res.id, 'CONFIRMED')}
                                                     className="px-4 py-2 bg-slate-900 hover:bg-black dark:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-lg shadow-slate-200 dark:shadow-none"
                                                 >
-                                                    <ShieldCheck size={14} /> 승인
+                                                    <ShieldCheck size={14} /> {t('workshopReservations.approve')}
                                                 </button>
                                                 <button 
                                                     onClick={() => openRejectModal(res.id)}
                                                     className="px-4 py-2 border border-rose-100 hover:bg-rose-50 dark:border-rose-900/30 dark:hover:bg-rose-900/20 text-rose-500 rounded-xl text-xs font-black transition-all flex items-center gap-1.5"
                                                 >
-                                                    <XCircle size={14} /> 반려
+                                                    <XCircle size={14} /> {t('workshopReservations.reject')}
                                                 </button>
                                             </>
                                         )}
@@ -250,7 +252,7 @@ const WorkshopReservations: React.FC = () => {
                                                     <MessageCircle size={20} />
                                                 </div>
                                                 <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl opacity-0 invisible group-hover/reason:opacity-100 group-hover/reason:visible transition-all z-10">
-                                                    <p className="text-[10px] font-black text-violet-500 dark:text-violet-400 mb-1 uppercase tracking-widest">거절 사유</p>
+                                                    <p className="text-[10px] font-black text-violet-500 dark:text-violet-400 mb-1 uppercase tracking-widest">{t('workshopReservations.rejectReasonTitle')}</p>
                                                     <p className="text-xs font-bold text-slate-600 dark:text-slate-300 leading-relaxed">{res.rejectReason}</p>
                                                 </div>
                                             </div>
