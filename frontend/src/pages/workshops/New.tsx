@@ -7,8 +7,10 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { REGIONS, CATEGORIES } from '@/constants/workshop';
 import { Workshop } from '@/types/workshop';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const WorkshopNew: React.FC = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: '',
@@ -78,10 +80,10 @@ const WorkshopNew: React.FC = () => {
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors font-bold mb-4"
                     >
-                        <ChevronLeft size={20} /> 취소하고 돌아가기
+                        <ChevronLeft size={20} /> {t('workshopNew.back')}
                     </button>
-                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">새 공방 등록</h1>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">당신의 감성을 나눌 새로운 클래스를 만들어보세요.</p>
+                    <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">{t('workshopNew.title')}</h1>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium mt-1">{t('workshopNew.subtitle')}</p>
                 </div>
             </div>
 
@@ -90,24 +92,24 @@ const WorkshopNew: React.FC = () => {
                 {/* Basic Information Section */}
                 <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
                     <h2 className="text-xl font-black text-slate-900 dark:text-white mb-8 flex items-center gap-2">
-                        <Info size={24} className="text-violet-500" /> 기본 정보
+                        <Info size={24} className="text-violet-500" /> {t('workshopNew.basicInfo')}
                     </h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4 md:col-span-2">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">클래스 제목</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.classTitle')}</label>
                             <input 
                                 required
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
-                                placeholder="예: [서촌] 한옥에서 즐기는 전통 자수"
+                                placeholder={t('workshopNew.titlePlaceholder')}
                                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                             />
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">카테고리</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.category')}</label>
                             <select 
                                 name="category"
                                 value={formData.category}
@@ -119,7 +121,7 @@ const WorkshopNew: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">지역</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.region')}</label>
                             <select 
                                 name="region"
                                 value={formData.region}
@@ -131,7 +133,7 @@ const WorkshopNew: React.FC = () => {
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">참가비 (1인당 원화)</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.price')}</label>
                             <div className="relative">
                                 <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₩</span>
                                 <input 
@@ -139,14 +141,14 @@ const WorkshopNew: React.FC = () => {
                                     name="price"
                                     value={formData.price}
                                     onChange={handleChange}
-                                    placeholder="예: 45,000"
+                                    placeholder={t('workshopNew.pricePlaceholder')}
                                     className="w-full pl-10 pr-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-4">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">대표 이미지 URL</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.imageUrl')}</label>
                             <div className="relative">
                                 <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
                                     <Plus size={18} />
@@ -156,7 +158,7 @@ const WorkshopNew: React.FC = () => {
                                     name="imageUrl"
                                     value={formData.imageUrl}
                                     onChange={handleChange}
-                                    placeholder="https://images.unsplash.com/..."
+                                    placeholder={t('workshopNew.imagePlaceholder')}
                                     className="w-full pl-12 pr-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                                 />
                             </div>
@@ -167,32 +169,32 @@ const WorkshopNew: React.FC = () => {
                 {/* Detailed Information Section */}
                 <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
                     <h2 className="text-xl font-black text-slate-900 dark:text-white mb-8 flex items-center gap-2">
-                        <BookOpen size={24} className="text-violet-500" /> 상세 정보
+                        <BookOpen size={24} className="text-violet-500" /> {t('workshopNew.detailInfo')}
                     </h2>
 
                     <div className="space-y-8">
                         <div className="space-y-4">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">공반/클래스 소개</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.description')}</label>
                             <textarea 
                                 required
                                 name="description"
                                 value={formData.description}
                                 onChange={handleChange}
                                 rows={4}
-                                placeholder="공방의 분위기와 클래스의 핵심 매력을 설명해주세요."
+                                placeholder={t('workshopNew.descPlaceholder')}
                                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                             />
                         </div>
 
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <label className="text-sm font-black text-slate-700 dark:text-slate-300">커리큘럼 (단계별 수업 내용)</label>
+                                <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.curriculum')}</label>
                                 <button 
                                     type="button"
                                     onClick={addCurriculumStep}
                                     className="text-xs font-black text-violet-600 dark:text-violet-400 flex items-center gap-1"
                                 >
-                                    <Plus size={14} /> 단계 추가
+                                    <Plus size={14} /> {t('workshopNew.addStep')}
                                 </button>
                             </div>
                             <div className="space-y-3">
@@ -205,7 +207,7 @@ const WorkshopNew: React.FC = () => {
                                             required
                                             value={step}
                                             onChange={(e) => handleCurriculumChange(index, e.target.value)}
-                                            placeholder={`단계 ${index + 1} 내용을 입력하세요`}
+                                            placeholder={t('workshopNew.stepPlaceholder', { index: index + 1 })}
                                             className="flex-1 px-5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                                         />
                                         <button 
@@ -225,31 +227,31 @@ const WorkshopNew: React.FC = () => {
                 {/* Instructor Section */}
                 <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 p-8 shadow-sm">
                     <h2 className="text-xl font-black text-slate-900 dark:text-white mb-8 flex items-center gap-2">
-                        <User size={24} className="text-violet-500" /> 강사 정보
+                        <User size={24} className="text-violet-500" /> {t('workshopNew.instructorInfo')}
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">강사명 / 작가명</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.instructorName')}</label>
                             <input 
                                 required
                                 name="instructor"
                                 value={formData.instructor}
                                 onChange={handleChange}
-                                placeholder="예: 김연우 명인"
+                                placeholder={t('workshopNew.instructorNamePlaceholder')}
                                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                             />
                         </div>
 
                         <div className="space-y-4 md:col-span-2">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">강사 한줄 소개 (Bio)</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300">{t('workshopNew.instructorBio')}</label>
                             <textarea 
                                 required
                                 name="instructorBio"
                                 value={formData.instructorBio}
                                 onChange={handleChange}
                                 rows={2}
-                                placeholder="강사님의 전문 분야나 경력을 소개해주세요."
+                                placeholder={t('workshopNew.bioPlaceholder')}
                                 className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl focus:outline-none focus:border-violet-500 transition-all font-bold text-slate-900 dark:text-white"
                             />
                         </div>
@@ -263,7 +265,7 @@ const WorkshopNew: React.FC = () => {
                         onClick={() => navigate('/workshops/manage')}
                         className="px-8 py-4 text-slate-500 hover:text-slate-900 dark:hover:text-white font-black transition-all"
                     >
-                        취소
+                        {t('workshopNew.cancel')}
                     </button>
                     <button 
                         type="submit"
@@ -273,11 +275,11 @@ const WorkshopNew: React.FC = () => {
                         {isSubmitting ? (
                             <>
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                등록 중...
+                                {t('workshopNew.submitting')}
                             </>
                         ) : (
                             <>
-                                <Save size={20} /> 클래스 등록 완료
+                                <Save size={20} /> {t('workshopNew.submit')}
                             </>
                         )}
                     </button>
