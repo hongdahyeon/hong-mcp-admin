@@ -5,6 +5,7 @@ import {
     CreditCard, ArrowRight, AlertCircle 
 } from 'lucide-react';
 import { reservationService } from '@/api/reservationService';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 interface ReservationModalProps {
     isOpen: boolean;
@@ -18,6 +19,7 @@ interface ReservationModalProps {
 const ReservationModal: React.FC<ReservationModalProps> = ({ 
     isOpen, onClose, workshopId, workshopTitle, price, onConfirm 
 }) => {
+    const { t } = useLanguage();
     const [step, setStep] = useState(1);
     const [selectedDate, setSelectedDate] = useState<number | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -109,7 +111,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                 {/* Header */}
                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <div>
-                        <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight">예약하기</h3>
+                        <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight">{t('reservationModal.title')}</h3>
                         <p className="text-sm text-slate-500 font-medium truncate max-w-[300px]">{workshopTitle}</p>
                     </div>
                     <button 
@@ -138,7 +140,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                         <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                             <div className="flex items-center justify-between mb-6">
                                 <h4 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                                    <CalendarIcon size={20} className="text-violet-500" /> 날짜를 선택하세요
+                                    <CalendarIcon size={20} className="text-violet-500" /> {t('reservationModal.step1Title')}
                                 </h4>
                                 <div className="flex items-center gap-2">
                                     <button 
@@ -156,10 +158,10 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                                             className="bg-transparent focus:outline-none cursor-pointer hover:text-violet-600 transition-colors"
                                         >
                                             {Array.from({ length: 5 }).map((_, i) => (
-                                                <option key={i} value={today.getFullYear() + i}>{today.getFullYear() + i}년</option>
+                                                <option key={i} value={today.getFullYear() + i}>{today.getFullYear() + i}{t('reservationModal.yearSuffix')}</option>
                                             ))}
                                         </select>
-                                        <span>{currentMonth + 1}월</span>
+                                        <span>{currentMonth + 1}{t('reservationModal.monthSuffix')}</span>
                                     </div>
 
                                     <button 
@@ -211,7 +213,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                                 onClick={() => setStep(2)}
                                 className="w-full mt-10 py-4 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white rounded-2xl font-black text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                             >
-                                다음 단계 <ArrowRight size={20} />
+                                {t('reservationModal.nextStep')} <ArrowRight size={20} />
                             </button>
                         </div>
                     )}
@@ -223,12 +225,12 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                                 onClick={() => setStep(1)}
                                 className="text-xs font-bold text-slate-400 hover:text-slate-900 flex items-center gap-1 mb-6"
                             >
-                                <ChevronLeft size={14} /> 날짜 다시 선택
+                                <ChevronLeft size={14} /> {t('reservationModal.reselectDate')}
                             </button>
 
                             <section className="mb-8">
                                 <h4 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-                                    <Clock size={20} className="text-violet-500" /> 시간 선택
+                                    <Clock size={20} className="text-violet-500" /> {t('reservationModal.selectTime')}
                                 </h4>
                                 <div className="grid grid-cols-2 gap-3">
                                     {timeSlots.map(time => {
@@ -264,10 +266,10 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
 
                             <section>
                                 <h4 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-                                    <Users size={20} className="text-violet-500" /> 인원 선택
+                                    <Users size={20} className="text-violet-500" /> {t('reservationModal.selectGuests')}
                                 </h4>
                                 <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                    <div className="text-sm font-bold text-slate-600 dark:text-slate-300">참가 인원 (최대 4인)</div>
+                                    <div className="text-sm font-bold text-slate-600 dark:text-slate-300">{t('reservationModal.guestLabel')}</div>
                                     <div className="flex items-center gap-4">
                                         <button 
                                             onClick={() => setGuests(Math.max(1, guests - 1))}
@@ -287,7 +289,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                                 onClick={() => setStep(3)}
                                 className="w-full mt-10 py-4 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white rounded-2xl font-black text-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                             >
-                                예약 정보 확인 <ArrowRight size={20} />
+                                {t('reservationModal.confirmInfo')} <ArrowRight size={20} />
                             </button>
                         </div>
                     )}
@@ -295,19 +297,19 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                     {/* Step 3: Confirmation */}
                     {step === 3 && (
                         <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                            <h4 className="text-lg font-black text-slate-900 dark:text-white mb-6">최종 예약 정보를 확인하세요</h4>
+                            <h4 className="text-lg font-black text-slate-900 dark:text-white mb-6">{t('reservationModal.checkFinalInfo')}</h4>
                             
                             <div className="space-y-4 mb-8">
                                 <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                    <span className="text-slate-500 font-bold">일정</span>
+                                    <span className="text-slate-500 font-bold">{t('reservationModal.schedule')}</span>
                                     <span className="text-slate-900 dark:text-white font-black">{currentYear}.{String(currentMonth + 1).padStart(2, '0')}.{String(selectedDate).padStart(2, '0')} · {selectedTime}</span>
                                 </div>
                                 <div className="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
-                                    <span className="text-slate-500 font-bold">인원</span>
-                                    <span className="text-slate-900 dark:text-white font-black">{guests}명</span>
+                                    <span className="text-slate-500 font-bold">{t('reservationModal.guests')}</span>
+                                    <span className="text-slate-900 dark:text-white font-black">{t('reservationModal.guestsCount', { count: guests })}</span>
                                 </div>
                                 <div className="flex justify-between items-center p-6 bg-violet-50 dark:bg-violet-900/20 rounded-[1.5rem] border-2 border-violet-100 dark:border-violet-800">
-                                    <span className="text-violet-600 dark:text-violet-400 font-black">최종 결제 금액</span>
+                                    <span className="text-violet-600 dark:text-violet-400 font-black">{t('reservationModal.finalPrice')}</span>
                                     <span className="text-2xl font-black text-violet-700 dark:text-violet-300">₩{totalPrice}</span>
                                 </div>
                             </div>
@@ -315,7 +317,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                             <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-100 dark:border-amber-800/50 mb-8 flex gap-3">
                                 <AlertCircle size={20} className="text-amber-500 flex-shrink-0" />
                                 <p className="text-[11px] text-amber-700 dark:text-amber-400 font-medium leading-relaxed">
-                                    예약 취소 및 환불은 클래스 시작 3일 전까지 100% 가능하며, 이후에는 규정에 따라 차등 적용됩니다.
+                                    {t('reservationModal.cancelNotice')}
                                 </p>
                             </div>
 
@@ -324,7 +326,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                                     onClick={() => setStep(2)}
                                     className="px-6 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-black hover:bg-slate-200 transition-all"
                                 >
-                                    이전
+                                    {t('reservationModal.prev')}
                                 </button>
                                 <button
                                     onClick={handleConfirm}
@@ -334,7 +336,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                                     {isSubmitting ? (
                                         <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                     ) : (
-                                        <><CreditCard size={20} /> 결제 및 예약 완료</>
+                                        <><CreditCard size={20} /> {t('reservationModal.completeBooking')}</>
                                     )}
                                 </button>
                             </div>
@@ -347,14 +349,14 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                              <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6 text-emerald-500">
                                 <CheckCircle2 size={48} />
                             </div>
-                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2">예약 확정!</h2>
-                            <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">작가님에게 예약 정보가 전달되었습니다.<br/>선택하신 시간에 맞춰 설레는 마음으로 만나요!</p>
+                            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{t('reservationModal.bookingSuccessTitle')}</h2>
+                            <p className="text-slate-500 dark:text-slate-400 font-medium mb-10">{t('reservationModal.bookingSuccessDesc1')}<br/>{t('reservationModal.bookingSuccessDesc2')}</p>
                             
                             <button
                                 onClick={onClose}
                                 className="w-full py-4 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white rounded-2xl font-black text-lg hover:bg-slate-800 transition-all"
                             >
-                                확인
+                                {t('reservationModal.confirm')}
                             </button>
                         </div>
                     )}
