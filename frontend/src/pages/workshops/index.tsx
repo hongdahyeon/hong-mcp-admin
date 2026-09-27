@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Tag, Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, X, RefreshCw } from 'lucide-react';
 import { useCart } from '@/hooks/CartContext';
 import { REGIONS, CATEGORIES, MOCK_WORKSHOPS } from '@/constants/workshop';
-import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Workshops: React.FC = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const { addToCart, toggleFavorite, isFavorite } = useCart();
@@ -54,8 +55,8 @@ const Workshops: React.FC = () => {
     return (
         <div className="mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="mb-10">
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">공방 클래스 찾기</h1>
-                <p className="text-slate-500 dark:text-slate-400 font-medium">당신의 감성을 깨울 특별한 경험을 검색해보세요.</p>
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2">{t('workshops.searchTitle')}</h1>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">{t('workshops.searchDesc')}</p>
             </div>
 
             {/* Search & Filter Header */}
@@ -66,7 +67,7 @@ const Workshops: React.FC = () => {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                         <input 
                             type="text" 
-                            placeholder="공방 이름이나 클래스 명을 입력하세요"
+                            placeholder={t('workshops.searchPlaceholder')}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-violet-500 transition-all font-bold"
@@ -78,7 +79,7 @@ const Workshops: React.FC = () => {
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
                         className="lg:hidden flex items-center justify-center gap-2 px-6 py-4 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-2xl font-bold transition-all border border-slate-200 dark:border-slate-700"
                     >
-                        <SlidersHorizontal size={18} /> 필터 상세 설정
+                        <SlidersHorizontal size={18} /> {t('workshops.filterSettings')}
                     </button>
 
                     {/* Desktop Selection Filters */}
@@ -89,7 +90,7 @@ const Workshops: React.FC = () => {
                                 onChange={(e) => setRegion(e.target.value)}
                                 className="appearance-none pl-4 pr-10 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl text-slate-900 dark:text-white font-bold cursor-pointer focus:ring-2 focus:ring-violet-500 transition-all"
                             >
-                                <option value="전체">모든 지역</option>
+                                <option value="전체">{t('workshops.allRegions')}</option>
                                 {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
@@ -101,7 +102,7 @@ const Workshops: React.FC = () => {
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="appearance-none pl-4 pr-10 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl text-slate-900 dark:text-white font-bold cursor-pointer focus:ring-2 focus:ring-violet-500 transition-all"
                             >
-                                <option value="전체">모든 카테고리</option>
+                                <option value="전체">{t('workshops.allCategories')}</option>
                                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
@@ -115,7 +116,7 @@ const Workshops: React.FC = () => {
                         {/* Price Filter */}
                         <div className="space-y-3">
                             <div className="flex justify-between items-center">
-                                <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">가격대 (~ ₩{maxPrice.toLocaleString()})</label>
+                                <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t('workshops.priceRange', { price: maxPrice.toLocaleString() })}</label>
                             </div>
                             <input 
                                 type="range" 
@@ -130,7 +131,7 @@ const Workshops: React.FC = () => {
 
                         {/* Rating Filter */}
                         <div className="space-y-3">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">최소 별점 ({minRating === 0 ? '전체' : minRating + '점 이상'})</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t('workshops.minRating', { rating: minRating === 0 ? t('workshops.ratingAll') : t('workshops.ratingAbove', { rating: minRating }) })}</label>
                             <div className="flex gap-2">
                                 {[0, 3, 4, 4.5].map(rating => (
                                     <button
@@ -148,13 +149,13 @@ const Workshops: React.FC = () => {
 
                         {/* Region Filter (Mobile only since visible on desktop) */}
                         <div className="lg:hidden space-y-3">
-                            <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">지역</label>
+                            <label className="text-sm font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t('workshops.regionLabel')}</label>
                             <select 
                                 value={region}
                                 onChange={(e) => setRegion(e.target.value)}
                                 className="w-full p-4 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl text-slate-900 dark:text-white font-bold"
                             >
-                                <option value="전체">모든 지역</option>
+                                <option value="전체">{t('workshops.allRegions')}</option>
                                 {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
                             </select>
                         </div>
@@ -165,7 +166,7 @@ const Workshops: React.FC = () => {
                                 onClick={clearFilters}
                                 className="flex items-center gap-2 px-6 py-3 text-slate-400 hover:text-rose-500 font-bold transition-all"
                             >
-                                <RefreshCw className="w-4 h-4" /> 필터 초기화
+                                <RefreshCw className="w-4 h-4" /> {t('workshops.resetFilter')}
                             </button>
                         </div>
                     </div>
@@ -175,7 +176,7 @@ const Workshops: React.FC = () => {
             {/* Results Count & Tags */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                    <span className="text-lg font-black text-slate-900 dark:text-white">검색 결과 {filteredWorkshops.length}개</span>
+                    <span className="text-lg font-black text-slate-900 dark:text-white">{t('workshops.searchResultCount', { count: filteredWorkshops.length })}</span>
                     <div className="h-4 w-px bg-slate-200 dark:bg-slate-800"></div>
                     <div className="flex gap-2 overflow-x-auto">
                         {region !== '전체' && (
@@ -198,8 +199,8 @@ const Workshops: React.FC = () => {
                     <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 dark:text-slate-600">
                         <Search size={40} />
                     </div>
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">검색 결과가 없습니다</h2>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium">필터 조건을 변경하여 다시 검색해보세요.</p>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{t('workshops.noResultsTitle')}</h2>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium">{t('workshops.noResultsDesc')}</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
