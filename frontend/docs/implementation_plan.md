@@ -1628,3 +1628,61 @@ Access Token이 만료되었을 때 (`AUTH-005` 에러), 사용자가 로그아�
    - `value: Partial<Address>`와 `onChange: (address: Address) => void`를 prop으로 받아 외부 폼 상태와 연동될 수 있도록 합니다.
    - 기본적인 스타일링과 반응형 레이아웃을 적용하여 즉시 폼에 삽입하여 사용할 수 있게 구성합니다.
 
+---
+
+# Plan 54.
+
+# 다국어(ko/en) 딕셔너리 도입 및 주요 파일 치환
+
+다국어 번역 사전(ko.json, en.json)을 도입하고, `useLanguage` 훅을 고도화하여 5개 주요 컴포넌트/레이아웃과 3개 컨텍스트 훅 파일, 그리고 총 32개의 서비스 페이지 및 모달 컴포넌트에 다국어 처리를 적용합니다.
+
+## 제안 사항 및 설계 계획
+
+1. **다국어 사전 리소스 추가**:
+   - `frontend/src/lang/ko.json` 및 `frontend/src/lang/en.json`에 신규 페이지들의 번역 데이터(제목, 설명, 폼 레이블, 에러/성공 메시지 등)를 체계적으로 분류하여 대량으로 추가 정의
+
+2. **다국어 훅(t 함수) 추가 및 업데이트**:
+   - `frontend/src/hooks/LanguageContext.tsx` 고도화 완료 (적용 완료)
+
+3. **신규 추가된 32개 파일 텍스트 치환**:
+   - `frontend/src/pages/admin/board/components/BoardCreateModal.tsx` [MODIFY]
+   - `frontend/src/pages/admin/board/components/BoardEditModal.tsx` [MODIFY]
+   - `frontend/src/pages/admin/board/index.tsx` [MODIFY]
+   - `frontend/src/pages/community/Interviews.tsx` [MODIFY]
+   - `frontend/src/pages/community/ReviewPride.tsx` [MODIFY]
+   - `frontend/src/pages/community/WorkshopNews.tsx` [MODIFY]
+   - `frontend/src/pages/community/WriteReview.tsx` [MODIFY]
+   - `frontend/src/pages/my/Coupons.tsx` [MODIFY]
+   - `frontend/src/pages/my/Payments.tsx` [MODIFY]
+   - `frontend/src/pages/my/Profile.tsx` [MODIFY]
+   - `frontend/src/pages/my/Reservations.tsx` [MODIFY]
+   - `frontend/src/pages/workshops/Detail.tsx` [MODIFY]
+   - `frontend/src/pages/workshops/index.tsx` [MODIFY]
+   - `frontend/src/pages/workshops/Manage.tsx` [MODIFY]
+   - `frontend/src/pages/workshops/New.tsx` [MODIFY]
+   - `frontend/src/pages/workshops/Reservations.tsx` [MODIFY]
+   - `frontend/src/pages/signup/index.tsx` [MODIFY]
+   - `frontend/src/pages/logout/index.tsx` [MODIFY]
+   - `frontend/src/pages/login/index.tsx` [MODIFY]
+   - `frontend/src/pages/legal/Terms.tsx` [MODIFY]
+   - `frontend/src/pages/legal/Privacy.tsx` [MODIFY]
+   - `frontend/src/pages/home/index.tsx` [MODIFY]
+   - `frontend/src/pages/favorites/index.tsx` [MODIFY]
+   - `frontend/src/pages/error/NotFound.tsx` [MODIFY]
+   - `frontend/src/pages/cart/index.tsx` [MODIFY]
+   - `frontend/src/pages/cart/components/CheckoutModal.tsx` [MODIFY]
+   - `frontend/src/pages/admin/workplace/index.tsx` [MODIFY]
+   - `frontend/src/pages/admin/user/index.tsx` [MODIFY]
+   - `frontend/src/pages/admin/user/components/UserCreateModal.tsx` [MODIFY]
+   - `frontend/src/pages/admin/post/index.tsx` [MODIFY]
+   - `frontend/src/pages/admin/payment/index.tsx` [MODIFY]
+   - `frontend/src/pages/admin/access/index.tsx` [MODIFY]
+
+## 검증 계획
+
+### 자동화 테스트
+- `npm run build`를 실행하여 모든 페이지의 TypeScript 및 빌드 오류가 없는지 검증
+
+### 수동 검증
+- 각 메뉴(어드민 관리, 커뮤니티, 마이페이지, 워크숍 상세/등록/예약, 로그인/회원가입, 약관, 장바구니 등)를 브라우저에서 넘나들며 KO/EN 다국어 전환이 자연스럽게 잘 이루어지는지 교차 검증
+
