@@ -394,4 +394,46 @@ _Last Updated: 2026-06-23_
 
 - 공방 목록 조회 API 추가
 
-_Last Updated: 2026-07-15_
+---
+
+## 54. 다국어(ko/en) 딕셔너리 도입 및 텍스트 치환
+
+- [ ] 다국어 번역 리소스 파일(`ko.json`, `en.json`)에 전체 페이지 딕셔너리 정의
+- [x] `LanguageContext` 고도화 및 `t` 함수 제공
+- [x] 주요 공통 컴포넌트 및 레이아웃 다국어 치환 (`AddressInput`, `AdminTable`, `Footer`, `Header`)
+- [x] 컨텍스트 훅 파일 다국어 호환성 확인 (`CartContext`, `ThemeContext`)
+- [ ] 신규 추가된 32개 페이지 및 모달 파일 다국어 치환:
+  - [ ] `BoardCreateModal.tsx`
+  - [ ] `BoardEditModal.tsx`
+  - [ ] `BoardManagement` (`admin/board/index.tsx`)
+  - [ ] `Interviews.tsx`
+  - [ ] `ReviewPride.tsx`
+  - [ ] `WorkshopNews.tsx`
+  - [ ] `WriteReview.tsx`
+  - [ ] `Coupons.tsx`
+  - [ ] `Payments.tsx`
+  - [ ] `Profile.tsx`
+  - [ ] `Reservations.tsx` (마이페이지)
+  - [ ] `Detail.tsx` (워크숍 상세)
+  - [ ] `Workshops` (`workshops/index.tsx`)
+  - [ ] `Manage.tsx` (내 공방 관리)
+  - [ ] `New.tsx` (공방 등록)
+  - [ ] `Reservations.tsx` (작가용 예약 관리)
+  - [ ] `Signup` (`signup/index.tsx`)
+  - [ ] `Logout` (`logout/index.tsx`)
+  - [ ] `Login` (`login/index.tsx`)
+  - [ ] `Terms.tsx`
+  - [ ] `Privacy.tsx`
+  - [ ] `Home` (`home/index.tsx`)
+  - [ ] `Favorites` (`favorites/index.tsx`)
+  - [ ] `NotFound.tsx`
+  - [ ] `Cart` (`cart/index.tsx`)
+  - [ ] `CheckoutModal.tsx`
+  - [ ] `WorkplaceManagement` (`admin/workplace/index.tsx`)
+  - [ ] `UserManagement` (`admin/user/index.tsx`)
+  - [ ] `UserCreateModal.tsx`
+  - [ ] `PostManagement` (`admin/post/index.tsx`)
+  - [ ] `PaymentManagement` (`admin/payment/index.tsx`)
+  - [ ] `AccessLog` (`admin/access/index.tsx`)
+
+_Last Updated: 2026-08-26_
