@@ -4,6 +4,7 @@ import io.hong.admin.golbal.auth.dto.request.LoginRequest;
 import io.hong.admin.golbal.auth.dto.request.ReissueRequest;
 import io.hong.admin.golbal.auth.dto.response.TokenResponse;
 import io.hong.admin.golbal.auth.service.AuthService;
+import io.hong.admin.golbal.common.BaseResponse;
 import io.hong.admin.golbal.exception.HongException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -39,22 +40,24 @@ public class AuthRestController {
      * FE의 login: async (email, password) 호출을 받는 지점
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(
+    public ResponseEntity<BaseResponse<TokenResponse>> login(
             @RequestBody LoginRequest loginRequest,
             HttpServletRequest req
     ) throws HongException {
         log.info("로그인 시도: {}", loginRequest.email());
         TokenResponse tokenResponse = authService.login(loginRequest, req);
-        return ResponseEntity.ok(tokenResponse);
+        BaseResponse<TokenResponse> response = BaseResponse.ok(tokenResponse);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<TokenResponse> reissue(
+    public ResponseEntity<BaseResponse<TokenResponse>> reissue(
             @RequestBody ReissueRequest reissueRequest,
             HttpServletRequest req
     ) throws HongException {
         log.info("토큰 재발급 시도");
         TokenResponse tokenResponse = authService.reissue(reissueRequest, req);
-        return ResponseEntity.ok(tokenResponse);
+        BaseResponse<TokenResponse> response = BaseResponse.ok(tokenResponse);
+        return ResponseEntity.ok(response);
     }
 }

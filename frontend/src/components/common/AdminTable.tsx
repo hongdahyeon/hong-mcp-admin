@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 interface Column<T> {
     header: string;
@@ -31,6 +32,7 @@ const AdminTable = <T extends { id: string | number }>({
     pageSize = 10,
     onPageSizeChange
 }: AdminTableProps<T>) => {
+    const { t } = useLanguage();
     return (
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
@@ -75,7 +77,7 @@ const AdminTable = <T extends { id: string | number }>({
                         {data.length === 0 && (
                             <tr>
                                 <td colSpan={columns.length} className="px-6 py-12 text-center text-slate-400 font-medium">
-                                    데이터가 없습니다.
+                                    {t('common.table.noData')}
                                 </td>
                             </tr>
                         )}

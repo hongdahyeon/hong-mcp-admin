@@ -1,6 +1,6 @@
 package io.hong.admin.domain.workshop.entity;
 
-import io.hong.admin.domain.adress.Address;
+import io.hong.admin.domain.address.Address;
 import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.golbal.audit.BaseEntity;
 import jakarta.persistence.*;

@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '@/api/auth';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Logout: React.FC = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -12,10 +14,10 @@ const Logout: React.FC = () => {
     }, [navigate]);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
             <div className="flex flex-col items-center gap-4">
                 <div className="w-12 h-12 border-4 border-violet-200 border-t-violet-600 rounded-full animate-spin" />
-                <p className="text-slate-500 font-bold tracking-tight">로그아웃 중입니다...</p>
+                <p className="text-slate-500 font-bold tracking-tight">{t('auth.logout.loggingOut')}</p>
             </div>
         </div>
     );

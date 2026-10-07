@@ -84,16 +84,16 @@ public class SecurityConfig {
     private void configureAuthorizeRequests(
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
     ) {
-
-        // 공통)) 로그인, 공방 조회 등은 언제나 허용
         auth.requestMatchers(AnonymousPath.ANONYMOUS_PATH).permitAll();
 
-        // 자동화)) UserRole Enum에 정의된 모든 매칭 경로를 권한별로 할당
-        for(UserRole role: UserRole.values()) {
-            // hasRole 대신 hasAuthority를 사용
-            // role.getAuthority()가 "ROLE_USER"이므로 그대로 매칭
-            auth.requestMatchers(role.getMatchersArray()).hasAuthority(role.getAuthority());
-        }
+        // 1. 유저 경로는 유저, 호스트, 어드민 모두 가능
+        auth.requestMatchers(UserRole.USER.getMatchersArray()).hasAnyAuthority("ROLE_USER", "ROLE_HOST", "ROLE_ADMIN");
+
+        // 2. 호스트 경로는 호스트, 어드민 가능
+        auth.requestMatchers(UserRole.HOST.getMatchersArray()).hasAnyAuthority("ROLE_HOST", "ROLE_ADMIN");
+
+        // 3. 어드민 경로는 어드민만 가능
+        auth.requestMatchers(UserRole.ADMIN.getMatchersArray()).hasAuthority("ROLE_ADMIN");
 
         // 나머지)) 그 외 모든 요청은 로그인 필요
         auth.anyRequest().authenticated();

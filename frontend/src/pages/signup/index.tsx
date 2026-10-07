@@ -3,8 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, UserPlus, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
 import { authService } from '@/api/auth';
 import { UserSaveRequest } from '@/types/auth';
+import { useLanguage } from '@/hooks/LanguageContext';
 
 const Signup: React.FC = () => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
     const [formData, setFormData] = useState<UserSaveRequest & { confirmPassword: string }>({
         email: '',
@@ -51,34 +53,34 @@ const Signup: React.FC = () => {
     // 이메일 중복 체크
     const handleCheckEmail = async () => {
         if (!formData.email) return;
-        setChecks(prev => ({ ...prev, email: { status: 'checking', message: '확인 중...' } }));
+        setChecks(prev => ({ ...prev, email: { status: 'checking', message: t('auth.signup.checking') } }));
         try {
             const isDuplicate = await authService.checkEmailDuplicate(formData.email);
             setChecks(prev => ({
                 ...prev,
                 email: isDuplicate
-                    ? { status: 'error', message: '이미 사용 중인 이메일입니다.' }
-                    : { status: 'success', message: '사용 가능한 이메일입니다.' }
+                    ? { status: 'error', message: t('auth.signup.emailDuplicate') }
+                    : { status: 'success', message: t('auth.signup.emailAvailable') }
             }));
         } catch (err) {
-            setChecks(prev => ({ ...prev, email: { status: 'error', message: '확인 실패' } }));
+            setChecks(prev => ({ ...prev, email: { status: 'error', message: t('auth.signup.checkFailed') } }));
         }
     };
 
     // 사용자명 중복 체크
     const handleCheckUsername = async () => {
         if (!formData.username) return;
-        setChecks(prev => ({ ...prev, username: { status: 'checking', message: '확인 중...' } }));
+        setChecks(prev => ({ ...prev, username: { status: 'checking', message: t('auth.signup.checking') } }));
         try {
             const isDuplicate = await authService.checkUsernameDuplicate(formData.username);
             setChecks(prev => ({
                 ...prev,
                 username: isDuplicate
-                    ? { status: 'error', message: '이미 사용 중인 아이디입니다.' }
-                    : { status: 'success', message: '사용 가능한 아이디입니다.' }
+                    ? { status: 'error', message: t('auth.signup.usernameDuplicate') }
+                    : { status: 'success', message: t('auth.signup.usernameAvailable') }
             }));
         } catch (err) {
-            setChecks(prev => ({ ...prev, username: { status: 'error', message: '확인 실패' } }));
+            setChecks(prev => ({ ...prev, username: { status: 'error', message: t('auth.signup.checkFailed') } }));
         }
     };
 
@@ -87,12 +89,12 @@ const Signup: React.FC = () => {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            alert('비밀번호가 일치하지 않습니다.');
+            alert(t('auth.signup.passwordMismatchAlert'));
             return;
         }
 
         if (checks.email.status !== 'success' || checks.username.status !== 'success') {
-            alert('이메일 및 아이디 중복 확인이 필요합니다.');
+            alert(t('auth.signup.checkRequired'));
             return;
         }
 
@@ -100,7 +102,7 @@ const Signup: React.FC = () => {
         try {
             const { confirmPassword, ...signupData } = formData;
             await authService.signup(signupData);
-            alert('회원가입이 완료되었습니다! 로그인해 주세요.');
+            alert(t('auth.signup.successAlert'));
             navigate('/login');
         } catch (err: any) {
             console.error('Signup error:', err);
@@ -124,7 +126,7 @@ const Signup: React.FC = () => {
                             <UserPlus size={40} className="text-white" />
                         </div>
                         <h1 className="text-4xl font-black mb-2 tracking-tight">CraftDay</h1>
-                        <p className="text-violet-100 text-sm opacity-90 font-medium italic">당신만의 감성 공방 라이프를 시작하세요</p>
+                        <p className="text-violet-100 text-sm opacity-90 font-medium italic">{t('auth.signup.slogan')}</p>
                     </div>
                 </div>
 
@@ -134,7 +136,7 @@ const Signup: React.FC = () => {
                         {/* Email Field */}
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="email">
-                                이메일 주소
+                                {t('auth.signup.emailLabel')}
                             </label>
                             <div className="flex gap-2">
                                 <div className="relative flex-1">
@@ -156,7 +158,7 @@ const Signup: React.FC = () => {
                                     onClick={handleCheckEmail}
                                     className="px-4 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-sm whitespace-nowrap"
                                 >
-                                    중복 확인
+                                    {t('auth.signup.checkDuplicate')}
                                 </button>
                             </div>
                             {checks.email.message && (
@@ -170,7 +172,7 @@ const Signup: React.FC = () => {
                         {/* Username (Name) Field */}
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="username">
-                                사용자 이름
+                                {t('auth.signup.usernameLabel')}
                             </label>
                             <div className="flex gap-2">
                                 <div className="relative flex-1">
@@ -183,7 +185,7 @@ const Signup: React.FC = () => {
                                         value={formData.username}
                                         onChange={handleChange}
                                         className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium"
-                                        placeholder="이름 또는 닉네임을 입력하세요"
+                                        placeholder={t('auth.signup.usernamePlaceholder')}
                                         required
                                     />
                                 </div>
@@ -192,7 +194,7 @@ const Signup: React.FC = () => {
                                     onClick={handleCheckUsername}
                                     className="px-4 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-sm whitespace-nowrap"
                                 >
-                                    중복 확인
+                                    {t('auth.signup.checkDuplicate')}
                                 </button>
                             </div>
                             {checks.username.message && (
@@ -207,7 +209,7 @@ const Signup: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="password">
-                                    비밀번호
+                                    {t('auth.signup.passwordLabel')}
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -219,14 +221,14 @@ const Signup: React.FC = () => {
                                         value={formData.password}
                                         onChange={handleChange}
                                         className="w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium"
-                                        placeholder="비밀번호 설정"
+                                        placeholder={t('auth.signup.passwordPlaceholder')}
                                         required
                                     />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="confirmPassword">
-                                    비밀번호 확인
+                                    {t('auth.signup.confirmPasswordLabel')}
                                 </label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -239,13 +241,13 @@ const Signup: React.FC = () => {
                                         onChange={handleChange}
                                         className={`w-full pl-10 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800/50 border rounded-2xl focus:ring-2 focus:ring-violet-500/20 transition-all outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium ${formData.confirmPassword ? (isPasswordMatch ? 'border-emerald-500 focus:border-emerald-500' : 'border-rose-500 focus:border-rose-500') : 'border-slate-200 dark:border-slate-700 focus:border-violet-500'
                                             }`}
-                                        placeholder="비밀번호 재입력"
+                                        placeholder={t('auth.signup.confirmPasswordPlaceholder')}
                                         required
                                     />
                                 </div>
                                 {formData.confirmPassword && (
                                     <p className={`mt-2 text-[10px] font-bold flex items-center gap-1 ml-1 ${isPasswordMatch ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                        {isPasswordMatch ? '비밀번호가 일치합니다' : '비밀번호가 일치하지 않습니다'}
+                                        {isPasswordMatch ? t('auth.signup.passwordMatch') : t('auth.signup.passwordMismatch')}
                                     </p>
                                 )}
                             </div>
@@ -254,7 +256,7 @@ const Signup: React.FC = () => {
                         {/* Role Selection */}
                         <div>
                             <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2 ml-1" htmlFor="role">
-                                회원 유형
+                                {t('auth.signup.roleLabel')}
                             </label>
                             <select
                                 id="role"
@@ -278,16 +280,16 @@ const Signup: React.FC = () => {
                             <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                             <>
-                                크래프트데이 시작하기 <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                {t('auth.signup.submit')} <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                             </>
                         )}
                     </button>
 
                     <div className="text-center">
                         <p className="text-slate-400 dark:text-slate-500 text-sm font-bold">
-                            이미 계정이 있으신가요?{' '}
+                            {t('auth.signup.alreadyHaveAccount')}{' '}
                             <Link to="/login" className="text-violet-600 dark:text-violet-400 hover:underline underline-offset-4 decoration-2">
-                                로그인하기
+                                {t('auth.signup.goToLogin')}
                             </Link>
                         </p>
                     </div>

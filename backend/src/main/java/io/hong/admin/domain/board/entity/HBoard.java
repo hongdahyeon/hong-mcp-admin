@@ -1,5 +1,6 @@
 package io.hong.admin.domain.board.entity;
 
+import io.hong.admin.domain.board.dto.request.ChangeBoardRequest;
 import io.hong.admin.domain.board.enumcd.BoardCode;
 import io.hong.admin.golbal.audit.BaseEntity;
 import jakarta.persistence.*;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-04        home       최초 생성
+ * 2026-05-24        note       게시판 수정을 위한 생성자 추가
  */
 @Entity
 @Table(name = "h_board")
@@ -48,5 +50,10 @@ public class HBoard extends BaseEntity {
         this.name = name;
         this.isUsed = isUsed;
         this.isDeleted = isDeleted;
+    }
+
+    public void update(String name, boolean isUsed) {
+        this.name = name;
+        this.isUsed = isUsed;
     }
 }
