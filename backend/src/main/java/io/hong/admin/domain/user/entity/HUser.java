@@ -62,6 +62,18 @@ public class HUser extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime lastPasswordChangedDate = LocalDateTime.now(); // 비밀번호 마지막 변경일
 
+    public void changeUserApproved(boolean isApproved) {
+        this.isApproved = isApproved;
+    }
+
+    public void changeUserLocked(boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
+    public void changeUserEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     @Builder
     public HUser( String email, String password, String username, UserRole role,
                   boolean isApproved, boolean isLocked, boolean isDeleted, boolean isEnabled ) {

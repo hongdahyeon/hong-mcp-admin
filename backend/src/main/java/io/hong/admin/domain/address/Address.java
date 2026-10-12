@@ -1,4 +1,4 @@
-package io.hong.admin.domain.adress;
+package io.hong.admin.domain.address;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * packageName    : io.hong.admin.domain.adress
+ * packageName    : io.hong.admin.domain.address
  * fileName       : Address
  * author         : home
  * date           : 2026-03-04

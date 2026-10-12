@@ -1,32 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Star, ShoppingCart, RefreshCw, Zap, ArrowRight, Heart } from 'lucide-react';
-
-interface Workshop {
-    id: string;
-    title: string;
-    region: string;
-    category: string;
-    price: string;
-    rating: number;
-    reviews: number;
-    imageUrl: string;
-    instructor: string;
-}
-
-const REGIONS = ['서울', '경기/인천', '부산/경상', '제주/강원'];
-
-const MOCK_WORKSHOPS: Workshop[] = [
-    { id: '1', title: '서촌 한옥에서 즐기는 전통 자수 클래스', region: '서울', category: '공예', price: '45,000', rating: 4.9, reviews: 124, instructor: '김연우 명인', imageUrl: 'https://images.unsplash.com/photo-1544961371-5120307bb371?q=80&w=400&h=300&auto=format&fit=crop' },
-    { id: '2', title: '망원동 감성 가득한 세라믹 페인팅', region: '서울', category: '도예', price: '38,000', rating: 4.8, reviews: 89, instructor: '스튜디오 소담', imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=400&h=300&auto=format&fit=crop' },
-    { id: '3', title: '판교 숲속 공방 목공 입문 클래스', region: '경기/인천', category: '목공', price: '65,000', rating: 4.7, reviews: 56, instructor: '우든 핸즈', imageUrl: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=400&h=300&auto=format&fit=crop' },
-    { id: '4', title: '송도 센트럴파크 야경 유화 그리기', region: '경기/인천', category: '미술', price: '42,000', rating: 4.9, reviews: 210, instructor: '그리다 예술원', imageUrl: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400&h=300&auto=format&fit=crop' },
-    { id: '5', title: '해운대 바다를 닮은 레진 아트 클래스', region: '부산/경상', category: '공예', price: '50,000', rating: 4.6, reviews: 45, instructor: '부산 바다 공방', imageUrl: 'https://images.unsplash.com/photo-1560067174-c5a3a8f37060?q=80&w=400&h=300&auto=format&fit=crop' },
-    { id: '6', title: '애월 바다 담은 감성 캔들 만들기', region: '제주/강원', category: '향수/캔들', price: '35,000', rating: 5.0, reviews: 32, instructor: '제주 향기', imageUrl: 'https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?q=80&w=400&h=300&auto=format&fit=crop' },
-];
+import { Workshop } from '@/types/workshop';
+import { useCart } from '@/hooks/CartContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { MOCK_WORKSHOPS, REGIONS } from '@/constants/workshop';
 
 const Home: React.FC = () => {
+    const navigate = useNavigate();
     const [workshops, setWorkshops] = useState<Workshop[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { addToCart, toggleFavorite, isFavorite } = useCart();
 
     useEffect(() => {
         handleLoadWorkshops();
@@ -83,6 +66,12 @@ const Home: React.FC = () => {
                                     {workshops.filter(w => w.region === region).length}
                                 </span>
                             </div>
+                            <Link 
+                                to={`/workshops?region=${encodeURIComponent(region)}`}
+                                className="text-xs font-black text-slate-400 hover:text-violet-600 transition-colors flex items-center gap-1 group/link"
+                            >
+                                자세히 보기 <ArrowRight size={12} className="group-hover/link:translate-x-0.5 transition-transform" />
+                            </Link>
                         </div>
 
                         <div className="flex flex-col gap-4">
@@ -94,7 +83,11 @@ const Home: React.FC = () => {
                                 workshops
                                     .filter(w => w.region === region)
                                     .map(workshop => (
-                                        <div key={workshop.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-violet-300 dark:hover:border-violet-500 transition-all hover:shadow-lg dark:hover:shadow-violet-900/20 group cursor-pointer">
+                                        <div 
+                                            key={workshop.id} 
+                                            onClick={() => navigate(`/workshops/${workshop.id}`)}
+                                            className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-violet-300 dark:hover:border-violet-500 transition-all hover:shadow-lg dark:hover:shadow-violet-900/20 group cursor-pointer"
+                                        >
                                             <div className="relative h-40 overflow-hidden">
                                                 <img
                                                     src={workshop.imageUrl}
@@ -106,8 +99,17 @@ const Home: React.FC = () => {
                                                         {workshop.category}
                                                     </span>
                                                 </div>
-                                                <button className="absolute top-3 right-3 p-2 bg-white/20 hover:bg-white/90 backdrop-blur-md rounded-full text-white hover:text-rose-500 transition-all shadow-sm">
-                                                    <Heart size={16} fill="currentColor" className="opacity-70 group-hover:opacity-100" />
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleFavorite(workshop);
+                                                    }}
+                                                    className={`absolute top-3 right-3 p-2 backdrop-blur-md rounded-full transition-all shadow-sm ${isFavorite(workshop.id)
+                                                        ? 'bg-rose-500 text-white'
+                                                        : 'bg-white/20 text-white hover:bg-white/90 hover:text-rose-500'
+                                                        }`}
+                                                >
+                                                    <Heart size={16} fill={isFavorite(workshop.id) ? 'currentColor' : 'none'} className={isFavorite(workshop.id) ? '' : 'opacity-70 group-hover:opacity-100'} />
                                                 </button>
                                             </div>
                                             <div className="p-5">
@@ -125,7 +127,13 @@ const Home: React.FC = () => {
                                                         <span className="text-xs font-medium text-slate-500 dark:text-slate-400 mr-1">₩</span>
                                                         {workshop.price}
                                                     </div>
-                                                    <button className="p-2 bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-lg hover:bg-violet-600 dark:hover:bg-violet-500 hover:text-white dark:hover:text-white transition-all">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            addToCart(workshop);
+                                                        }}
+                                                        className="p-2 bg-violet-50 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 rounded-lg hover:bg-violet-600 dark:hover:bg-violet-500 hover:text-white dark:hover:text-white transition-all"
+                                                    >
                                                         <ShoppingCart size={18} />
                                                     </button>
                                                 </div>

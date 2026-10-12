@@ -9,6 +9,25 @@ import UserManagement from '@/pages/admin/user';
 import WorkplaceManagement from '@/pages/admin/workplace';
 import AccessLog from '@/pages/admin/access';
 import PaymentManagement from '@/pages/admin/payment';
+import BoardManagement from '@/pages/admin/board';
+import PostManagement from '@/pages/admin/post';
+import Cart from '@/pages/cart';
+import Favorites from '@/pages/favorites';
+import Workshops from '@/pages/workshops';
+import WorkshopDetail from '@/pages/workshops/Detail';
+import WorkshopManage from '@/pages/workshops/Manage';
+import WorkshopNew from '@/pages/workshops/New';
+import WorkshopReservations from '@/pages/workshops/Reservations';
+import MyReservations from '@/pages/my/Reservations';
+import Profile from '@/pages/my/Profile';
+import Payments from '@/pages/my/Payments';
+import Coupons from '@/pages/my/Coupons';
+import ReviewPride from '@/pages/community/ReviewPride';
+import WriteReview from '@/pages/community/WriteReview';
+import WorkshopNews from '@/pages/community/WorkshopNews';
+import Interviews from '@/pages/community/Interviews';
+import Terms from '@/pages/legal/Terms';
+import Privacy from '@/pages/legal/Privacy';
 import NotFound from '@/pages/error/NotFound';
 
 const AppRouter: React.FC = () => {
@@ -24,11 +43,32 @@ const AppRouter: React.FC = () => {
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<Home />} />
 
+                    {/* 사용자 메뉴 */}
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/favorites" element={<Favorites />} />
+                    <Route path="/workshops" element={<Workshops />} />
+                    <Route path="/workshops/:id" element={<WorkshopDetail />} />
+                    <Route path="/workshops/manage" element={<WorkshopManage />} />
+                    <Route path="/workshops/manage/new" element={<WorkshopNew />} />
+                    <Route path="/workshops/manage/:id/reservations" element={<WorkshopReservations />} />
+                    <Route path="/my/reservations" element={<MyReservations />} />
+                    <Route path="/my/profile" element={<Profile />} />
+                    <Route path="/my/payments" element={<Payments />} />
+                    <Route path="/my/coupons" element={<Coupons />} />
+                    <Route path="/community/reviews" element={<ReviewPride />} />
+                    <Route path="/community/reviews/write" element={<WriteReview />} />
+                    <Route path="/community/news" element={<WorkshopNews />} />
+                    <Route path="/community/interviews" element={<Interviews />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+
                     {/* 관리자(Admin) 전용 메뉴 */}
                     <Route path="/admin/user" element={<UserManagement />} />
                     <Route path="/admin/workplace" element={<WorkplaceManagement />} />
                     <Route path="/admin/access" element={<AccessLog />} />
                     <Route path="/admin/payment" element={<PaymentManagement />} />
+                    <Route path="/admin/board" element={<BoardManagement />} />
+                    <Route path="/admin/post" element={<PostManagement />} />
                 </Route>
 
                 {/* 404 페이지 - 최상단 수준에서 렌더링 */}

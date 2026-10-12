@@ -1,12 +1,20 @@
 package io.hong.admin.domain.user.service;
 
+import io.hong.admin.domain.user.dto.request.SearchUserRequest;
+import io.hong.admin.domain.user.dto.request.UpdateUserFlagRequest;
+import io.hong.admin.domain.user.dto.request.UserSaveRequest;
+import io.hong.admin.domain.user.dto.response.UserListResponse;
+import io.hong.admin.domain.user.dto.response.UserViewResponse;
 import io.hong.admin.domain.user.entity.HUser;
 import io.hong.admin.domain.user.enumcd.UserRole;
 import io.hong.admin.domain.user.repository.HUserRepository;
-import io.hong.admin.domain.user.dto.request.UserSaveRequest;
+import io.hong.admin.golbal.common.page.PageResponseDto;
 import io.hong.admin.golbal.exception.HongException;
 import io.hong.admin.golbal.exception.error.HongErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
  * 2026-03-03        home       최초 생성
+ * 2026-04-18        note       {findUserPage} 추가
+ * 2026-04-29        note       {findUserView} 추가
  */
 
 @Service
@@ -43,7 +53,7 @@ public class HUserService {
 
     // 3. 유저 저장
     @Transactional
-    public Long saveUser(UserSaveRequest dto) {
+    public HUser saveUser(UserSaveRequest dto) {
         try {
             // 중복 검증 한 번 더 수행
             if (checkEmailDuplicate(dto.email())) throw new HongException(HongErrorCode.USER_ID_DUPLICATE);
@@ -58,10 +68,49 @@ public class HUserService {
                     .isEnabled(true)
                     .build();
 
-            return userRepository.save(user).getId();
+            Long userId = userRepository.save(user).getId();
+
+            return userRepository.getHUserById(userId);
 
         } catch (HongException e) {
             return null;
         }
+    }
+
+    public PageResponseDto<UserListResponse> findUserPage(SearchUserRequest search) {
+        Pageable pageable = search.toPageable(Sort.by("id").descending());
+        Page<UserListResponse> userPage = userRepository.findAllUser(pageable);
+        return new PageResponseDto<>(userPage);
+    }
+
+    public UserViewResponse findUserView(Long id) {
+        return userRepository.findUserView(id);
+    }
+
+    @Transactional(readOnly = false)
+    public String changeUserFlag(UpdateUserFlagRequest request) throws HongException {
+        // 1. 유저 조회
+        HUser hUser = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new HongException(HongErrorCode.USER_NOT_FOUND));
+
+        String message = "";
+
+        // 2. 수정
+        switch (request.type()) {
+            case "approved":
+                hUser.changeUserApproved(request.value());
+                message = request.value() ? "유저가 승인되었습니다." : "유저가 미승인되었습니다.";
+                break;
+            case "locked":
+                hUser.changeUserLocked(request.value());
+                message = request.value() ? "유저가 잠금되었습니다." : "유저 잠금이 해제되었습니다.";
+                break;
+            case "enabled":
+                hUser.changeUserEnabled(request.value());
+                message = request.value() ? "유저가 활성화 되었습니다." : "유저가 비활성화 되었습니다.";
+                break;
+        }
+
+        return message;
     }
 }
